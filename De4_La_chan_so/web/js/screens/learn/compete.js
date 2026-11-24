@@ -20,7 +20,7 @@ A.route(/^\/thi-dua$/, (m, q) => {
       <tr><td>Đỡ đầu và xác minh</td><td>${me.dodau}</td><td>20%</td></tr></table>
       <p class="hint mt8">Để lên hạng: tổ chức thêm 1 buổi tuyên truyền có QR, hoặc nhận đỡ đầu thêm 1 hộ cao tuổi.</p></div>` : ''}`
     :`<div class="empty"><b>Chi đoàn chưa có điểm</b>Hãy làm bài kiểm tra đầu tiên để mở điểm thi đua.</div><a class="btn btn-primary" href="#/thu-thach">Làm bài kiểm tra</a>`}
-    <p class="source">Chỉ công khai điểm theo chi đoàn, không công khai điểm cá nhân · dữ liệu giả lập</p>`});
+    <p class="source">Chỉ công khai điểm theo chi đoàn, không công khai điểm cá nhân · dữ liệu minh họa</p>`});
 });
 document.addEventListener('change', event => {
   if(!event.target.dataset.actCompete || !A.hasAccount()) return;

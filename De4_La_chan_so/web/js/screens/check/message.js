@@ -45,8 +45,8 @@ A.route(/^\/tin-nhan$/, (m, q) => {
         <a class="btn btn-primary" href="${r?'#/hoi-nguoi-than':'#/nguoi-than?ret=hoi'}">Hỏi người thân${r?' · '+esc(r.ten):''}</a>
         <div class="btn-row"><a class="btn btn-ghost" href="#/bao-cao?tu=tn">Báo cáo</a>${sc?`<a class="btn btn-ghost" href="#/hoc/${sc.id}">Học 1 phút</a>`:'<a class="btn btn-ghost" href="#/tin-nhan">Phân tích tin khác</a>'}</div>
       </div>
-      ${st==='ai-loi'?'<p class="hint">Phần giải thích chi tiết chưa phản hồi. Đang hiển thị kết quả kiểm tra theo luật.</p>':''}
-      <p class="source">Bản mẫu phân tích bằng quy tắc trên thiết bị.</p>`});
+      ${st==='ai-loi'?'<p class="hint">Phần giải thích chi tiết chưa phản hồi. Bạn vẫn có thể xem các dấu hiệu bên dưới.</p>':''}
+      <p class="source">Kết quả mang tính tham khảo. Hãy hỏi người tin cậy nếu còn nghi ngờ.</p>`});
   }
   return A.screen({mh:'MH-07', title:'Phân tích tin nhắn', tab:'#/kiem-tra', body:`
     ${seg}
@@ -74,7 +74,7 @@ A.route(/^\/tin-nhan$/, (m, q) => {
       ${st==='trong'?'<p class="hint" role="alert">Hãy dán tin nhắn hoặc đọc chữ từ ảnh trước khi phân tích.</p>':''}
       ${st==='dang-phan-tich'?'<div class="card center"><b>Đang phân tích…</b></div>':'<button class="btn btn-primary" type="submit">Phân tích</button>'}
     </form>
-    <div class="stack"><span class="label">Thử với tin nhắn mẫu</span><div class="chips">${SAMPLES.map((s,i)=>`<button class="chip" data-act="sample" data-i="${i}">${esc(s.lb)}</button>`).join('')}</div></div>
+    <details><summary>Xem ví dụ tin nhắn</summary><div class="chips">${SAMPLES.map((s,i)=>`<button class="chip" data-act="sample" data-i="${i}">${esc(s.lb)}</button>`).join('')}</div></details>
     <p class="source">Tin nhắn gần nhất được lưu trên thiết bị để điền sẵn khi báo cáo.</p>`});
 });
 let imageJob = null;

@@ -33,7 +33,7 @@ A.route(/^\/kiem-tra\/ket-qua$/, (m, q) => {
       ${res.level==='ok'?`<p class="remind">Số này đúng, nhưng nếu ai giục ${A.xung()} chuyển tiền gấp, hãy dừng lại và hỏi người thân.</p>`
         :''}
     </section>
-    <p class="source">Dữ liệu giả lập · danh sách đã xác minh, báo cáo cộng đồng và dấu hiệu từ đường link.</p>
+    <p class="source">Dữ liệu minh họa, không dùng để xác nhận giao dịch thực tế.</p>
     <div class="result-actions sticky-cta">${primary}</div>
     ${secondary}`});
 });

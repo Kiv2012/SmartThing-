@@ -20,9 +20,9 @@ A.actions.tham = el => { const h = S.dodau[+el.dataset.i]; h.lan_cuoi = 0; h.can
 A.actions['add-ho'] = () => {
   const code = String(100000 + Math.floor(Math.random()*899999));
   A.sheet(`<h2>Mã liên kết đỡ đầu</h2>
-    <p class="small ink2">Mở Lá Chắn Số trên điện thoại của cụ, quét mã hoặc nhập 6 số. Cụ cần bấm đồng ý thì mới liên kết.</p>
-    <div class="qr-card" style="border:0;padding:0">${pseudoQR(code)}<span class="code6">${code}</span><span class="note">Mã QR minh họa · hiệu lực 10 phút</span></div>
-    <a class="btn btn-primary" href="#/lien-ket/${code}" data-act="sheet-close" data-go="#/lien-ket/${code}">Mở trên máy của cụ (mô phỏng)</a>
+    <p class="small ink2">Đây là ví dụ về bước đồng ý nhận hỗ trợ. Chưa tạo liên kết giữa hai tài khoản.</p>
+    <div class="qr-card" style="border:0;padding:0">${pseudoQR(code)}<span class="code6">${code}</span><span class="note">QR minh họa, chưa quét được. Liên kết hỗ trợ chưa khả dụng.</span></div>
+    <a class="btn btn-primary" href="#/lien-ket/${code}" data-act="sheet-close" data-go="#/lien-ket/${code}">Xem ví dụ lời đề nghị hỗ trợ</a>
     <button class="btn btn-ghost" data-act="sheet-close">Đóng</button>`);
 };
 

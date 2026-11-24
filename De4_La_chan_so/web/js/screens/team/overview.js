@@ -65,7 +65,7 @@ A.actions.export = () => A.sheet(`<h2>Xuất báo cáo tháng 11/2026</h2>
   <p class="small ink2">Gồm số liệu theo kiểu lừa và kênh, danh sách ca đã xác minh, các buổi tuyên truyền và số người tham gia.</p>
   <button class="btn btn-primary" data-act="print">Báo cáo cho Đoàn cấp trên (PDF)</button>
   <button class="btn btn-ghost" data-act="print">Báo cáo cho Công an xã, phường (PDF)</button>
-  <p class="note">Bản mẫu: dùng chức năng in của trình duyệt để lưu PDF.</p>
+  <p class="note">Chọn Lưu thành PDF trong cửa sổ in để tải báo cáo.</p>
   <button class="btn btn-ghost" data-act="sheet-close">Đóng</button>`);
 A.actions.print = () => { A.closeSheet(); setTimeout(()=>window.print(), 100); };
 })();

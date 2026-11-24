@@ -19,7 +19,7 @@ A.route(/^\/ong-ba\/tro-ly$/, (m, q) => {
     ${!res?`<p class="ink2" style="font-size:var(--fs-card)">Bấm nút micro rồi kể chuyện vừa xảy ra, ví dụ: "Có người xưng công an bảo tôi chuyển tiền".</p>`:''}
     ${A.Rec?`<div class="listening"><button class="micbig" data-act="voice" aria-label="Bấm để nói">${icon('mic')}</button><span id="vstate" class="ink2">Bấm để nói</span></div>`
       :`<div class="empty"><b>Máy này chưa hỗ trợ nghe giọng nói</b>${A.xung()==='bà'?'Bà':'Bạn'} vẫn có thể kiểm tra bằng cách dán hoặc gõ số.</div><a class="btn btn-ghost" href="#/kiem-tra">Kiểm tra số lạ</a>`}
-    ${!res?`<button class="btn btn-ghost" data-act="voice-demo">Thử với câu mẫu</button>`:''}
+    ${!res?`<button class="btn btn-ghost" data-act="voice-demo">Xem ví dụ</button>`:''}
     ${out}`});
 });
 A.actions.voice = el => {

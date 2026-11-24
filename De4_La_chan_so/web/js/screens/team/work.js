@@ -42,7 +42,7 @@ A.route(/^\/dieu-phoi$/, (match, query) => {
   const count = status => list.filter(t => t.status===status).length;
   const body = query.muc==='ke-hoach' ? `
     <div class="section-heading-row"><h2>Các buổi đã phân công</h2><a class="link-btn" href="#/doi/buoi?moi=1">Tạo buổi tuyên truyền</a></div>${cards(list)}`
-    : query.muc==='thanh-vien' ? `<section class="card"><h2>Chi đoàn Khu phố 5</h2><p>Quốc Bảo · Tình nguyện viên</p><p class="note">Địa bàn và thành viên mẫu.</p></section>`
+    : query.muc==='thanh-vien' ? `<section class="card"><h2>Chi đoàn Khu phố 5</h2><p>Quốc Bảo · Tình nguyện viên</p><p class="note">Dữ liệu minh họa. Chưa hỗ trợ thay đổi thành viên.</p></section>`
     : query.muc==='bao-cao' ? `<section class="stack"><h2 class="dashboard-title">Kết quả đã duyệt</h2>${cards(list.filter(t=>t.status==='done'))}<a class="btn btn-ghost" href="#/doi">Xem tình hình địa bàn</a></section>` : `
     <section class="work-lead"><p>${esc(S.ward)}</p><h2>Quản lý hoạt động</h2>
       <p>${count('review')} kết quả đang chờ duyệt · ${count('assigned')} nhiệm vụ chờ nhận</p>
@@ -71,7 +71,7 @@ A.route(/^\/cong-tac\/nhiem-vu\/(kp5|thpt|[0-9]{6})$/, ([id]) => {
         ${!['assigned','declined'].includes(task.status) ? `<a class="link-btn" href="#/doi/buoi/${task.session}">Mã buổi và số liệu tạm tính</a>` : ''}</div></section>
     ${task.log.length ? `<section class="card stack"><h2>Lịch sử thực hiện</h2><ul class="list">${task.log.map(item=>`<li><b>${esc(item.label)}</b>${item.text ? `<p>${esc(item.text)}</p>` : ''}</li>`).join('')}</ul></section>` : ''}
     ${action ? `<form class="card stack" data-form="work-transition" data-task="${task.id}">
-      ${(mustExplain || alternative) ? `<label class="field"><span class="label">${mustExplain ? 'Tóm tắt kết quả' : 'Lý do (khi chọn thao tác phụ)'}</span>
+      ${(mustExplain || alternative) ? `<label class="field"><span class="label">${mustExplain ? 'Tóm tắt kết quả' : '' + (role==='dp' ? 'Nhận xét / Nội dung cần bổ sung' : 'Lý do từ chối (nếu từ chối)') + ''}</span>
         <textarea class="textarea" name="summary" maxlength="400"${mustExplain?' required':''}></textarea></label>` : ''}
       <div id="work-feedback" role="alert"></div>
       <button class="btn btn-primary" name="transition" value="${action[0]}">${action[1]}</button>

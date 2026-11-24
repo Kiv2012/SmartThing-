@@ -37,7 +37,7 @@ function render(){
     const title = unauthorized ? 'Công tác tuyên truyền' : 'Chưa có quyền truy cập';
     const target = unauthorized ? (App.hasAccount() ? '#/toi' : '#/dang-nhap?work=1&next='+encodeURIComponent(location.hash)) : roleHome();
     document.getElementById('app').innerHTML = App.screen({title, noTab:true, backTo:roleHome(), body:`
-      <div class="empty"><b>${title}</b>${unauthorized ? 'Khu công tác dành cho tài khoản được cấp quyền.' : 'Màn này cần quyền phù hợp. Tài khoản trình diễn hiện tại chưa được cấp quyền này.'}</div>
+      <div class="empty"><b>${title}</b>${unauthorized ? 'Khu công tác dành cho tài khoản được cấp quyền.' : 'Bạn chưa được cấp quyền xem nội dung này. Liên hệ người phụ trách nếu cần truy cập.'}</div>
       <a class="btn btn-primary" href="${App.esc(target)}">${unauthorized ? (App.hasAccount() ? 'Kiểm tra quyền trong mục Tôi' : 'Đăng nhập để vào công tác') : 'Về khu công tác'}</a>`});
     document.title = title + ' – Lá Chắn Số';
     window.scrollTo(0,0);

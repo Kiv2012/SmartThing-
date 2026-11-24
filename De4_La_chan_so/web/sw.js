@@ -1,5 +1,5 @@
 /* Lưu sẵn giao diện, dữ liệu, font để dùng khi mất mạng (PCN-05) */
-const C = 'lcs-v15';
+const C = 'lcs-v16-copy';
 const FILES = [
   './',
   'index.html',

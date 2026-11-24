@@ -30,10 +30,10 @@ A.route(/^\/kiem-tra$/, (m, q) => {
         :`<button class="btn btn-primary" type="submit">Kiểm tra</button>`}
     </form>
     <div class="check-details">
-    <div class="stack"><span class="label">Thử nhanh</span><div class="chips">${D.EXAMPLES.map(x=>`<button class="chip mono" data-act="example" data-v="${esc(x.v)}">${esc(x.lb)}</button>`).join('')}</div></div>
+    <details><summary>Ví dụ cách nhập</summary><div class="chips">${D.EXAMPLES.map(x=>`<button class="chip mono" data-act="example" data-v="${esc(x.v)}">${esc(x.lb)}</button>`).join('')}</div></details>
     <div class="stack"><span class="label">Vừa kiểm tra</span>
       ${hist.length ? `<div class="card"><ul class="list">${hist.slice(0,5).map(h=>`<li><a class="kv" style="text-decoration:none;color:inherit" href="#/kiem-tra/ket-qua?v=${encodeURIComponent(h.raw)}"><span class="mono">${esc(h.value)}</span><span class="tag ${h.level}">${A.LV[h.level]}</span></a></li>`).join('')}</ul></div>`
-        : `<div class="empty"><b>${A.xung()==='bà'?'Bà':'Bạn'} chưa kiểm tra lần nào</b>Thử bấm một ví dụ ở trên để xem cách hoạt động.</div>`}
+        : `<div class="empty"><b>${A.xung()==='bà'?'Bà':'Bạn'} chưa kiểm tra lần nào</b>Nhập số điện thoại, đường link hoặc số tài khoản cần kiểm tra.</div>`}
     </div>
     <div class="check-links"><a class="link-btn" href="#/ong-ba/tro-ly">Kể bằng giọng nói</a><a class="link-btn" href="#/khan-cap">Tôi đã chuyển tiền</a></div>
     </div>

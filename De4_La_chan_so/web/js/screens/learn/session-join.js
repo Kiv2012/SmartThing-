@@ -4,7 +4,7 @@ const A = window.App, D = A.D, S = A.S, esc = A.esc, icon = A.icon;
 const buildQuiz = A.quiz.build, quizScreen = A.quiz.screen, resultBody = A.quiz.result;
 /* ===== Người dân tại buổi tuyên truyền (quét QR) ===== */
 A.route(/^\/buoi$/, (m, q) => A.screen({mh:'MH-22', title:'Tham gia buổi tuyên truyền', noTab:true, backTo:A.roleHome(), body:`
-  <p class="ink2">Nhập mã 6 số đội tình nguyện đang chiếu, hoặc quét mã QR bằng máy ảnh điện thoại.</p>
+  <p class="ink2">Nhập mã buổi có trên máy này. Chưa hỗ trợ tham gia buổi từ thiết bị khác.</p>
   <form class="stack" data-form="buoi-code"><label class="label" for="code">Mã buổi</label><input id="code" class="input mono" inputmode="numeric" maxlength="6" placeholder="Ví dụ: 482917">
   ${q.loi?'<p class="hint" role="alert">Không tìm thấy buổi với mã này.</p>':''}<button class="btn btn-primary">Vào buổi</button></form>`}));
 document.addEventListener('submit', e => { if(e.target.dataset.form==='buoi-code'){ e.preventDefault(); const c = document.getElementById('code').value.trim(); A.go(S.buoi.some(b=>b.ma===c) ? '#/buoi/'+c : '#/buoi?loi=1'); } });
@@ -35,7 +35,7 @@ A.route(/^\/buoi\/(\d{6})\/ket-qua$/, (m, q) => {
   return A.screen({mh:'MH-15', title:'Kết quả của bạn', noTab:true, back:false, body: resultBody(score, recent?.weak || [], `
     <p class="hint">Kết quả đã được ghi nhận vào buổi tuyên truyền (không lưu tên).</p>
     ${!A.hasAccount() && A.tmp.recentQuiz?.session===m[0] ? `<a class="btn btn-ghost" href="#/dang-nhap?next=${next}">Đăng nhập để lưu điểm</a>` : ''}
-    <a class="btn btn-primary" href="#/kiem-tra">Thử kiểm tra một số lạ</a>
+    <a class="btn btn-primary" href="#/kiem-tra">Kiểm tra số lạ</a>
     <button class="btn btn-ghost" data-act="a2hs-show">Lưu Lá Chắn Số vào màn hình chính</button>`)});
 });
 })();

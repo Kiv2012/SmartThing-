@@ -20,7 +20,7 @@ A.route(/^\/hoc-sinh$/, () => {
           </div>
           <button class="btn btn-primary" type="submit">Kiểm tra ngay</button>
           <div class="entry-utilities">
-            <button class="link-btn" type="button" data-act="entry-example">Thử số mẫu</button>
+            <button class="link-btn" type="button" data-act="entry-example">Xem ví dụ</button>
             <a class="link-btn" href="#/tin-nhan">Phân tích tin nhắn</a>
           </div>
         </form>
@@ -51,7 +51,7 @@ A.route(/^\/hoc-sinh$/, () => {
       <a class="link-btn" href="#/hoi-nguoi-than">Hỏi người tin cậy</a>
       <a class="link-btn" href="#/bao-cao?moi=1">Báo cáo</a>
     </div>
-    <p class="note entry-help">Bản trình diễn dùng dữ liệu giả lập. Kết quả hỗ trợ nhận diện dấu hiệu.</p>`});
+    <p class="note entry-help">Dữ liệu minh họa. Kết quả chỉ hỗ trợ nhận diện dấu hiệu.</p>`});
 });
 
 A.actions['entry-example'] = () => A.submitCheck(A.D.EXAMPLES[0].v);

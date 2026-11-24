@@ -25,36 +25,37 @@ A.route(/^\/dang-nhap$/, (match, query) => A.screen({
   mh:'MH-25', noTab:true, title:query.work ? 'Khu công tác' : 'Đăng nhập', backTo:A.residentHome(),
   body:`
   <div class="account-layout">
-    ${query.work ? '' : `<form class="card stack" data-form="demo-login">
-      <h2>Thử đăng nhập</h2>
+    ${query.preview!=='1' ? `<section class="card stack"><h2>Đăng nhập chưa khả dụng</h2><p>Chưa kết nối dịch vụ tài khoản. Bạn vẫn có thể kiểm tra và học mà không cần đăng nhập.</p><a class="btn btn-primary" href="${A.residentHome()}">Dùng ngay</a></section>` : `<form class="card stack" data-form="demo-login">
+      <h2>Đăng nhập bằng tài khoản minh họa</h2>
       <p class="note">Bản trình diễn. Chỉ dùng dữ liệu mẫu, mật khẩu mẫu là <b>${samplePassword}</b>.</p>
       ${phone()}${password()}
       <div id="account-feedback" role="alert"></div>
-      <button class="btn btn-primary">Đăng nhập thử</button>
-      <div class="account-links"><a href="#/dang-ky?next=${encodeURIComponent(query.next || '')}">Tạo tài khoản</a><a href="#/quen-mat-khau">Quên mật khẩu?</a></div>
+      <button class="btn btn-primary">Đăng nhập</button>
+      <div class="account-links"><a href="#/dang-ky?preview=1&next=${encodeURIComponent(query.next || '')}">Tạo tài khoản</a><a href="#/quen-mat-khau?preview=1">Quên mật khẩu?</a></div>
       <a class="btn btn-ghost" href="${A.residentHome()}">Dùng ngay, không cần tài khoản</a>
     </form>`}
-    <section class="card stack" aria-labelledby="preview-accounts">
-      <h2 id="preview-accounts">Tài khoản công tác trình diễn</h2>
+    ${query.preview==='1' ? `<section class="card stack" aria-labelledby="preview-accounts">
+      <h2 id="preview-accounts">Tài khoản công tác minh họa</h2>
       <p class="note">Các tài khoản này đã được cấp quyền trong bản trình diễn.</p>
       <button class="role-choice" type="button" data-act="sign-in-work" data-work="tnv"><b>Tình nguyện viên</b><span>Nhận nhiệm vụ, đi tuyên truyền và nộp kết quả.</span></button>
       <button class="role-choice" type="button" data-act="sign-in-work" data-work="dp"><b>Điều phối viên</b><span>Lập kế hoạch, phân công và duyệt kết quả hoạt động.</span></button>
-    </section>
+    </section>` : ''}
   </div>`
 }));
 
 A.route(/^\/(dang-ky|quen-mat-khau)$/, ([mode], query) => {
+  if(query.preview!=='1') return A.screen({title:'Dịch vụ tài khoản chưa khả dụng', noTab:true, backTo:'#/dang-nhap', body:`<p>Chưa thể tạo tài khoản hoặc đổi mật khẩu. Bạn vẫn có thể kiểm tra và học.</p><a class="btn btn-primary" href="${A.residentHome()}">Dùng ngay</a>`});
   const signup = mode==='dang-ky';
   const step = ['2','3'].includes(query.b) ? Number(query.b) : 1;
   const heading = signup ? 'Tạo tài khoản' : 'Đặt lại mật khẩu';
   const section = step===1 ? 'Số điện thoại' : step===2 ? 'Mã xác minh' : 'Mật khẩu';
-  return A.screen({mh:signup?'MH-26':'MH-27', title:heading, noTab:true, backTo:step===1 ? '#/dang-nhap' : `#/${mode}?b=${step-1}&next=${encodeURIComponent(query.next || '')}`,
+  return A.screen({mh:signup?'MH-26':'MH-27', title:heading, noTab:true, backTo:step===1 ? '#/dang-nhap' : `#/${mode}?b=${step-1}&preview=1&next=${encodeURIComponent(query.next || '')}`,
     steps:[step, 3, section], body:`<form class="card stack account-step" data-form="demo-account-step" data-mode="${mode}" data-step="${step}">
       <h2>${section}</h2>
-      <p class="note">Luồng trình diễn sử dụng dữ liệu mẫu.</p>
+      <p class="note">Chỉ dùng thông tin mẫu. Chưa tạo tài khoản hoặc gửi mã xác minh thật.</p>
       ${step===1 ? phone() : step===2 ? `<label class="field"><span class="label">Mã mẫu 123456</span><input class="input" id="account-otp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required></label>` : `${password('Mật khẩu mẫu mới')}${signup ? '<label class="field"><span class="label">Tên mẫu</span><input class="input" id="account-name" value="Minh Anh" required></label>' : ''}`}
       <div id="account-feedback" role="alert"></div>
-      <button class="btn btn-primary">${step===1 ? 'Xem bước nhập mã' : step===2 ? 'Xác minh mã mẫu' : 'Hoàn thành bản thử'}</button>
+      <button class="btn btn-primary">${step===1 ? 'Tiếp tục' : step===2 ? 'Xác nhận' : 'Hoàn tất'}</button>
     </form>`});
 });
 
@@ -103,7 +104,7 @@ document.addEventListener('submit', event => {
     accountError('Hãy nhập mã mẫu 123456.',otp);
     return;
   }
-  if(step<3) A.go(`#/${form.dataset.mode}?b=${step+1}&next=${encodeURIComponent(A.q.next || '')}`);
+  if(step<3) A.go(`#/${form.dataset.mode}?b=${step+1}&preview=1&next=${encodeURIComponent(A.q.next || '')}`);
   else if(form.dataset.mode==='dang-ky') {
     const name = document.getElementById('account-name').value.trim();
     if(!A.S.name && name==='Minh Anh') A.S.name = name;

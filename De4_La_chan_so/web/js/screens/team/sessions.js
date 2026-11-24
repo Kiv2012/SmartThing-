@@ -18,7 +18,7 @@ A.route(/^\/doi\/buoi$/, (m, q) => {
       <div class="field"><label class="label" for="b-dd">Địa điểm</label><input id="b-dd" class="input" required value="Nhà văn hóa Khu phố 5"></div>
       <div class="field"><label class="label" for="b-tg">Thời gian</label><input id="b-tg" class="input" value="19:00 · 26/11/2026"></div>
       <div class="stack"><span class="label">Chủ đề (1–2 kiểu lừa) · gợi ý từ kiểu MỚI</span><div class="chips">${D.SCEN.map(s=>`<button type="button" class="chip ${ch.includes(s.id)?'on':''}" data-act="cd" data-v="${s.id}">${esc(s.ngan)}</button>`).join('')}</div></div>
-      <p class="note">Tình nguyện viên được giao trong bản trình diễn: Quốc Bảo.</p>
+      <p class="note">Người phụ trách: Quốc Bảo · thông tin minh họa.</p>
       <button class="btn btn-primary">Tạo buổi và phân công</button></form>`
       :coordinator ? '<a class="btn btn-primary" href="#/doi/buoi?moi=1">Tạo buổi mới</a>' : ''}
     <div class="stack"><span class="label">Các buổi của chi đoàn</span>
@@ -45,8 +45,8 @@ A.route(/^\/doi\/buoi\/(\d{6})$/, (m) => {
   if(b.mo) A.after = () => { poll = setInterval(() => { if(A.path!=='/doi/buoi/'+b.ma) return clearInterval(poll); try{ const s = JSON.parse(localStorage.getItem('lcs-state-v1')); const nb = s.buoi.find(x=>x.ma===b.ma); if(nb && nb.kq.nguoi!==k.nguoi){ Object.assign(b, nb); A.render(); } }catch(e){} }, 3000); };
   return A.screen({mh:'MH-23', title:'Kết quả buổi', tab:'#/doi/buoi', backTo:'#/doi/buoi', body:`
     <div class="card"><b style="font-size:var(--fs-card)">${esc(b.ten)}</b><p class="small ink2">${esc(b.dd)} · ${esc(b.tg)} · Chủ đề: ${b.chude.map(t=>esc(A.scen(t).ngan)).join(', ')}</p></div>
-    ${b.mo?`<div class="qr-card" id="qrc">${pseudoQR(b.ma)}<span class="code6">${b.ma}</span><span class="note">Mã QR minh họa · người dân quét hoặc nhập mã tại trang Lá Chắn Số</span>
-      <div class="btn-row" style="width:100%"><button class="btn btn-ghost" data-act="fs">Chiếu toàn màn hình</button><a class="btn btn-ghost" href="#/buoi/${b.ma}">Thử như người tham gia</a></div></div>`:''}
+    ${b.mo?`<div class="qr-card" id="qrc">${pseudoQR(b.ma)}<span class="code6">${b.ma}</span><span class="note">QR minh họa, chưa quét được. Mở trang tham gia để xem nội dung.</span>
+      <div class="btn-row" style="width:100%"><button class="btn btn-ghost" data-act="fs">Chiếu toàn màn hình</button><a class="btn btn-ghost" href="#/buoi/${b.ma}">Xem trang tham gia</a></div></div>`:''}
     ${k.nguoi?`<div class="kpis">
       <div class="kpi"><div class="n">${k.nguoi}</div><div class="l">Người tham gia</div></div>
       <div class="kpi"><div class="n">${k.tb}</div><div class="l">Điểm trung bình</div></div>
@@ -54,7 +54,7 @@ A.route(/^\/doi\/buoi\/(\d{6})$/, (m) => {
       <div class="kpi"><div class="n">${k.nhom.ob}·${k.nhom.hs}·${k.nhom.dan}</div><div class="l">Cao tuổi · Học sinh · Người dân</div></div></div>
       ${k.saiNhieu?`<div class="card"><span class="label">Câu sai nhiều nhất – nên nhấn mạnh</span><p>${esc(k.saiNhieu)}</p></div>`:''}
       <p class="source">Mỗi thiết bị tính một lượt · không lưu tên người tham gia · số liệu tạm tính cho đến khi điều phối viên duyệt</p>`
-      :`<div class="empty"><b>Đang chờ người tham gia</b>Hãy chiếu mã QR lên màn hình hoặc đọc mã 6 số cho bà con.</div>`}
+      :`<div class="empty"><b>Đang chờ người tham gia</b>Mở trang tham gia để xem bài học của buổi.</div>`}
     ${b.mo?`<button class="btn btn-danger" data-act="close-buoi" data-ma="${b.ma}">Đóng buổi</button>`:''}`});
 });
 A.actions.fs = () => { const el = document.getElementById('qrc'); if(el.requestFullscreen) el.requestFullscreen().catch(()=>{}); };
