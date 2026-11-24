@@ -6,6 +6,29 @@
 
 ---
 
+## 0. Nền tảng: ứng dụng web, giao diện ưu tiên điện thoại
+
+- **Thiết kế cho điện thoại trước:** khung 360–430px, một cột. Trên màn hình rộng hơn, nội dung giữ tối đa 480px và căn giữa. Riêng màn đội TNV (MH-16 → MH-18) giãn thành 2–3 cột trên máy tính bảng và máy tính.
+- **Thanh điều hướng dưới cùng** trong tầm ngón cái. Nút hành động chính nằm ở nửa dưới màn hình.
+- **Trình duyệt mục tiêu:** Chrome trên Android và Safari trên iPhone (2 phiên bản gần nhất).
+- **Cài lên màn hình chính** (P1): khai báo để trình duyệt cho phép "Thêm vào màn hình chính", có biểu tượng và tên "Lá Chắn Số". Đây là điều kiện để dùng khi mất mạng và nhận thông báo đẩy.
+
+**Giới hạn của web và cách xử lý:**
+
+| Khả năng | Giới hạn trên web | Cách xử lý trong sản phẩm |
+|---|---|---|
+| Dán từ bộ nhớ tạm | Trình duyệt hỏi quyền hoặc hiện bong bóng "Dán" | Nút "Dán" kèm gợi ý nhấn giữ ô nhập → Dán khi bị từ chối quyền |
+| Chọn từ danh bạ | Chỉ một số trình duyệt Android hỗ trợ | Có hỗ trợ thì hiện nút "Chọn từ danh bạ", nếu không thì **nhập tay** (mặc định) |
+| Quét mã QR | Cần quyền camera | Xin quyền khi bấm "Quét QR". Có thể chọn ảnh mã QR có sẵn trong máy thay vì quét |
+| Gửi SMS / Zalo | Web không tự gửi tin được | SMS: mở ứng dụng tin nhắn với nội dung soạn sẵn. Zalo: **chép nội dung vào bộ nhớ tạm** rồi mở Zalo đến đúng người, người dùng chỉ cần dán và gửi |
+| Gọi điện | – | Đường dẫn gọi điện, mở trình quay số với số có sẵn |
+| Thông báo đẩy cho người thân | iPhone chỉ nhận khi web đã được thêm vào màn hình chính | Người thân đã cài thì gửi thông báo. Nếu chưa thì dùng SMS/Zalo |
+| Nhận và đọc giọng nói tiếng Việt | Giọng và độ chính xác khác nhau tùy máy | Kiểm tra máy có hỗ trợ không. Không hỗ trợ thì ẩn nút 🎤, giữ nút 🔊 (dự phòng bằng dịch vụ giọng nói) |
+| Dùng khi mất mạng | Cần lưu sẵn dữ liệu trên máy | Lưu giao diện, danh sách cảnh báo và 10 bài học trên máy |
+| Chia sẻ | – | Dùng bảng chia sẻ của điện thoại cho chứng nhận, bài tuyên truyền, kết quả |
+
+---
+
 ## 1. Vai trò và quyền
 
 | Vai trò | Mô tả | Được dùng |
@@ -30,13 +53,22 @@
 - **NT:** nút "Bắt đầu" chỉ bấm được khi đã chọn vai trò. Đổi vai trò được trong Hồ sơ (MH-20).
 
 ### CN-01.2 Cài người thân tin cậy ("chỉ định trước")
-- **Đầu vào:** 1–3 người. Mỗi người có tên gọi, số điện thoại (nhập tay hoặc chọn từ danh bạ), quan hệ (con, cháu, vợ/chồng, thầy cô, anh chị Đoàn, khác), kênh nhận (Zalo, SMS, cuộc gọi). Đánh dấu **1 người ưu tiên**.
+- **Đầu vào:** 1–3 người. Mỗi người có tên gọi, số điện thoại (nhập tay, hoặc chọn từ danh bạ nếu trình duyệt hỗ trợ – xem mục 0), quan hệ (con, cháu, vợ/chồng, thầy cô, anh chị Đoàn, khác), kênh nhận (Zalo, SMS, cuộc gọi). Đánh dấu **1 người ưu tiên**.
 - **QT-02:** người đầu tiên được thêm sẽ mặc định là người ưu tiên.
 - **QT-03:** Học sinh có sẵn gợi ý quan hệ "Thầy cô chủ nhiệm" và "Anh chị Đoàn".
 - **Trạng thái:**
   - Chưa có ai: hộp trống với nội dung "Thêm người thân để dùng nút Hỏi người thân".
   - Cho phép **"Để sau"**. Nút Hỏi người thân khi đó hiện nhãn "Chưa cài – bấm để thêm".
 - **NT:** lưu thành công thì danh sách hiện ngay ở MH-11. Không lưu trùng số điện thoại.
+
+### CN-01.3 Gợi ý "Thêm vào màn hình chính" · P1
+- **Khi nào hiện:** sau khi cài người thân (hoặc bấm "Để sau"), với người dùng chưa thêm web vào màn hình chính.
+- **Nội dung:** một thẻ ngắn "Thêm Lá Chắn Số ra màn hình chính để mở nhanh khi có cuộc gọi lạ", kèm **hướng dẫn bằng hình theo từng trình duyệt**:
+  - Chrome Android: nút "Cài đặt" của trình duyệt.
+  - Safari iPhone: Chia sẻ → Thêm vào MH chính.
+- **Lựa chọn:** "Thêm ngay" · "Để sau". Bấm "Để sau" thì nhắc lại sau 3 lần sử dụng, tối đa 2 lần.
+- **QT-26:** với vai trò Ông bà, bước này được làm nổi bật, vì nó là điều kiện để nhận thông báo và dùng khi mất mạng. Đội TNV có thể làm hộ.
+- **NT:** không chặn người dùng ở bước này. Sau khi thêm thành công thì không hiện lại.
 
 ---
 
@@ -50,7 +82,7 @@
 | Ví dụ mẫu | 3–4 chip bấm nhanh để thử (số, link, STK) | P0 |
 | Lịch sử | Danh sách "Vừa kiểm tra" (tối đa 10, lưu trên máy) | P0 |
 | Nói | Đọc số điện thoại bằng giọng nói (CN-09) | P1 |
-| Quét QR chuyển khoản | Đọc mã QR chuyển khoản ngân hàng, lấy STK, ngân hàng, số tiền | P1 |
+| Quét QR chuyển khoản | Đọc mã QR chuyển khoản ngân hàng bằng camera hoặc từ ảnh có sẵn, lấy STK, ngân hàng, số tiền | P1 |
 
 ### CN-02.2 Tự nhận dạng loại dữ liệu
 | Loại | Quy tắc nhận dạng (đề xuất) | Chip hiển thị |
@@ -71,7 +103,7 @@
 - (c) Số báo cáo cộng đồng chưa xác minh.
 - (d) Dấu hiệu kỹ thuật của đường link.
 
-**QT-07 – Quy tắc phân mức** (ngưỡng là đề xuất, chờ duyệt):
+**QT-07 – Quy tắc phân mức** (đã chốt, xem mục 16):
 
 | Mức | Điều kiện (chỉ cần thỏa một) |
 |---|---|
@@ -102,7 +134,7 @@
 - **NT:**
   - Kết quả hiện trong ≤ 3 giây.
   - Mỗi kết quả có ít nhất 1 lý do.
-  - Từ trang chủ đến lúc gửi Hỏi người thân không quá 3 chạm (Kiểm tra → Kết quả → Hỏi người thân → Gửi).
+  - Từ màn kết quả: **2 chạm** để người thân nhận tin qua thông báo (Hỏi người thân → Gửi) hoặc để gọi người thân (Hỏi người thân → Gọi ngay). **3 chạm** khi gửi qua SMS hoặc Zalo (thêm chạm "Gửi" trong ứng dụng tin nhắn).
 
 ### CN-02.5 Trạng thái trống và lỗi
 | Tình huống | Hiển thị |
@@ -169,14 +201,15 @@
 ### CN-05.1 Gửi
 - **Vị trí nút:** MH-03 (trang chủ Ông bà), MH-06 (kết quả), MH-07 (AI), MH-09 (tiếp nhận báo cáo).
 - **Xử lý:**
-  - Bấm nút thì hiện thẻ người ưu tiên, bản xem trước tin nhắn và nút to **"Gửi cho [tên]"**.
+  - Bấm nút thì hiện thẻ người ưu tiên, bản xem trước tin nhắn và **hai nút to ngang hàng**: **"Gửi cho [tên]"** và **"Gọi [tên] ngay"**.
+  - **QT-27:** ở chế độ Dễ nhìn (Ông bà), **"Gọi ngay" đứng trước "Gửi"**, vì gọi điện chỉ mất 1 chạm và người thân phản ứng nhanh nhất.
   - Có thể đổi sang người khác trong danh sách.
 - **Nội dung soạn sẵn** (tự điền từ ngữ cảnh):
   > "[Mẹ] vừa nhận [cuộc gọi] từ [0909 xxx xxx]. Lá Chắn Số báo **[NGUY HIỂM – giả danh Công an]**. [Con] gọi lại cho [mẹ] ngay nhé."
 - **Kênh gửi:**
-  - Nếu người thân có cài app: gửi bằng **thông báo trong app**, đúng 1 chạm. Prototype mô phỏng cách này.
-  - Nếu không: **mở Zalo hoặc SMS với nội dung soạn sẵn**, người dùng chạm thêm "Gửi".
-  - Có thêm nút **Gọi ngay**.
+  - Người thân đã thêm Lá Chắn Số vào màn hình chính: gửi bằng **thông báo đẩy**, đúng 1 chạm. Prototype mô phỏng cách này.
+  - Nếu chưa: **SMS** mở ứng dụng tin nhắn với nội dung soạn sẵn. **Zalo** chép nội dung vào bộ nhớ tạm rồi mở Zalo đến đúng người. Người dùng chạm thêm "Gửi" (hoặc Dán → Gửi trên Zalo).
+  - Nút **Gọi ngay** mở trình quay số với số có sẵn (xem QT-27).
 - **QT-15:** chưa cài người thân thì chuyển sang MH-02, xong quay lại đúng bước đang làm.
 
 ### CN-05.2 Theo dõi và leo thang
@@ -328,7 +361,8 @@
 | PCN-04 | Mọi màn có nút Quay lại. Thao tác làm mất dữ liệu đều hỏi xác nhận |
 | PCN-05 | Kiểm tra vẫn hoạt động khi mất mạng, dùng danh sách đã tải về |
 | PCN-06 | Thu tối thiểu dữ liệu, che dữ liệu nhạy cảm trước khi đưa cho AI, cho báo cáo ẩn danh, tuân thủ quy định pháp luật về bảo vệ dữ liệu cá nhân |
-| PCN-07 | Giao diện mobile-first (rộng 360–430px). Riêng màn đội TNV dùng được cả trên máy tính bảng và máy tính |
+| PCN-07 | **Ứng dụng web, giao diện ưu tiên điện thoại** (360–430px, cột nội dung tối đa 480px trên màn hình rộng). Riêng màn đội TNV giãn ra trên máy tính bảng và máy tính. Chạy tốt trên Chrome Android và Safari iPhone. Xem mục 0 |
+| PCN-09 | Lần đầu mở trang hiển thị trong ≤ 3 giây trên mạng 4G. Giao diện không phụ thuộc thư viện tải từ máy chủ ngoài |
 | PCN-08 | Toàn bộ dữ liệu trong prototype là giả lập |
 
 ---
@@ -348,14 +382,19 @@
 | Điểm cộng: kết nối kênh tiếp nhận tin báo của Công an | CN-10 | MH-09, MH-10, MH-17 |
 | Dữ liệu mẫu: 10 tình huống, 120 báo cáo, 35% đường dẫn | Đặc tả sản phẩm mục 8 | MH-13, MH-16 |
 | Người dùng: người cao tuổi · học sinh · đội TNV | CN-01, CN-09, CN-08 | MH-01, MH-03, MH-04, MH-16 |
+| Nền tảng: ứng dụng web, giao diện ưu tiên điện thoại | Mục 0, CN-01.3, PCN-07, PCN-09 | Tất cả |
 
 ---
 
-## 16. Quyết định chờ duyệt
+## 16. Quyết định đã chốt (24/11/2026)
 
-1. Ngưỡng phân mức (QT-07): **≥ 5 báo cáo độc lập trong 30 ngày** thì xếp Nguy hiểm.
-2. Định nghĩa "kiểu mới" (QT-20).
-3. Thời gian chờ trước khi gợi ý người thân thứ hai (QT-16): **2 phút**.
-4. Ngưỡng chứng nhận (QT-19): **80 điểm**.
-5. Số câu mỗi lượt kiểm tra: **10 cho Học sinh, 5 cho Ông bà**.
-6. Phân định P0/P1 (có thể đổi khi có thang điểm của vòng thi).
+| # | Nội dung | Quyết định |
+|---|---|---|
+| 1 | Ngưỡng 🔴 từ báo cáo cộng đồng (QT-07) | **≥ 5 báo cáo độc lập trong 30 ngày**. 1–4 báo cáo thì xếp 🟡 |
+| 2 | Định nghĩa "kiểu mới" (QT-20) | **Lần đầu xuất hiện** tại xã/phường trong 7 ngày, **hoặc** số ca 7 ngày **≥ 2 lần** trung bình 4 tuần trước và ≥ 3 ca |
+| 3 | Chờ trước khi gợi ý người thân thứ hai (QT-16) | **2 phút** |
+| 4 | Bài kiểm tra (QT-17, QT-19) | **10 câu cho Học sinh, 5 câu cho Ông bà**. Chứng nhận khi đạt **≥ 80 điểm** |
+| 5 | Phạm vi dựng | **Mọi luồng (F0–F8) làm hoàn chỉnh**. Thứ tự trình diễn do đội tự quyết sau khi dựng xong |
+| 6 | Dữ liệu mẫu người thân | **Lan (con gái, ưu tiên)**, **Hùng (con trai)** |
+
+**Còn mở:** việc phân định P0/P1 có thể đổi khi có thang điểm của vòng thi · danh sách kênh tiếp nhận tin báo Công an cần kiểm chứng (QT-24).

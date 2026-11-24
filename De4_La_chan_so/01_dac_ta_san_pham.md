@@ -7,7 +7,7 @@
 
 ## 1. Tóm tắt
 
-**Lá Chắn Số** là ứng dụng trên điện thoại. Sản phẩm **chen vào giữa lúc người dân bị dụ và lúc bấm chuyển tiền**: người dùng kiểm tra số điện thoại, đường link hoặc số tài khoản trong vài giây, rồi **hỏi người thân bằng một chạm**. Sau đó app dạy họ nhận ra đúng kiểu lừa vừa gặp trong 1 phút. Mỗi báo cáo của người dân được chuyển cho **đội thanh niên tình nguyện xã/phường**, để đội biết tuần này cần tuyên truyền gì, ở đâu và cho ai.
+**Lá Chắn Số** là **ứng dụng web có giao diện tối ưu cho điện thoại**: mở bằng trình duyệt qua đường link hoặc mã QR, không cần cài từ kho ứng dụng. Sản phẩm **chen vào giữa lúc người dân bị dụ và lúc bấm chuyển tiền**: người dùng kiểm tra số điện thoại, đường link hoặc số tài khoản trong vài giây, rồi **hỏi người thân bằng một chạm**. Sau đó app dạy họ nhận ra đúng kiểu lừa vừa gặp trong 1 phút. Mỗi báo cáo của người dân được chuyển cho **đội thanh niên tình nguyện xã/phường**, để đội biết tuần này cần tuyên truyền gì, ở đâu và cho ai.
 
 **Hai mục tiêu:**
 1. **Chặn giao dịch hôm nay:** kiểm tra nhanh, gọi người thân vào cuộc, chuyển tin báo cho Công an.
@@ -63,7 +63,7 @@ Nhận cảnh báo, trả lời nhanh, gọi lại cho người đang bị dụ.
 
 ## 4. Nguyên tắc sản phẩm
 
-1. **Nhanh trước, đầy đủ sau:** một ô nhập cho mọi loại dữ liệu. Tối đa **3 chạm** từ trang chủ đến lúc người thân nhận được tin.
+1. **Nhanh trước, đầy đủ sau:** một ô nhập cho mọi loại dữ liệu. Từ màn kết quả hoặc trang chủ Ông bà, **2 chạm** là người thân nhận được tin (gửi bằng thông báo) hoặc đã gọi được người thân (**Gọi ngay**). Khi gửi qua SMS hoặc Zalo thì mất **3 chạm**, do giới hạn của web.
 2. **Lời thường:** viết "đường link" thay cho "URL", "số tài khoản" thay cho "STK". Lý do kết quả là câu đời thường, không phải điểm kỹ thuật.
 3. **Không bao giờ hứa "an toàn" khi không có căn cứ:** không có dữ liệu thì xếp vào mức "Nghi ngờ".
 4. **Màu, biểu tượng, chữ và giọng đọc đi cùng nhau:** không truyền thông tin bằng màu một mình.
@@ -120,7 +120,7 @@ Nhận cảnh báo, trả lời nhanh, gọi lại cho người đang bị dụ.
 | MH-20 | Hồ sơ và cài đặt (Dễ nhìn và đọc to) | Điểm cộng 2 | Tất cả | P1 |
 
 **P0:** bắt buộc có trong bài nộp. **P1:** nên có để ghi điểm cộng và cho thấy luồng khép kín.
-Sitemap và luồng chi tiết sẽ làm ở bước sau, khi đặc tả chức năng đã được duyệt.
+Sitemap và luồng màn hình: xem [03_sitemap_luong_man_hinh.md](03_sitemap_luong_man_hinh.md).
 
 ---
 
@@ -135,11 +135,10 @@ Người dân ──kiểm tra──> Kết quả ──┬──> Hỏi ngườ
 Người dân nhận diện tốt hơn  <──────────────────────────────────────────────────────────────────┘
 ```
 
-**Luồng chính đề xuất cho phần trình diễn: luồng Ông bà.** Đây là đề xuất của đội phân tích, chờ chốt.
-Nhận cuộc gọi lạ → mở app → Kiểm tra số → 🔴 Nguy hiểm, kèm 3 lý do → **Hỏi người thân** → người thân trả lời "Đừng chuyển, con gọi ngay".
-Lý do chọn: luồng ngắn, đúng khoảnh khắc "trước khi chuyển tiền", đi qua 2 màn bắt buộc và thể hiện được điểm cộng giọng nói.
+**Đã chốt: mọi luồng được làm hoàn chỉnh ngang nhau.** Không có luồng nào chỉ làm ở mức minh họa. Thứ tự trình diễn do đội quyết định sau khi web dựng xong.
 
-**Luồng phụ:**
+**Ba luồng theo vai trò:**
+- **Ông bà:** nhận cuộc gọi lạ → mở app → Kiểm tra số → 🔴 Nguy hiểm, kèm 3 lý do → **Hỏi người thân** (Gọi Lan ngay / Gửi cho Lan) → Lan trả lời "Đừng chuyển, con gọi ngay".
 - **Học sinh:** dán tin nhắn "việc nhẹ lương cao" → AI tô đỏ dấu hiệu → Báo cáo → Bài học 1 phút → Bài kiểm tra.
 - **Đội TNV:** Tổng quan → kiểu lừa mới tuần này → Xác minh báo cáo → Tạo bài tuyên truyền → Xuất báo cáo.
 
@@ -205,10 +204,13 @@ Danh sách kênh tiếp nhận cụ thể của Công an (số, tài khoản Zal
 
 ## 11. Khả thi và công nghệ (đề xuất)
 
-- **Nền tảng:** web app mobile-first, mở bằng đường link hoặc mã QR, không cần cài đặt. Có thể đóng gói thành Zalo Mini App, vì ông bà đã quen Zalo.
+- **Nền tảng (đã chốt): ứng dụng web, giao diện ưu tiên điện thoại.**
+  - Bố cục thiết kế cho màn hình rộng 360–430px. Màn hình rộng hơn vẫn dùng được: cột nội dung tối đa 480px, căn giữa. Riêng màn đội TNV giãn ra trên máy tính bảng và máy tính.
+  - Mở bằng đường link hoặc mã QR. Có thể **"Thêm vào màn hình chính"** để có biểu tượng như app, dùng được khi mất mạng và nhận thông báo. Đội TNV làm thao tác này giúp ông bà.
+  - Dùng tốt trên Chrome (Android) và Safari (iPhone), là hai trình duyệt phổ biến nhất của người dùng mục tiêu.
 - **Kiểm tra:** danh sách cảnh báo (từ báo cáo đã xác minh và nguồn chính thức) + danh sách số và tên miền chính thức + luật nhận dạng link (tên miền nhái, link rút gọn, tên miền mới tạo).
 - **AI:** tầng 1 là luật từ khóa, chạy ngay và không tốn chi phí. Tầng 2 là mô hình ngôn ngữ lớn để giải thích và phân loại, dữ liệu được che trước khi gửi.
-- **Giọng nói:** bộ nhận dạng và đọc giọng nói tiếng Việt có sẵn trong trình duyệt, hoặc dịch vụ giọng nói tiếng Việt trong nước.
+- **Giọng nói:** bộ nhận dạng và đọc giọng nói tiếng Việt có sẵn trong trình duyệt. Chất lượng giọng tiếng Việt khác nhau tùy máy, nên dự phòng bằng dịch vụ giọng nói tiếng Việt trong nước.
 - **Dữ liệu:** backend nhẹ lưu báo cáo, danh sách cảnh báo và thống kê theo xã/phường.
 - **Triển khai:** đội TNV phát mã QR tại tổ dân phố và cài hộ ông bà · nhà trường đưa bài học và bài kiểm tra vào tiết sinh hoạt lớp · đội cập nhật danh sách cảnh báo hằng tuần cùng Công an xã/phường.
 
@@ -229,6 +231,6 @@ Danh sách kênh tiếp nhận cụ thể của Công an (số, tài khoản Zal
 ## 13. Điểm còn mở
 
 1. Thể lệ, thang điểm, sản phẩm nộp và hạn nộp của vòng thi: **chưa có**. Thứ tự ưu tiên P0/P1 có thể đổi khi có thang điểm.
-2. Luồng chính cho phần trình diễn: **đề xuất luồng Ông bà, chờ chốt**.
-3. Danh sách kênh tiếp nhận tin báo của Công an: **cần kiểm chứng**.
-4. Ngưỡng phân mức (QT-07 và mục 16 trong đặc tả chức năng): **đề xuất, chờ duyệt**.
+2. Danh sách kênh tiếp nhận tin báo của Công an: **cần kiểm chứng**.
+
+**Đã chốt (24/11/2026):** làm hoàn chỉnh mọi luồng, thứ tự trình diễn do đội tự quyết sau khi dựng xong · các ngưỡng và tham số nghiệp vụ (xem mục 16 trong đặc tả chức năng) · tên người thân mẫu là Lan (con gái) và Hùng (con trai).
