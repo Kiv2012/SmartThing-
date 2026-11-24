@@ -126,8 +126,11 @@ Nhận cảnh báo, trả lời nhanh, gọi lại cho người đang bị dụ.
 | MH-22 | Buổi tuyên truyền: tạo buổi và mã QR | Sáng tạo – đoàn viên | Đội TNV | P0 |
 | MH-23 | Kết quả buổi tuyên truyền | Sáng tạo – đoàn viên (đo tác động) | Đội TNV | P0 |
 | MH-24 | Thi đua chi đoàn | Sáng tạo – đoàn viên | Học sinh, Đội TNV | P0 |
+| MH-25 | Đăng nhập (số điện thoại + mật khẩu, hoặc Google) | Tài khoản | Tất cả | P0 |
+| MH-26 | Đăng ký (số điện thoại → mã OTP → mật khẩu và tên) | Tài khoản | Tất cả | P0 |
+| MH-27 | Quên mật khẩu | Tài khoản | Tất cả | P0 |
 
-**Tổng: 25 màn** (MH-01 → MH-24 và lớp phủ MH-02a). Trong đó có 9 màn đáp ứng 6 yêu cầu bắt buộc. Các màn còn lại do đội thiết kế thêm để luồng liền mạch và để ghi điểm sáng tạo.
+**Tổng: 28 màn** (MH-01 → MH-27 và lớp phủ MH-02a). Trong đó có 9 màn đáp ứng 6 yêu cầu bắt buộc. Các màn còn lại do đội thiết kế thêm để luồng liền mạch và để ghi điểm sáng tạo.
 
 **P0:** bắt buộc có trong bài nộp. **P1:** nên có để ghi điểm cộng và cho thấy luồng khép kín.
 Sitemap và luồng màn hình: xem [03_sitemap_luong_man_hinh.md](03_sitemap_luong_man_hinh.md).
@@ -260,6 +263,7 @@ Nguyên tắc của BTC phải giữ: không sao chép nguyên giao diện sản
 
 | Nhóm | Màn P0 | Chức năng |
 |---|---|---|
+| Tài khoản | MH-25, MH-26, MH-27 | Đăng nhập, đăng ký bằng số điện thoại (OTP) + mật khẩu hoặc Google · quên mật khẩu |
 | Khởi đầu | MH-01, MH-02 | Chọn vai trò, xã/phường, lớp/chi đoàn · cài người thân |
 | Trang chủ | MH-03, MH-04 | Theo vai trò |
 | Kiểm tra | MH-05, MH-06 | Nhận dạng, tra danh sách mẫu, xếp 3 mức kèm lý do, đọc to |
@@ -280,6 +284,12 @@ Nguyên tắc của BTC phải giữ: không sao chép nguyên giao diện sản
 - **AI:** tầng 1 là luật từ khóa, chạy ngay và không tốn chi phí. Tầng 2 là mô hình ngôn ngữ lớn để giải thích và phân loại, dữ liệu được che trước khi gửi.
 - **Giọng nói:** bộ nhận dạng và đọc giọng nói tiếng Việt có sẵn trong trình duyệt. Chất lượng giọng tiếng Việt khác nhau tùy máy, nên dự phòng bằng dịch vụ giọng nói tiếng Việt trong nước.
 - **Dữ liệu:** backend nhẹ lưu báo cáo, danh sách cảnh báo và thống kê theo xã/phường.
+- **Tài khoản (đã chốt): Firebase.**
+  - **Firebase Authentication** với 4 cách: số điện thoại (OTP qua SMS) để xác thực · số điện thoại + mật khẩu (dùng email nội bộ sinh từ số điện thoại) · Google · ẩn danh cho "Dùng ngay".
+  - **Cloud Firestore** lưu hồ sơ, có Security Rules.
+  - **Cloud Functions** cấp quyền Đội TNV bằng custom claim và dọn dữ liệu khi xóa tài khoản.
+  - **Firebase Hosting** cho HTTPS và trang đăng nhập Google cùng tên miền.
+  - Không tự viết phần bảo mật, nên làm kịp trong 24 giờ. Khi trình diễn dùng **số điện thoại thử nghiệm** của Firebase để không tốn SMS.
 - **Triển khai:** đội TNV phát mã QR tại tổ dân phố và cài hộ ông bà · nhà trường đưa bài học và bài kiểm tra vào tiết sinh hoạt lớp · đội cập nhật danh sách cảnh báo hằng tuần cùng Công an xã/phường.
 
 ---
@@ -291,6 +301,10 @@ Nguyên tắc của BTC phải giữ: không sao chép nguyên giao diện sản
 | Báo "An toàn" sai | Chỉ xanh khi nằm trong danh sách chính thức. Luôn kèm nhắc "dừng lại nếu bị giục chuyển tiền" |
 | Báo cáo bừa, vu khống số vô tội | Ngưỡng số báo cáo độc lập · đội TNV xác minh · có quy trình khiếu nại gỡ nhãn |
 | Lộ dữ liệu cá nhân | Thu tối thiểu · báo cáo ẩn danh · che STK và họ tên trước khi đưa AI · tuân thủ quy định pháp luật về bảo vệ dữ liệu cá nhân |
+| Chiếm tài khoản, lừa lấy mã OTP | Mật khẩu băm, khóa tạm sau 5 lần sai · OTP có hạn và giới hạn số lần gửi · màn OTP ghi rõ "Lá Chắn Số không bao giờ hỏi mã này" · đổi mật khẩu thì đăng xuất mọi máy |
+| Dữ liệu cá nhân lưu trên máy chủ Firebase ở nước ngoài | Chỉ lưu tối thiểu (tên gọi, xã/phường, vai trò, người thân) · không lưu nội dung tin nhắn · đánh giá và làm thủ tục chuyển dữ liệu cá nhân ra nước ngoài theo quy định trước khi triển khai thật |
+| Chi phí SMS OTP tăng khi nhiều người dùng | Chỉ gửi OTP lúc đăng ký và quên mật khẩu, đăng nhập hằng ngày bằng mật khẩu · khóa gửi lại 60 giây · SMS region policy chỉ +84 · reCAPTCHA chống gửi tự động |
+| Bắt đăng nhập làm người đang hoảng bỏ cuộc | **Không bắt buộc đăng nhập** để kiểm tra, phân tích tin nhắn, báo cáo ẩn danh, hỏi người thân (QT-01) |
 | AI phân tích sai | AI chỉ giải thích, mức cảnh báo do quy tắc quyết định. Khi không chắc thì xếp "Nghi ngờ" |
 | Người cao tuổi không dùng được | Trang chủ 2–3 nút to · giọng nói · đội TNV cài hộ · thử với người dùng thật |
 

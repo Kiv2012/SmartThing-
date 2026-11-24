@@ -10,7 +10,11 @@
 
 ```mermaid
 flowchart TD
-    ROOT["laChanSo (web)"] --> MH01["MH-01 Chọn vai trò"]
+    ROOT["laChanSo (web)"] --> MH25["MH-25 Đăng nhập"]
+    MH25 --> MH26["MH-26 Đăng ký"]
+    MH25 --> MH27["MH-27 Quên mật khẩu"]
+    MH25 -- "Dùng ngay, không cần tài khoản" --> MH01
+    MH26 --> MH01["MH-01 Chọn vai trò"]
     MH01 --> MH02["MH-02 Cài người thân tin cậy"]
     MH02 --> MH02a["MH-02a Gợi ý Thêm vào màn hình chính (lớp phủ)"]
 
@@ -55,7 +59,10 @@ flowchart TD
 Mỗi màn có đường dẫn riêng. Người dùng mở thẳng được từ link hoặc thông báo, nút Quay lại của trình duyệt hoạt động đúng, và prototype có thể đi thẳng đến từng màn khi trình diễn.
 
 ```
-/                         → chuyển theo vai trò đã lưu (chưa có thì /bat-dau)
+/                         → đã đăng nhập hoặc đã chọn vai trò: về trang chủ theo vai trò; chưa thì /dang-nhap
+├── /dang-nhap            MH-25 Đăng nhập (số điện thoại + mật khẩu, Google)
+├── /dang-ky              MH-26 Đăng ký: ?b=1 số điện thoại · ?b=2 mã OTP · ?b=3 mật khẩu và tên
+├── /quen-mat-khau        MH-27 Quên mật khẩu
 ├── /bat-dau              MH-01 Chọn vai trò
 ├── /nguoi-than           MH-02 Cài người thân tin cậy   (+ lớp phủ MH-02a)
 │
@@ -129,9 +136,18 @@ Mỗi thẻ có một icon nét đơn sắc kèm nhãn chữ (DESIGN.md mục 1A
 
 ```mermaid
 flowchart LR
-    A["Mở link / quét QR"] --> B{"Đã có vai trò?"}
+    A["Mở link / quét QR"] --> B{"Đã đăng nhập hoặc đã chọn vai trò?"}
     B -- "Có" --> H["Trang chủ theo vai trò"]
-    B -- "Chưa" --> C["MH-01 Chọn vai trò + xã/phường"]
+    B -- "Chưa" --> L["MH-25 Đăng nhập"]
+    L -- "Số điện thoại + mật khẩu đúng" --> H
+    L -- "Tạo tài khoản mới" --> R1["MH-26 B1 Số điện thoại"]
+    R1 --> R2["B2 Mã OTP 6 số"]
+    R2 --> R3["B3 Mật khẩu + tên gọi"]
+    R3 --> C
+    L -- "Tiếp tục với Google (lần đầu)" --> R1
+    L -- "Quên mật khẩu?" --> F["MH-27 Số điện thoại → OTP → mật khẩu mới"]
+    F --> L
+    L -- "Dùng ngay, không cần tài khoản (Firebase ẩn danh)" --> C["MH-01 Chọn vai trò + xã/phường"]
     C -- "Ông bà (bật Dễ nhìn)" --> D["MH-02 Cài người thân"]
     C -- "Học sinh" --> D
     C -- "Đội TNV (nhập mã đội)" --> T["MH-16 Tổng quan phường"]
@@ -141,7 +157,9 @@ flowchart LR
 
 | Bước | Màn | Người dùng làm | Hệ thống phản hồi |
 |---|---|---|---|
-| 1 | MH-01 | Chọn thẻ vai trò, chọn xã/phường | Ông bà: tự bật Dễ nhìn và đọc lời chào |
+| 0a | MH-25 | Nhập số điện thoại + mật khẩu, hoặc "Tiếp tục với Google", hoặc "Dùng ngay, không cần tài khoản" | Đúng thì về trang chủ (đã có vai trò) hoặc MH-01. Sai 5 lần thì khóa 15 phút |
+| 0b | MH-26 | B1 nhập số (reCAPTCHA vô hình) → B2 nhập mã OTP (đếm ngược gửi lại 60 giây) → B3 mật khẩu + tên gọi. Đang dùng ẩn danh thì dữ liệu được giữ lại khi tạo tài khoản. Google lần đầu: chỉ B1–B2, bỏ qua được trừ Đội TNV | Tạo tài khoản, chuyển MH-01 |
+| 1 | MH-01 | Chọn thẻ vai trò, chọn xã/phường | Ông bà: tự bật Dễ nhìn và đọc lời chào. Chọn Đội TNV khi chưa đăng nhập thì yêu cầu đăng nhập |
 | 2 | MH-02 | Thêm người thân (tên, số, quan hệ) hoặc "Để sau" | Người đầu tiên là người ưu tiên |
 | 3 | MH-02a | "Thêm ngay" (xem hướng dẫn theo trình duyệt) hoặc "Để sau" | Không chặn, nhắc lại tối đa 2 lần |
 | 4 | Trang chủ | – | Hiện "Bài học hôm nay" |
@@ -401,7 +419,10 @@ Ca đã xác minh (MH-17) ───────┘    20% Tuyên truyền · 20%
 
 | Mã | Màn | Đường dẫn | Vào từ | Đi tới | Luồng |
 |---|---|---|---|---|---|
-| MH-01 | Chọn vai trò | /bat-dau | Lần đầu mở · Tôi → Đổi vai trò | MH-02 · MH-16 | F0 |
+| MH-25 | Đăng nhập | /dang-nhap | Lần đầu mở · chạm chức năng cần tài khoản · Tôi → Đăng nhập | Trang chủ · MH-01 · MH-26 · MH-27 | F0 |
+| MH-26 | Đăng ký (3 bước) | /dang-ky | MH-25 (Tạo tài khoản, Google lần đầu) | MH-01 | F0 |
+| MH-27 | Quên mật khẩu | /quen-mat-khau | MH-25 | MH-25 | F0 |
+| MH-01 | Chọn vai trò | /bat-dau | MH-25 (Dùng ngay) · MH-26 · Tôi → Đổi vai trò | MH-02 · MH-16 | F0 |
 | MH-02 | Cài người thân | /nguoi-than | MH-01 · MH-11 · MH-20 | MH-02a · quay lại MH-11 | F0, F4 |
 | MH-02a | Gợi ý Thêm vào MH chính | lớp phủ | MH-02 | Trang chủ | F0 |
 | MH-03 | Trang chủ Ông bà | /ong-ba | F0 · thẻ Trang chủ | MH-05 · MH-11 · MH-19 · MH-13 | F1 |
@@ -445,6 +466,7 @@ Ca đã xác minh (MH-17) ───────┘    20% Tuyên truyền · 20%
 | Sáng tạo: Đoàn viên đỡ đầu số | MH-21 | F9 | 1 (thẻ Đỡ đầu) |
 | Sáng tạo: Buổi tuyên truyền có QR | MH-22, MH-23 | F10 | 1–2 · người dân: quét QR là vào thẳng bài học |
 | Sáng tạo: Thi đua chi đoàn | MH-24 | F5, F6 | 1–2 |
+| Tài khoản: đăng nhập, đăng ký (số điện thoại + mật khẩu, Google) | MH-25, MH-26, MH-27 | F0 | Không chặn: "Dùng ngay, không cần tài khoản" |
 
 ---
 

@@ -39,7 +39,13 @@
 | **Người tham gia buổi tuyên truyền** | Người dân quét QR, không cần tài khoản | Bài học và bài kiểm tra của buổi đó |
 | **Người thân** | Không bắt buộc cài app | Nhận cảnh báo, trả lời nhanh |
 
-**QT-01:** Kiểm tra nhanh, AI tin nhắn và Bài học **dùng được mà không cần tài khoản**. Chỉ Báo cáo không ẩn danh, Hỏi người thân và chức năng của đội TNV cần thông tin hồ sơ.
+**QT-01:** **Không bắt buộc đăng nhập để tự bảo vệ.** Người đang hoảng không bị chặn ở màn đăng nhập.
+
+| Dùng được khi **chưa đăng nhập** (dữ liệu lưu trên máy) | **Cần tài khoản** (CN-15) |
+|---|---|
+| Kiểm tra nhanh, phân tích tin nhắn, bài học, bài kiểm tra (không lưu điểm), báo cáo **ẩn danh**, Hỏi người thân (danh sách người thân lưu trên máy), tham gia buổi tuyên truyền bằng QR | Báo cáo có tên và theo dõi trạng thái · đồng bộ người thân và lịch sử giữa các máy · lưu điểm, nhận Chứng nhận có tên · cộng điểm Thi đua chi đoàn · **mọi chức năng của Đội TNV** (thống kê, xác minh, tuyên truyền, đỡ đầu) |
+
+Khi người chưa đăng nhập chạm vào chức năng cần tài khoản, app hiện bottom sheet "Đăng nhập để lưu và theo dõi" với hai nút **Đăng nhập** và **Để sau**. Riêng chức năng của Đội TNV thì không có nút "Để sau".
 
 ---
 
@@ -72,6 +78,83 @@
 - **Lựa chọn:** "Thêm ngay" · "Để sau". Bấm "Để sau" thì nhắc lại sau 3 lần sử dụng, tối đa 2 lần.
 - **QT-26:** với vai trò Ông bà, bước này được làm nổi bật, vì nó là điều kiện để nhận thông báo và dùng khi mất mạng. Đội TNV có thể làm hộ.
 - **NT:** không chặn người dùng ở bước này. Sau khi thêm thành công thì không hiện lại.
+
+---
+
+## 2A. CN-15 Tài khoản bằng Firebase Authentication (MH-25, MH-26, MH-27) · P0
+
+**Nền tảng (đã chốt): Firebase Authentication**, đi cùng **Cloud Firestore** (hồ sơ người dùng), **Cloud Functions** (quyền Đội TNV, dọn dữ liệu khi xóa tài khoản) và **Firebase Hosting** (HTTPS, cùng tên miền với trang đăng nhập Google).
+
+**Nhà cung cấp đăng nhập bật trong Firebase:**
+
+| Nhà cung cấp | Dùng cho |
+|---|---|
+| **Phone** (OTP qua SMS) | Xác thực số điện thoại khi đăng ký · quên mật khẩu · bổ sung số sau Google |
+| **Email/Password** | Đăng nhập hằng ngày bằng **số điện thoại + mật khẩu** (QT-34) |
+| **Google** | "Tiếp tục với Google" |
+| **Anonymous** | "Dùng ngay, không cần tài khoản" (QT-01). Dữ liệu được giữ khi người dùng tạo tài khoản sau |
+
+- **QT-34 – Số điện thoại + mật khẩu trên Firebase:** Firebase không có sẵn kiểu đăng nhập này, nên app làm như sau.
+  - Khi đăng ký, xác thực số bằng OTP (Phone), rồi **gắn thêm** thông tin Email/Password bằng `linkWithCredential`. Email là một **email nội bộ sinh từ số điện thoại** theo dạng E.164, ví dụ `+84912000001@sdt.lachanso.vn`. Người dùng không bao giờ thấy email này.
+  - Khi đăng nhập, người dùng nhập số + mật khẩu. App đổi số sang email nội bộ rồi gọi `signInWithEmailAndPassword`.
+  - Một tài khoản (một `uid`) có thể gắn đủ Phone, Email/Password và Google.
+
+### CN-15.1 Đăng nhập (MH-25)
+- **Trên màn:** khối thương hiệu · ô **Số điện thoại** · ô **Mật khẩu** (nút chữ Hiện/Ẩn) · công tắc **Ghi nhớ trên máy này** · nút **Đăng nhập** · "hoặc" · **Tiếp tục với Google** · **Quên mật khẩu?** · **Tạo tài khoản mới** · **Dùng ngay, không cần tài khoản**.
+- **Xử lý:**
+  - Thành công: đọc hồ sơ `users/{uid}` trên Firestore. Có vai trò rồi thì về trang chủ theo vai trò, chưa có thì sang MH-01.
+  - Google: dùng `signInWithPopup`. Trình duyệt chặn cửa sổ bật lên thì chuyển sang `signInWithRedirect`. Lần đầu đăng nhập thì sang MH-26 bước "Xác thực số điện thoại".
+- **QT-35 – Ghi nhớ:** bật thì dùng `browserLocalPersistence` (giữ đăng nhập đến khi đăng xuất). Tắt thì dùng `browserSessionPersistence` (thoát khi đóng tab).
+- **QT-36 – Chống dò mật khẩu:** dùng cơ chế chặn của Firebase. Khi gặp lỗi `auth/too-many-requests`, hiện "Đăng nhập tạm bị khóa do thử sai nhiều lần. Hãy thử lại sau hoặc dùng Quên mật khẩu". Bật **Email enumeration protection** để lỗi không tiết lộ số điện thoại đã có tài khoản hay chưa.
+- **Bảng lỗi Firebase → câu hiển thị:**
+
+| Mã lỗi Firebase | Câu hiển thị |
+|---|---|
+| `auth/invalid-credential`, `auth/wrong-password`, `auth/user-not-found` | Số điện thoại hoặc mật khẩu chưa đúng |
+| `auth/too-many-requests` | Tạm khóa do thử sai nhiều lần (QT-36) |
+| `auth/network-request-failed` | Cần có mạng để đăng nhập. Bạn vẫn kiểm tra số lạ được (kèm nút sang MH-05) |
+| `auth/popup-closed-by-user` | Bạn đã đóng cửa sổ Google. Hãy thử lại |
+| `auth/invalid-verification-code` | Mã chưa đúng, kiểm tra lại tin nhắn |
+| `auth/code-expired` | Mã đã hết hạn, hãy bấm Gửi lại mã |
+| `auth/credential-already-in-use` | Số này đã có tài khoản. Hãy đăng nhập |
+
+- **NT:** người cao tuổi đăng nhập được trong ≤ 3 thao tác nhập. Thông báo lỗi không lộ mã lỗi kỹ thuật.
+
+### CN-15.2 Đăng ký bằng số điện thoại (MH-26, 3 bước)
+| Bước | Nội dung | Firebase |
+|---|---|---|
+| 1. Số điện thoại | Nhập số → **Gửi mã** | Kiểm tra người dùng bằng **reCAPTCHA vô hình** (`RecaptchaVerifier`, size `invisible`) → `signInWithPhoneNumber`. Nếu đang dùng ẩn danh thì dùng `linkWithPhoneNumber` để giữ dữ liệu |
+| 2. Mã xác thực | **6 ô** mã OTP · đếm ngược "Gửi lại sau 60 giây" · dòng cảnh báo **"Lá Chắn Số không bao giờ gọi điện hay nhắn tin hỏi mã này. Không đưa mã cho ai."** | `confirmationResult.confirm(code)` |
+| 3. Mật khẩu và tên gọi | Mật khẩu (Hiện/Ẩn) · độ mạnh bằng chữ · tên gọi · đồng ý điều khoản và chính sách dữ liệu | `linkWithCredential(EmailAuthProvider.credential(emailNoiBo, matKhau))` · `updateProfile({displayName})` · tạo `users/{uid}` trên Firestore |
+
+Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
+- **QT-37 – Mã OTP:** độ dài, thời hạn và hạn mức gửi do Firebase quản lý. App chỉ khóa nút "Gửi lại mã" trong **60 giây** để tránh bấm liên tục.
+- **QT-38 – Mật khẩu:** bật **chính sách mật khẩu** của Firebase Authentication: tối thiểu **8 ký tự**, có chữ và số. Firebase tự băm mật khẩu (scrypt), app không bao giờ lưu hay ghi mật khẩu.
+- **QT-39 – Học sinh dưới 16 tuổi (P1):** ở MH-01, học sinh khai năm sinh. Dưới 16 tuổi thì cần **cha mẹ hoặc giáo viên chủ nhiệm xác nhận** bằng OTP gửi tới số của người đó. Kết quả lưu trong `users/{uid}.xacNhanGiamHo`. Điều khoản pháp lý cụ thể về dữ liệu cá nhân trẻ em cần kiểm chứng.
+- **Cấu hình Firebase cần làm:** bật nhà cung cấp Phone · thêm **Việt Nam (+84)** vào **SMS region policy** · khai báo tên miền Hosting trong **Authorized domains** · khai báo **số điện thoại thử nghiệm** (mã cố định) để trình diễn không tốn SMS.
+- **NT:** tạo được tài khoản trong ≤ 2 phút. Số chưa xác thực OTP thì không gắn được mật khẩu.
+
+### CN-15.3 Google
+- Nút **"Tiếp tục với Google"** đúng nhận diện nút đăng nhập của Google, có logo. Đây là ngoại lệ được phép với quy tắc ít icon (DESIGN.md mục 1A).
+- Lần đầu: lấy tên và email từ Google, rồi sang bước **Xác thực số điện thoại** (`linkWithPhoneNumber`, bước 1–2 của MH-26):
+  - **Bắt buộc** với Đội TNV.
+  - **Bỏ qua được** với Ông bà và Học sinh.
+- **QT-40:** Firebase để mặc định **một tài khoản cho mỗi email**. Nếu email Google trùng một tài khoản đã có, Firebase trả `auth/account-exists-with-different-credential`. Khi đó app hướng dẫn đăng nhập bằng cách cũ rồi gắn Google trong Hồ sơ.
+
+### CN-15.4 Quên mật khẩu (MH-27)
+- Firebase gửi link đặt lại qua email, nhưng email nội bộ không nhận thư. Vì vậy:
+  - Nhập số → OTP (`signInWithPhoneNumber`) → đăng nhập bằng số điện thoại → `updatePassword(matKhauMoi)`. Vừa xác thực xong nên không cần đăng nhập lại.
+  - Về MH-25 với thông báo "Đã đổi mật khẩu".
+- Tài khoản chưa gắn mật khẩu (chỉ dùng Google) thì hiện "Tài khoản này đăng nhập bằng Google" kèm nút Google.
+
+### CN-15.5 Hồ sơ, vai trò, quyền
+- **Hồ sơ trên Firestore** `users/{uid}`: vai trò, tên gọi, xã/phường, chi đoàn, người thân tin cậy, cài đặt Dễ nhìn. **Security Rules:** mỗi người chỉ đọc và ghi hồ sơ của chính mình.
+- **Vai trò Đội TNV không tự khai được:** người dùng nhập mã đội → Cloud Function kiểm tra mã → gắn **custom claim** `doi: <mã xã/phường>`. Security Rules chỉ cho tài khoản có claim này đọc thống kê, hàng chờ xác minh và hộ đỡ đầu của xã/phường đó.
+- **Trong MH-20:** xem số điện thoại và Google đã gắn · gắn hoặc gỡ Google · đổi mật khẩu · **Đăng xuất** (`signOut`) · **Đăng xuất mọi máy** (Cloud Function gọi `revokeRefreshTokens`) · **Xóa tài khoản** (`user.delete()`, Cloud Function xóa `users/{uid}`; báo cáo ẩn danh đã gửi vẫn giữ để thống kê).
+
+### CN-15.6 Người cao tuổi
+- Màn đăng nhập theo chế độ **Dễ nhìn**: chữ ≥ 20px, ô nhập cao 68px.
+- **Đoàn viên đỡ đầu** (CN-12) có thể giúp cụ đăng ký trên máy của cụ. OTP gửi về số của cụ, **cụ tự đọc mã**. Đoàn viên không nhận mã thay cụ.
 
 ---
 
@@ -394,7 +477,8 @@
 
 | Thực thể | Trường chính |
 |---|---|
-| NguoiDung | id, vai_tro, ten_goi, xa_phuong, de_nhin (bật/tắt) |
+| NguoiDung (Firestore `users/{uid}`) | uid (từ Firebase Authentication), vai_tro, ten_goi, xa_phuong, chi_doan, nguoi_than[], de_nhin, xac_nhan_giam_ho |
+| Tài khoản, mật khẩu, mã OTP, phiên đăng nhập | **Do Firebase Authentication quản lý**, app không lưu |
 | NguoiThan | id, nguoi_dung_id, ten_goi, so_dien_thoai, quan_he, kenh, uu_tien |
 | LuotKiemTra *(trên máy)* | thoi_diem, noi_dung, loai (SĐT/link/STK), muc, ly_do[], tinh_huong_id |
 | MucCanhBao | gia_tri, loai, muc, nguon (chính thức/xác minh/cộng đồng), so_bao_cao, cap_nhat |
@@ -425,6 +509,8 @@
 | PCN-07 | **Ứng dụng web, giao diện ưu tiên điện thoại** (360–430px, cột nội dung tối đa 480px trên màn hình rộng). Riêng màn đội TNV giãn ra trên máy tính bảng và máy tính. Chạy tốt trên Chrome Android và Safari iPhone. Xem mục 0 |
 | PCN-09 | Lần đầu mở trang hiển thị trong ≤ 3 giây trên mạng 4G. Giao diện không phụ thuộc thư viện tải từ máy chủ ngoài |
 | PCN-08 | Toàn bộ dữ liệu trong prototype là giả lập |
+| PCN-10 | **Bảo mật tài khoản (Firebase):** Firebase Hosting, chỉ HTTPS · mật khẩu do Firebase băm (scrypt) · bật Email enumeration protection, chính sách mật khẩu, SMS region policy chỉ +84 · reCAPTCHA cho đăng nhập số điện thoại · Firestore Security Rules: chỉ đọc/ghi dữ liệu của mình, quyền Đội TNV qua custom claim · không ghi mật khẩu hay OTP vào nhật ký · nên bật App Check (P1) |
+| PCN-11 | **Mã nguồn Firebase SDK được đóng gói cùng web** (bản dựng chung kết dùng công cụ đóng gói), không tải SDK từ CDN, để giữ PCN-09. Đăng nhập cần có mạng, còn Kiểm tra nhanh vẫn chạy khi mất mạng |
 
 ---
 
@@ -447,6 +533,7 @@
 | Tiêu chí 1 (người dùng, nỗi đau) + Tiêu chí 4 (triển khai ở cơ sở) | CN-12 Đoàn viên đỡ đầu số | MH-21 |
 | Tiêu chí 3 (dữ liệu) + Tiêu chí 4 (tác động) | CN-13 Buổi tuyên truyền có QR | MH-22, MH-23 |
 | Tiêu chí 1, 4 (phong trào Đoàn) | CN-14 Thi đua chi đoàn | MH-24 |
+| Tài khoản người dùng: số điện thoại + mật khẩu hoặc Google | CN-15 | MH-25, MH-26, MH-27 |
 
 ---
 
@@ -466,4 +553,6 @@
 
 **Tham số của chức năng mới** (do đội phân tích đặt, sửa được): tối đa 5 hộ cho mỗi đoàn viên (QT-29) · nhắc thăm hỏi sau 14 ngày · buổi tuyên truyền tự đóng sau 24 giờ (QT-30) · tỷ trọng điểm thi đua 40/20/20/20 (QT-32).
 
-**Còn mở:** danh sách kênh tiếp nhận tin báo Công an cần kiểm chứng (QT-24).
+**Tài khoản (CN-15):** **đã chốt dùng Firebase Authentication** (Phone, Email/Password với email nội bộ sinh từ số điện thoại, Google, Anonymous) cùng Firestore, Cloud Functions, Hosting. Do đội phân tích đặt, chờ duyệt: không bắt buộc đăng nhập để tự bảo vệ (QT-01) · ghi nhớ đăng nhập bằng `browserLocalPersistence` (QT-35) · chống dò mật khẩu bằng cơ chế của Firebase (QT-36) · khóa nút gửi lại OTP 60 giây (QT-37) · mật khẩu từ 8 ký tự, có chữ và số (QT-38) · Google bắt buộc bổ sung số điện thoại với Đội TNV · vai trò Đội TNV cấp qua custom claim.
+
+**Còn mở:** danh sách kênh tiếp nhận tin báo Công an cần kiểm chứng (QT-24) · điều khoản pháp lý cụ thể về dữ liệu của học sinh dưới 16 tuổi (QT-38) · chi phí SMS OTP của Firebase (phải dùng gói trả theo mức dùng, cần kiểm tra bảng giá hiện hành) · đánh giá việc lưu dữ liệu cá nhân trên máy chủ Firebase ở nước ngoài theo quy định chuyển dữ liệu cá nhân ra nước ngoài.

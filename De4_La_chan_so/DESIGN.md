@@ -28,6 +28,8 @@
 | 3 | Nút ← Quay lại | Quy ước, kèm nhãn ẩn cho trình đọc màn hình |
 | 4 | Nút Nghe đọc, nút Micro | Chức năng nhận ra bằng hình nhanh hơn chữ |
 
+**Ngoại lệ bắt buộc:** nút **"Tiếp tục với Google"** ở MH-25, MH-26 dùng logo Google nhiều màu theo đúng hướng dẫn nhận diện nút đăng nhập của Google. Đây là quy định của bên thứ ba, không phải icon trang trí.
+
 **Mọi chỗ còn lại dùng chữ:** nút, danh sách, lý do "Vì sao?", thẻ chọn vai trò, kiểu lừa, KPI, trạng thái. **Mỗi thành phần tối đa 1 icon.** Không có icon trang trí.
 
 **Không dùng:**
@@ -193,7 +195,19 @@ Mỗi mức gồm **màu + biểu tượng + chữ + câu đọc to**, không ba
 | `.btn-call` | **Gọi ngay** (nền `--ok-ink`, chữ trắng, **chỉ có chữ**) |
 | `.btn-xl` | Nút trang chủ Ông bà: cao 92px, **chỉ có chữ**: dòng chính 22px đậm ("Kiểm tra số lạ"), dòng phụ 16px ("Dán hoặc đọc số điện thoại") |
 
-**Nút không có icon.** Ngoại lệ duy nhất là nút Nghe đọc và nút Micro (mục 1A).
+**Nút không có icon.** Ngoại lệ là nút Nghe đọc, nút Micro và nút "Tiếp tục với Google" (mục 1A).
+
+### 7.4A Tài khoản (MH-25, MH-26, MH-27)
+| Thành phần | Mô tả |
+|---|---|
+| **Ô mật khẩu** `.pw` | Như `.input`, bên phải có nút chữ **Hiện / Ẩn** (không dùng icon con mắt) |
+| **Ô mã OTP** `.otp` | 6 ô vuông 48px (Dễ nhìn 56px), số Bai Jamjuree 24px, tự nhảy ô, dán được cả 6 số. Dưới ô: đếm ngược "Gửi lại sau 0:45" rồi chuyển thành nút chữ "Gửi lại mã" |
+| **reCAPTCHA** | Dùng dạng **vô hình** của Firebase. Chỉ khi Google nghi ngờ mới hiện ô kiểm tra, đặt dưới nút "Gửi mã", không che nội dung. Giữ dòng ghi chú bản quyền reCAPTCHA cỡ 14px ở cuối màn |
+| **Cảnh báo OTP** `.hint` | Luôn hiện dưới ô OTP: "Lá Chắn Số không bao giờ gọi điện hay nhắn tin hỏi mã này. Không đưa mã cho ai." |
+| **Thước độ mạnh mật khẩu** | Thanh 3 đoạn kèm **chữ** Yếu / Được / Mạnh (màu `--danger-ink` / `--warn-ink` / `--ok-ink`) |
+| **Nút Google** `.btn-google` | Nền trắng, viền `#747775`, logo Google 20px, chữ "Tiếp tục với Google", cao bằng `.btn` |
+| **Dải phân cách** | Đường mảnh `--line` với chữ "hoặc" ở giữa |
+| **Liên kết phụ** | "Quên mật khẩu?" · "Tạo tài khoản mới" · **"Dùng ngay, không cần tài khoản"** (nút `.btn-ghost`, luôn ở cuối màn MH-25) |
 
 ### 7.5 Học và thi đua
 | Thành phần | Mô tả |
@@ -265,6 +279,9 @@ Câu đọc to ngắn hơn câu hiển thị: một mệnh đề, kết thúc b�
 | MH-21 Đỡ đầu | Chưa có hộ · hộ có cảnh báo · đến hạn thăm hỏi |
 | MH-23 Kết quả buổi | Chưa có người tham gia · đang có người tham gia |
 | MH-24 Thi đua | Chi đoàn chưa có điểm · có xếp hạng |
+| MH-25 Đăng nhập | Ô trống (nút mờ) · sai số hoặc mật khẩu · khóa tạm 15 phút (đếm ngược) · mất mạng · chế độ Dễ nhìn |
+| MH-26 Đăng ký | Số đã có tài khoản · OTP sai · OTP hết hạn · đang đếm ngược gửi lại · mật khẩu yếu · bước bổ sung số sau Google |
+| MH-27 Quên mật khẩu | Gửi mã · đổi thành công · tài khoản chỉ dùng Google |
 
 ---
 
