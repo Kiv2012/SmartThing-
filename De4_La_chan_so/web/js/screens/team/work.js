@@ -31,7 +31,8 @@ A.route(/^\/cong-tac$/, (match, query) => {
     ${next ? `<section class="work-lead"><p>Buổi tiếp theo</p><h2>${esc(next.title)}</h2>
       <p>${esc(next.time)} · ${esc(next.place)}</p>
       <a class="btn btn-star" href="${detail(next.id)}">Xem nhiệm vụ và tài liệu</a></section>` : ''}
-    <section class="stack"><h2 class="dashboard-title">Nhiệm vụ được giao</h2>${cards(all)}</section>`
+    <section class="stack"><h2 class="dashboard-title">Nhiệm vụ được giao</h2>${cards(all)}</section>
+    <button class="btn btn-ghost" data-act="exit-work">Về trang cá nhân</button>`
   });
 });
 
@@ -48,7 +49,7 @@ A.route(/^\/dieu-phoi$/, (match, query) => {
       <a class="btn btn-star" href="#/dieu-phoi?muc=ke-hoach">Mở kế hoạch</a></section>
     <section class="stack"><h2 class="dashboard-title">Kết quả chờ duyệt</h2>${cards(list.filter(t=>t.status==='review'))}</section>
     <a class="btn btn-ghost" href="#/doi">Xem tình hình địa bàn</a>`;
-  return A.screen({mh:'MH-29', title:tab || 'Điều phối hoạt động', tab:tab ? '#/dieu-phoi?muc='+query.muc : '#/dieu-phoi', back:!!tab, backTo:'#/dieu-phoi', body});
+  return A.screen({mh:'MH-29', title:tab || 'Điều phối hoạt động', tab:tab ? '#/dieu-phoi?muc='+query.muc : '#/dieu-phoi', back:!!tab, backTo:'#/dieu-phoi', body:body+'<button class="btn btn-ghost" data-act="exit-work">Về trang cá nhân</button>'});
 });
 
 const actionsByRole = {

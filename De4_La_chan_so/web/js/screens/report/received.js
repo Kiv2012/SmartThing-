@@ -12,12 +12,12 @@ A.route(/^\/bao-cao\/da-nhan$/, () => {
     </div>
     <div class="card"><span class="label">Báo cáo đi đến đâu</span>
       <ol class="ol"><li><b>Đã nhận</b> · vừa xong</li><li class="muted">Đội tình nguyện ${esc(rp.ward)} xác minh</li><li class="muted">Chuyển Công an xã, phường</li></ol>
-      <p class="note mt8">Xem trạng thái ở mục Tôi → Báo cáo của tôi.</p></div>
+      <p class="note mt8">${rp.anonymous ? 'Báo cáo này đã gửi ẩn danh.' : 'Xem trạng thái ở mục Tôi → Báo cáo của tôi.'}</p></div>
     <div class="stack">
       <button class="btn btn-primary" data-act="to-police">Gửi Công an</button>
       <a class="btn btn-ghost" href="#/hoi-nguoi-than">Hỏi người thân</a>
       <a class="btn btn-ghost" href="${A.roleHome()}">Về trang chủ</a>
-    </div>`, noTab:!S.role});
+    </div>` });
 });
 A.actions['to-police'] = () => {
   const rp = S.myReports[0] || {}; const sc = rp.type && A.scen(rp.type);

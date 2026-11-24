@@ -83,6 +83,7 @@
   background: var(--paper);
   border-top: 1px solid var(--line);
 }
+.tabbar.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .tabbar.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .tabbar-title { display: none; }
 .tab {

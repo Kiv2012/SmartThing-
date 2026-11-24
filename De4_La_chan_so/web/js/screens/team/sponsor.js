@@ -28,7 +28,7 @@ A.actions['add-ho'] = () => {
 
 /* Màn trên máy của cụ: đồng ý liên kết (CN-12) */
 A.route(/^\/lien-ket\/(\d{6})$/, (m, q) => {
-  A.tmp.dv = A.tmp.dv || (S.role==='tnv' ? S.name : 'Đoàn viên Quốc Bảo');
+  A.tmp.dv = A.tmp.dv || 'Đoàn viên Quốc Bảo';
   return A.screen({mh:'MH-21', title:'Lời đề nghị hỗ trợ', noTab:true, back:false, body:`
     <div class="card stack"><p style="font-size:var(--fs-card)"><b>Cháu ${esc(A.tmp.dv.replace('Đoàn viên ',''))}</b>, đoàn viên Chi đoàn Khu phố 5, xin được hỗ trợ khi có cuộc gọi lạ.</p>
       <ol class="ol"><li>Khi bấm "Hỏi người thân", cháu sẽ nhận được cảnh báo.</li><li>Cháu sẽ ghé thăm hoặc gọi hỏi thăm định kỳ.</li><li>Có thể hủy bất cứ lúc nào trong mục Tôi.</li></ol></div>
@@ -37,14 +37,17 @@ A.route(/^\/lien-ket\/(\d{6})$/, (m, q) => {
 });
 A.actions['lk-yes'] = () => {
   const ten = A.tmp.dv.replace('Đoàn viên ','');
-  const wasOb = S.role==='ob';
-  const others = wasOb ? S.relatives.filter(r=>r.qh!=='Đoàn viên đỡ đầu') : [];
-  if(!wasOb) S.name = 'Bà Năm';
-  S.role = 'ob'; S.deNhin = true;
-  if(others.length && !others.some(r=>r.uu)) others[0].uu = true;
-  S.relatives = others.slice(0,2);
-  S.relatives.push({id:'dv', ten, sdt:'0912 000 009', qh:'Đoàn viên đỡ đầu', kenh:'Zalo', uu: !others.length});
-  A.save(); A.toast('Đã liên kết với cháu '+ten); A.go('#/ong-ba');
+  const linked = S.relatives.find(relative=>relative.id==='dv');
+  if(!linked && S.relatives.length>=3){
+    A.toast('Danh sách đã đủ 3 người. Hãy bỏ một người trong mục Tôi trước khi liên kết.');
+    return;
+  }
+  if(linked) linked.ten = ten;
+  else S.relatives.push({id:'dv', ten, sdt:'0912 000 009', qh:'Đoàn viên đỡ đầu', kenh:'Zalo', uu:!S.relatives.length});
+  if(!S.contentGroup) S.contentGroup = 'ob';
+  A.save();
+  A.toast('Đã liên kết với cháu '+ten);
+  A.go(A.residentHome());
 };
 A.actions['lk-no'] = () => { A.toast('Đã từ chối, không liên kết'); A.go(A.roleHome()); };
 })();

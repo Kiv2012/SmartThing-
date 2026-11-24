@@ -1,37 +1,68 @@
-/* Trạng thái ứng dụng (lưu trên máy), vai trò, xưng hô */
+/* Hồ sơ cá nhân, tùy chọn hiển thị và phiên tài khoản demo. */
 (function(){
 const D = window.LCS_DATA;
 const KEY = 'lcs-state-v1';
-const DEFAULT = {role:null, name:'', ward:D.MY_WARD, cls:'12A1', relatives:[], deNhin:false, history:[],
-  myReports:[], quiz:null, a2hs:0, a2hsDone:false, ask:null, dodau:D.DODAU, buoi:D.BUOI, reportSeq:121};
-let S;
-try{ S = Object.assign({}, DEFAULT, JSON.parse(localStorage.getItem(KEY)||'{}')); }catch(e){ S = Object.assign({}, DEFAULT); }
-if(S.role==='tnv') S.role = null;
-const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
+const DEFAULT = {
+  contentGroup:null, displayMode:null, readAloud:false,
+  name:'', ward:D.MY_WARD, cls:null, relatives:[], history:[],
+  myReports:[], quiz:null, a2hs:0, a2hsDone:false, ask:null,
+  dodau:D.DODAU, buoi:D.BUOI, reportSeq:121
+};
+
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY)||'{}') || {}; } catch {}
+const S = Object.assign({}, DEFAULT, saved);
+if(!Object.hasOwn(saved,'contentGroup') && ['ob','hs'].includes(saved.role)) S.contentGroup = saved.role;
+if(!Object.hasOwn(saved,'displayMode') && typeof saved.deNhin==='boolean' && saved.role==='ob' && !saved.deNhin){
+  S.displayMode = 'standard';
+}
+delete S.role;
+delete S.deNhin;
+
+let account = null;
 let work = null;
 try {
-  const stored = sessionStorage.getItem('lcs-demo-work');
-  if(stored==='tnv' || stored==='dp') work = stored;
+  const previousWork = sessionStorage.getItem('lcs-demo-work');
+  const stored = sessionStorage.getItem('lcs-demo-account') || previousWork;
+  if(['user','tnv','dp'].includes(stored)) account = stored;
+  if(previousWork===account && ['tnv','dp'].includes(account)) work = account;
 } catch {}
+
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch{} };
+const accountRole = () => account;
 const workRole = () => work;
-function setWork(role){
-  work = role;
-  try {
-    if(role) sessionStorage.setItem('lcs-demo-work', role);
-    else sessionStorage.removeItem('lcs-demo-work');
-  } catch {}
+const hasAccount = () => account !== null;
+
+function signIn(role){
+  if(!['user','tnv','dp'].includes(role)) return;
+  if(work && work!==role) leaveWork();
+  account = role;
+  try { sessionStorage.setItem('lcs-demo-account',role); } catch {}
 }
-const leaveWork = () => setWork(null);
-const residentHome = () => S.role==='ob' ? '#/ong-ba' : S.role==='hs' ? '#/hoc-sinh' : '#/bat-dau';
+function enterWork(){
+  if(!['tnv','dp'].includes(account)) return false;
+  work = account;
+  try { sessionStorage.setItem('lcs-demo-work',work); } catch {}
+  return true;
+}
+function leaveWork(){
+  work = null;
+  try { sessionStorage.removeItem('lcs-demo-work'); } catch {}
+}
+function signOut(){
+  leaveWork();
+  account = null;
+  try { sessionStorage.removeItem('lcs-demo-account'); } catch {}
+}
+const easyView = () => S.displayMode ? S.displayMode==='easy' : S.contentGroup==='ob';
+const residentHome = () => easyView() ? '#/ong-ba' : '#/hoc-sinh';
 const roleHome = () => work==='tnv' ? '#/cong-tac' : work==='dp' ? '#/dieu-phoi' : residentHome();
-const xung = () => S.role==='ob' ? 'bà' : 'bạn';
-function seedRole(r){
-  S.role = r; S.deNhin = r==='ob';
-  if(r!=='tnv' && !S.relatives.length) S.relatives = JSON.parse(JSON.stringify(D.RELATIVES_DEFAULT));
-  S.name = {ob:'Bà Sáu', hs:'Minh Anh', tnv:'Đoàn viên Quốc Bảo'}[r];
-  S.cls = r==='tnv' ? 'KP5' : '12A1';
-  save();
-}
+const xung = () => S.contentGroup==='ob' ? 'bà' : 'bạn';
 const priorityRelative = () => S.relatives.find(r=>r.uu) || S.relatives[0];
-window.App = Object.assign(window.App || {}, {S, D, save, roleHome, residentHome, workRole, setWork, leaveWork, xung, seedRole, priorityRelative, tmp:{role:null}, q:{}, path:'', after:null});
+
+window.App = Object.assign(window.App || {}, {
+  S, D, save, roleHome, residentHome, easyView, xung, priorityRelative,
+  workRole, accountRole, hasAccount, signIn, signOut, enterWork, leaveWork,
+  tmp:{}, q:{}, path:'', after:null
+});
 })();

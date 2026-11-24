@@ -8,7 +8,7 @@ A.route(/^\/ong-ba\/tro-ly$/, (m, q) => {
   let out = '';
   if(res){
     const sc = res.type && A.scen(res.type);
-    const answer = sc ? `${sc.nenLam[0]}. ${S.role==='ob'?'Bà':'Bạn'} đừng chuyển tiền. Bấm Gọi ${r?r.ten:'người thân'} ngay.` : `${S.role==='ob'?'Bà':'Bạn'} đừng chuyển tiền cho người lạ. Hỏi người thân trước đã.`;
+    const answer = sc ? `${sc.nenLam[0]}. ${S.contentGroup==='ob'?'Bà':'Bạn'} đừng chuyển tiền. Bấm Gọi ${r?r.ten:'người thân'} ngay.` : `${S.contentGroup==='ob'?'Bà':'Bạn'} đừng chuyển tiền cho người lạ. Hỏi người thân trước đã.`;
     A.after = () => setTimeout(()=>A.speak(answer), 300);
     out = `<div class="card"><span class="label">${A.xung()==='bà'?'Bà':'Bạn'} vừa kể</span><p>"${esc(res.text)}"</p></div>
       <section class="verdict is-${res.flagged?res.level:'warn'}"><div class="lvl">${A.verdictIcon(res.flagged?res.level:'warn')}<h2>${A.LV[res.flagged?res.level:'warn']}</h2></div>

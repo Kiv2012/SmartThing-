@@ -12,10 +12,10 @@
 
 | Đường dẫn | Màn |
 |---|---|
-| `#/bat-dau` | MH-01 Chọn vai trò |
+| `/` | Trang cá nhân, tra cứu ngay |
+| `#/bat-dau` | MH-01 Chọn nhóm nội dung tùy chọn |
 | `#/man-hinh` | **Danh mục toàn bộ màn hình và trạng thái** (dùng khi trình chiếu, chụp PDF) |
-| `#/ong-ba?vai=ob` | Vào thẳng vai Ông bà (dữ liệu mẫu) |
-| `#/hoc-sinh?vai=hs` | Vào thẳng vai Học sinh |
+| `#/toi` | Đổi cách hiển thị, nghe đọc, nội dung và vào công tác theo quyền |
 | `#/dang-nhap?work=1` | Chọn tài khoản mẫu Tình nguyện viên hoặc Điều phối viên |
 
 Đăng nhập, mã xác minh và phân quyền trong bản này được mô phỏng tại trình duyệt. Các màn hình tài khoản chỉ dùng dữ liệu mẫu.
@@ -86,7 +86,7 @@ web/
 ## Giới hạn của bản mẫu (nói rõ)
 
 - Mọi số điện thoại, đường link, số tài khoản, tên người là **dữ liệu giả lập**.
-- Phân tích tin nhắn chạy **tầng luật từ khóa trên máy**. Tầng mô hình ngôn ngữ (giải thích, phân loại) dành cho bản chung kết.
+- Phân tích tin nhắn chạy **tầng luật từ khóa trên máy**. Có thể chọn ảnh PNG, JPG hoặc WebP tối đa 10 MB, rồi rà chữ tiếng Việt hoặc tiếng Anh được nhận diện trước khi phân tích. Bộ đọc ảnh tải theo nhu cầu. Ảnh không được gửi lên máy chủ. Tầng mô hình ngôn ngữ dành cho bản chung kết.
 - "Hỏi người thân" trong app là **mô phỏng** trạng thái Đã gửi → Đã xem → Đã trả lời. Gọi điện, SMS, Zalo mở ứng dụng thật của điện thoại.
 - Mã QR của buổi tuyên truyền là **mã minh họa** (không quét được). Người dân vào bằng mã 6 số tại `#/buoi`.
 - Kênh tiếp nhận tin báo của Công an cần kiểm chứng và cấu hình theo địa phương. App không tự gửi.

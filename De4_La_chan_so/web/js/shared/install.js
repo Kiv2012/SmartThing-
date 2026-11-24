@@ -8,7 +8,7 @@ function a2hsSheet(){
     <p>Để mở nhanh khi có cuộc gọi lạ, nhận cảnh báo từ người thân và dùng được khi mất mạng.</p>
     <ol class="ol small ink2"><li><b>Điện thoại Android (Chrome):</b> bấm "Cài đặt" trên thanh địa chỉ, hoặc menu ⋮ → "Thêm vào màn hình chính".</li>
     <li><b>iPhone (Safari):</b> bấm nút Chia sẻ → "Thêm vào MH chính".</li></ol>
-    ${S.role==='ob'?'<p class="hint">Đoàn viên tình nguyện có thể làm giúp ông bà bước này.</p>':''}
+    ${S.contentGroup==='ob'?'<p class="hint">Đoàn viên tình nguyện có thể làm giúp ông bà bước này.</p>':''}
     <button class="btn btn-primary" data-act="a2hs-yes">${deferredInstall?'Thêm ngay':'Tôi đã thêm'}</button>
     <button class="btn btn-ghost" data-act="a2hs-later">Để sau</button>`);
 }

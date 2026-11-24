@@ -1,6 +1,6 @@
 /* Điều hướng #/... và sự kiện chung (data-go, data-act) */
 (function(){
-const {S, canSpeak, speak, closeSheet, confirmLeave, seedRole, roleHome} = window.App;
+const {closeSheet, confirmLeave, roleHome} = window.App;
 const routes = [];
 function route(re, fn){ routes.push([re, fn]); }
 function parse(){
@@ -9,23 +9,36 @@ function parse(){
   const q = Object.fromEntries(new URLSearchParams(qs||''));
   return {path, q};
 }
+const workRoute = /^\/(doi|cong-tac|dieu-phoi)(\/|$)/;
 function render(){
-  if(canSpeak) window.speechSynthesis.cancel();
+  App.stopSpeech();
   closeSheet();
-  const {path, q} = parse(); App.q = q; App.path = path;
-  if(q.vai && ['ob','hs'].includes(q.vai)){ seedRole(q.vai); }
-  document.documentElement.classList.toggle('de-nhin', !!S.deNhin);
-  document.body.classList.toggle('wide', App.workRole() && /^\/(doi|cong-tac|dieu-phoi)(\/|$)/.test(path));
-  const unauthorized = /^\/(doi|cong-tac|dieu-phoi)(\/|$)/.test(path) && !App.workRole();
+  let {path, q} = parse();
+  if(path==='/' || path==='/ong-ba' || path==='/hoc-sinh'){
+    App.leaveWork();
+    const home = App.residentHome().slice(1);
+    if(path!==home){
+      path = home;
+      q = {};
+      history.replaceState(history.state, '', '#'+home);
+    }
+  }
+  const isWorkRoute = workRoute.test(path);
+  if(isWorkRoute && !App.workRole()) App.enterWork();
+  Object.assign(App, {path, q});
+  document.documentElement.classList.toggle('de-nhin', App.easyView());
+  document.body.classList.toggle('wide', Boolean(App.workRole()) && isWorkRoute);
+  const unauthorized = isWorkRoute && !App.workRole();
   const denied = path==='/doi/xac-minh' ||
     (path.startsWith('/dieu-phoi') && App.workRole()==='tnv') ||
     (path==='/cong-tac' && App.workRole()==='dp') ||
     (path==='/doi/buoi' && q.moi && App.workRole()==='tnv');
   if(unauthorized || denied){
-    const title = unauthorized ? 'Mở khu công tác' : 'Chưa có quyền truy cập';
+    const title = unauthorized ? 'Công tác tuyên truyền' : 'Chưa có quyền truy cập';
+    const target = unauthorized ? (App.hasAccount() ? '#/toi' : '#/dang-nhap?work=1&next='+encodeURIComponent(location.hash)) : roleHome();
     document.getElementById('app').innerHTML = App.screen({title, noTab:true, backTo:roleHome(), body:`
-      <div class="empty"><b>${title}</b>${unauthorized ? 'Chọn tài khoản trình diễn phù hợp để xem công việc theo vai trò.' : 'Màn này cần quyền phù hợp. Tài khoản trình diễn hiện tại chưa được cấp quyền này.'}</div>
-      <a class="btn btn-primary" href="${unauthorized ? '#/dang-nhap?work=1' : roleHome()}">${unauthorized ? 'Chọn tài khoản trình diễn' : 'Về khu công tác'}</a>`});
+      <div class="empty"><b>${title}</b>${unauthorized ? 'Khu công tác dành cho tài khoản được cấp quyền.' : 'Màn này cần quyền phù hợp. Tài khoản trình diễn hiện tại chưa được cấp quyền này.'}</div>
+      <a class="btn btn-primary" href="${App.esc(target)}">${unauthorized ? (App.hasAccount() ? 'Kiểm tra quyền trong mục Tôi' : 'Đăng nhập để vào công tác') : 'Về khu công tác'}</a>`});
     document.title = title + ' – Lá Chắn Số';
     window.scrollTo(0,0);
     return;
@@ -58,7 +71,7 @@ actions.back = el => {
   if(el.dataset.to) return go(el.dataset.to);
   if(history.length>1) history.back(); else go(roleHome());
 };
-actions.speak = el => speak(el.dataset.text);
+actions.speak = el => App.isSpeaking() ? App.stopSpeech() : App.speak(el.dataset.text);
 window.addEventListener('hashchange', () => {
   render();
   document.getElementById('main')?.focus({preventScroll:true});

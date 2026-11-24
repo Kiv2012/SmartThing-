@@ -138,6 +138,17 @@
 .chip.on { border-color: var(--brand); font-weight: 700; }
 .field { display: flex; flex-direction: column; min-width: 0; }
 .input, .textarea, .select { padding: 10px 11px; }
+.select {
+  appearance: none;
+  padding-inline-end: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='m3 5 4 4 4-4' fill='none' stroke='%23142941' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+}
+@media (forced-colors: active) {
+  .select { appearance: auto; background-image: none; padding-inline-end: 11px; }
+}
 .textarea { min-height: 144px; resize: vertical; }
 .counter { color: var(--muted); font-size: var(--fs-small); text-align: right; }
 .pick {

@@ -1,5 +1,5 @@
 /* Lưu sẵn giao diện, dữ liệu, font để dùng khi mất mạng (PCN-05) */
-const C = 'lcs-v9';
+const C = 'lcs-v15';
 const FILES = [
   './',
   'index.html',
@@ -31,6 +31,7 @@ const FILES = [
   'js/core/router.js',
   'js/shared/install.js',
   'js/shared/input.js',
+  'js/shared/message-ocr.js',
   'js/shared/qr.js',
   'js/shared/quiz-engine.js',
   'js/screens/onboarding/role.js',
@@ -83,5 +84,5 @@ self.addEventListener('fetch', e => {
   e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
     if (res.ok && new URL(e.request.url).origin === location.origin) { const cp = res.clone(); caches.open(C).then(c => c.put(e.request, cp)); }
     return res;
-  }).catch(() => caches.match('index.html'))));
+  }).catch(() => e.request.mode==='navigate' ? caches.match('index.html') : Response.error())));
 });

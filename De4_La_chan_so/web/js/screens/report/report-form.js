@@ -3,12 +3,14 @@
 const A = window.App, D = A.D, S = A.S, esc = A.esc, icon = A.icon;
 /* ===== MH-08 Báo cáo 3 bước ===== */
 const KENH = ['Cuộc gọi','Tin nhắn','Đường link','Số tài khoản','Mạng xã hội'];
-const draft = () => (S.draft = S.draft || {type:null, kenh:null, value:'', anh:0, mota:'', ward:S.ward, when:'Hôm nay', chuyen:null, an:false});
+const draft = () => (S.draft = S.draft || {type:null, kenh:null, value:'', anh:0, mota:'', ward:S.ward, when:'Hôm nay', chuyen:null, an:!A.hasAccount()});
 A.route(/^\/bao-cao$/, (m, q) => {
   if(q.tu==='kq' && S.lastCheck && !q.b){ S.draft = null; const d = draft(); d.type = S.lastCheck.type; d.value = S.lastCheck.value; d.kenh = {'Số điện thoại':'Cuộc gọi','Đường link':'Đường link','Số tài khoản':'Số tài khoản'}[S.lastCheck.kind]; A.save(); }
   if(q.tu==='tn' && S.lastAnalysis && !q.b){ S.draft = null; const d = draft(); d.type = S.lastAnalysis.type; d.kenh = 'Tin nhắn'; d.mota = S.lastAnalysis.text.slice(0,300); A.save(); }
   if(q.moi){ S.draft = null; }
   const d = draft(); const b = +(q.b||1);
+  if(!A.hasAccount()) d.an = true;
+  if(q['co-ten'] && A.hasAccount()) d.an = false;
   let body = '';
   if(b===1){
     body = `<p class="ink2">Chọn kiểu lừa giống nhất với điều ${A.xung()} gặp.</p>
@@ -43,13 +45,27 @@ A.actions['d-chuyen'] = el => { keepD(); draft().chuyen = el.dataset.v; A.save()
 A.actions['d-next2'] = () => { keepD(); if(!draft().kenh) return A.go('#/bao-cao?b=2&loi=1'); A.go('#/bao-cao?b=3'); };
 document.addEventListener('change', e => {
   if(e.target.dataset.actFile){ const d = draft(); d.anh = Math.min(3, e.target.files.length); keepD(); A.save(); A.render(); }
-  if(e.target.dataset.actCheck==='an'){ draft().an = e.target.checked; A.save(); }
+  if(e.target.dataset.actCheck==='an'){
+    keepD();
+    if(!e.target.checked && !A.hasAccount()){
+      e.target.checked = true;
+      draft().an = true;
+      A.save();
+      const next = encodeURIComponent('#/bao-cao?b=3&co-ten=1');
+      A.sheet(`<h2>Đăng nhập để lưu và theo dõi</h2><p>Bạn vẫn có thể gửi báo cáo ẩn danh.</p>
+        <a class="btn btn-primary" href="#/dang-nhap?next=${next}">Đăng nhập</a>
+        <button class="btn btn-ghost" data-act="sheet-close">Để sau</button>`);
+    }else{
+      draft().an = e.target.checked;
+      A.save();
+    }
+  }
 });
 A.actions['d-send'] = () => {
   keepD(); const d = draft();
   if(!d.chuyen) return A.go('#/bao-cao?b=3&loi=1');
   const ma = 'BC-2026-'+String(S.reportSeq).padStart(4,'0');
-  S.myReports.unshift({ma, type:d.type, kenh:d.kenh, value:d.value, ward:d.ward, status:'received', at:Date.now(), chuyen:d.chuyen});
+  S.myReports.unshift({ma, type:d.type, kenh:d.kenh, value:d.value, ward:d.ward, anonymous:d.an || !A.hasAccount(), status:'received', at:Date.now(), chuyen:d.chuyen});
   S.lastReport = ma; S.reportSeq++; S.draft = null; A.save();
   A.go(d.chuyen==='roi' ? '#/khan-cap?bc=1' : '#/bao-cao/da-nhan');
 };

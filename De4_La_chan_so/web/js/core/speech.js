@@ -1,16 +1,40 @@
-/* Đọc to và nhận giọng nói tiếng Việt (Web Speech API) */
+/* Đọc và nhận giọng nói tiếng Việt. */
 (function(){
 const {toast, xung} = window.App;
 const canSpeak = 'speechSynthesis' in window;
 const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+let current = null;
+
+function updateButton(){
+  const button = document.querySelector('[data-act="speak"]');
+  if(!button) return;
+  button.setAttribute('aria-label', current ? 'Dừng đọc' : 'Nghe đọc');
+  button.querySelector('.listen-label').textContent = current ? 'Dừng' : 'Nghe';
+}
+function stopSpeech(){
+  current = null;
+  if(canSpeak) window.speechSynthesis.cancel();
+  updateButton();
+}
 function speak(text){
   if(!canSpeak) return toast('Máy này chưa hỗ trợ đọc to');
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'vi-VN'; u.rate = 0.9;
-  const v = speechSynthesis.getVoices().find(v => /vi/i.test(v.lang));
-  if(v) u.voice = v;
-  speechSynthesis.speak(u);
+  stopSpeech();
+  const engine = window.speechSynthesis;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'vi-VN';
+  utterance.rate = 0.9;
+  const voice = engine.getVoices().find(v=>/vi/i.test(v.lang));
+  if(voice) utterance.voice = voice;
+  const finish = () => {
+    if(current!==utterance) return;
+    current = null;
+    updateButton();
+  };
+  utterance.onend = finish;
+  utterance.onerror = finish;
+  current = utterance;
+  updateButton();
+  engine.speak(utterance);
 }
 function listen(onText, onEnd){
   if(!Rec) return null;
@@ -21,5 +45,5 @@ function listen(onText, onEnd){
   try{ r.start(); }catch(e){ return null; }
   return r;
 }
-Object.assign(window.App, {canSpeak, Rec, speak, listen});
+Object.assign(window.App, {Rec, speak, listen, stopSpeech, isSpeaking:()=>current!==null});
 })();

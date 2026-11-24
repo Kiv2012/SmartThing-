@@ -3,7 +3,7 @@
 const A = window.App, D = A.D, S = A.S, esc = A.esc, icon = A.icon;
 const a2hsSheet = () => A.showInstallSheet();
 /* ===== MH-02 Cài người thân + MH-02a ===== */
-const QH = () => S.role==='hs' ? ['Bố','Mẹ','Anh, chị','Thầy cô chủ nhiệm','Anh chị Đoàn','Khác'] : ['Con gái','Con trai','Cháu','Vợ, chồng','Đoàn viên đỡ đầu','Khác'];
+const QH = () => S.contentGroup==='hs' ? ['Bố','Mẹ','Anh, chị','Thầy cô chủ nhiệm','Anh chị Đoàn','Khác'] : ['Con gái','Con trai','Cháu','Vợ, chồng','Đoàn viên đỡ đầu','Khác'];
 A.route(/^\/nguoi-than$/, (m, q) => {
   const list = q.state==='empty' ? [] : S.relatives;
   const items = list.map((r,i) => `<li class="person"><span class="avatar">${esc(r.ten[0]||'?')}</span><span class="grow"><b>${esc(r.ten)}</b> ${r.uu?'<span class="tag">Ưu tiên</span>':''}<br><span class="ink2 small">${esc(r.qh)} · ${esc(r.sdt)} · ${esc(r.kenh)}</span></span>

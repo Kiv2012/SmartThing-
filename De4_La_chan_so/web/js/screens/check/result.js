@@ -10,9 +10,9 @@ A.route(/^\/kiem-tra\/ket-qua$/, (m, q) => {
   S.history = [{raw:q.v, value:res.value, level:res.level}, ...S.history.filter(h=>h.value!==res.value)].slice(0,10); A.save();
   const sc = res.type && A.scen(res.type);
   const r = uu();
-  const say = `${A.LV[res.level]}. ${res.reasons[0]} ${res.level==='danger'?(S.role==='ob'?'Bà đừng chuyển tiền. Bấm Hỏi người thân ngay.':'Đừng chuyển tiền. Hỏi người thân ngay.'):''}`;
-  if(S.deNhin) A.after = () => setTimeout(()=>A.speak(say), 300);
-  const askBtn = `<a class="btn btn-primary" href="${r?'#/hoi-nguoi-than':'#/nguoi-than?ret=hoi'}" style="min-height:var(--tap)">${res.level==='danger'?'Hỏi người thân ngay':'Hỏi người thân'}${r?' · '+esc(r.ten):''}</a>`;
+  const say = `${A.LV[res.level]}. ${res.reasons[0]} ${res.level==='danger'?(S.contentGroup==='ob'?'Bà đừng chuyển tiền. Bấm Hỏi người thân ngay.':'Đừng chuyển tiền. Hỏi người thân ngay.'):''}`;
+  if(S.readAloud) A.after = () => setTimeout(()=>{ if(A.path==='/kiem-tra/ket-qua' && S.readAloud) A.speak(say); }, 300);
+  const askBtn = `<a class="btn btn-primary" href="${r?'#/hoi-nguoi-than':'#/nguoi-than?ret=hoi'}" style="min-height:var(--tap)">${A.easyView()?'Gọi người tin cậy':res.level==='danger'?'Hỏi người tin cậy ngay':'Hỏi người tin cậy'}${r?' · '+esc(r.ten):''}</a>`;
   const learn = sc ? `<a class="btn btn-ghost" href="#/hoc/${sc.id}">Học 1 phút về kiểu này</a>` : '';
   const report = `<a class="btn btn-ghost" href="#/bao-cao?tu=kq">Báo cáo</a>`;
   const primary = res.level==='ok' ? `<a class="btn btn-primary" href="${A.roleHome()}">Xong</a>` : askBtn;
@@ -20,7 +20,7 @@ A.route(/^\/kiem-tra\/ket-qua$/, (m, q) => {
   if(res.level!=='ok'){
     const more = `<button class="link-btn" data-act="more-actions" data-t="${sc?sc.id:''}">Xem thêm</button>`;
     const emergency = res.level==='danger' ? '<a class="btn btn-danger" href="#/khan-cap">Tôi đã chuyển tiền</a>' : '';
-    secondary = S.deNhin ? `<div class="btn-row">${report}${more}</div>` : `<div class="btn-row">${report}${learn || emergency}</div>${learn ? emergency : ''}`;
+    secondary = A.easyView() ? `<div class="btn-row">${report}${more}</div>` : `<div class="btn-row">${report}${learn || emergency}</div>${learn ? emergency : ''}`;
   }
   return A.screen({mh:'MH-06', title:'Kết quả kiểm tra', tab:'#/kiem-tra', listen:say, body:`
     <section class="verdict is-${res.level}" aria-live="polite">

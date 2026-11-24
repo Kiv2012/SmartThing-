@@ -4,6 +4,12 @@ const A = window.App;
 const samplePhone = '0900000000';
 const samplePassword = 'matkhaumau';
 
+function returnTo(work=false){
+  const next = A.q.next || '';
+  if(work) return /^#\/(doi|cong-tac|dieu-phoi)([/?]|$)/.test(next) ? next : A.roleHome();
+  return /^#\/(?!dang-(?:nhap|ky)|quen-mat-khau)[a-z0-9-]+(?:[/?].*)?$/.test(next) ? next : A.residentHome();
+}
+
 function phone(){
   return `<label class="field"><span class="label">Số điện thoại mẫu</span>
     <input class="input" id="account-phone" inputmode="tel" value="${samplePhone}" required></label>`;
@@ -16,7 +22,7 @@ function password(label='Mật khẩu mẫu'){
 }
 
 A.route(/^\/dang-nhap$/, (match, query) => A.screen({
-  mh:'MH-25', noTab:true, title:query.work ? 'Khu công tác' : 'Đăng nhập', backTo:'#/bat-dau',
+  mh:'MH-25', noTab:true, title:query.work ? 'Khu công tác' : 'Đăng nhập', backTo:A.residentHome(),
   body:`
   <div class="account-layout">
     ${query.work ? '' : `<form class="card stack" data-form="demo-login">
@@ -25,14 +31,14 @@ A.route(/^\/dang-nhap$/, (match, query) => A.screen({
       ${phone()}${password()}
       <div id="account-feedback" role="alert"></div>
       <button class="btn btn-primary">Đăng nhập thử</button>
-      <div class="account-links"><a href="#/dang-ky">Tạo tài khoản</a><a href="#/quen-mat-khau">Quên mật khẩu?</a></div>
-      <a class="btn btn-ghost" href="#/bat-dau">Dùng ngay, không cần tài khoản</a>
+      <div class="account-links"><a href="#/dang-ky?next=${encodeURIComponent(query.next || '')}">Tạo tài khoản</a><a href="#/quen-mat-khau">Quên mật khẩu?</a></div>
+      <a class="btn btn-ghost" href="${A.residentHome()}">Dùng ngay, không cần tài khoản</a>
     </form>`}
     <section class="card stack" aria-labelledby="preview-accounts">
       <h2 id="preview-accounts">Tài khoản công tác trình diễn</h2>
-      <p class="note">Chọn tài khoản mẫu để xem các nhiệm vụ và thao tác tương ứng.</p>
-      <button class="role-choice" type="button" data-act="enter-work" data-work="tnv"><b>Tình nguyện viên</b><span>Nhận nhiệm vụ, đi tuyên truyền và nộp kết quả.</span></button>
-      <button class="role-choice" type="button" data-act="enter-work" data-work="dp"><b>Điều phối viên</b><span>Lập kế hoạch, phân công và duyệt kết quả hoạt động.</span></button>
+      <p class="note">Các tài khoản này đã được cấp quyền trong bản trình diễn.</p>
+      <button class="role-choice" type="button" data-act="sign-in-work" data-work="tnv"><b>Tình nguyện viên</b><span>Nhận nhiệm vụ, đi tuyên truyền và nộp kết quả.</span></button>
+      <button class="role-choice" type="button" data-act="sign-in-work" data-work="dp"><b>Điều phối viên</b><span>Lập kế hoạch, phân công và duyệt kết quả hoạt động.</span></button>
     </section>
   </div>`
 }));
@@ -42,7 +48,7 @@ A.route(/^\/(dang-ky|quen-mat-khau)$/, ([mode], query) => {
   const step = ['2','3'].includes(query.b) ? Number(query.b) : 1;
   const heading = signup ? 'Tạo tài khoản' : 'Đặt lại mật khẩu';
   const section = step===1 ? 'Số điện thoại' : step===2 ? 'Mã xác minh' : 'Mật khẩu';
-  return A.screen({mh:signup?'MH-26':'MH-27', title:heading, noTab:true, backTo:step===1 ? '#/dang-nhap' : `#/${mode}?b=${step-1}`,
+  return A.screen({mh:signup?'MH-26':'MH-27', title:heading, noTab:true, backTo:step===1 ? '#/dang-nhap' : `#/${mode}?b=${step-1}&next=${encodeURIComponent(query.next || '')}`,
     steps:[step, 3, section], body:`<form class="card stack account-step" data-form="demo-account-step" data-mode="${mode}" data-step="${step}">
       <h2>${section}</h2>
       <p class="note">Luồng trình diễn sử dụng dữ liệu mẫu.</p>
@@ -67,11 +73,14 @@ A.actions['account-show'] = button => {
   field.type = hidden ? 'text' : 'password';
   button.textContent = hidden ? 'Ẩn' : 'Hiện';
 };
-A.actions['enter-work'] = button => {
-  A.setWork(button.dataset.work);
-  A.go(A.roleHome());
+A.actions['sign-in-work'] = button => {
+  A.signIn(button.dataset.work);
+  if(A.q.work && A.enterWork()) A.go(returnTo(true));
+  else A.go(returnTo());
 };
+A.actions['open-work'] = () => { if(A.enterWork()) A.go(A.roleHome()); };
 A.actions['exit-work'] = () => { A.leaveWork(); A.go(A.residentHome()); };
+A.actions['sign-out'] = () => { A.signOut(); A.go(A.residentHome()); };
 
 document.addEventListener('submit', event => {
   const form = event.target;
@@ -85,7 +94,7 @@ document.addEventListener('submit', event => {
   }
   if(form.dataset.form==='demo-login'){
     if(passField.value!==samplePassword) accountError('Mật khẩu mẫu là '+samplePassword+'.', passField);
-    else A.go(A.residentHome());
+    else { A.signIn('user'); A.go(returnTo()); }
     return;
   }
   const step = Number(form.dataset.step);
@@ -94,7 +103,14 @@ document.addEventListener('submit', event => {
     accountError('Hãy nhập mã mẫu 123456.',otp);
     return;
   }
-  if(step<3) A.go(`#/${form.dataset.mode}?b=${step+1}`);
+  if(step<3) A.go(`#/${form.dataset.mode}?b=${step+1}&next=${encodeURIComponent(A.q.next || '')}`);
+  else if(form.dataset.mode==='dang-ky') {
+    const name = document.getElementById('account-name').value.trim();
+    if(!A.S.name && name==='Minh Anh') A.S.name = name;
+    A.save();
+    A.signIn('user');
+    A.go(returnTo());
+  }
   else { A.toast('Đã xem xong luồng tài khoản mẫu'); A.go('#/dang-nhap'); }
 });
 })();

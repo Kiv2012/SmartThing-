@@ -1,5 +1,5 @@
 /* Cửa vào công khai */
-[data-mh="MH-01"] .content { width: min(100%, 1120px); gap: 24px; }
+[data-mh="MH-04"] .content { width: min(100%, 1120px); gap: 24px; }
 .landing-hero { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
 .landing-main { min-width: 0; display: grid; gap: 14px; }
 .landing-intro h1 { font-size: clamp(36px, 10vw, 57px); line-height: .99; letter-spacing: -.035em; color: var(--navy-deep); }
@@ -45,7 +45,6 @@
 .section-heading-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
 .section-heading-row h2 { font-size: var(--fs-title); }
 .section-heading-row .link-btn { font-size: var(--fs-small); }
-.role-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .role-choice {
   display: grid;
   align-content: start;
@@ -62,15 +61,6 @@
 .role-choice b { color: var(--brand-ink); font: 700 var(--fs-card)/1.2 var(--display); }
 .role-choice span { color: var(--ink-2); font-size: var(--fs-small); }
 .role-choice:hover, .role-choice[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); }
-.role-setup {
-  display: grid;
-  gap: 12px;
-  margin-top: 12px;
-  padding: var(--pad);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--paper);
-}
 .entry-help { border-top: 1px solid var(--line); padding-top: 12px; }
 
 /* Trang chủ và tra cứu */
@@ -89,6 +79,7 @@
 .home-hero .btn-xl { margin-top: 6px; }
 .student-hero .check-label { color: var(--paper); }
 .student-hero .omni { color: var(--ink); }
+.home-actions > :first-child { min-height: 92px; }
 .home-actions {
   align-self: start;
   display: grid;
@@ -256,7 +247,7 @@ button.tapsent { background: transparent; text-decoration: underline; text-under
 .weeks i { display: block; width: 100%; background: var(--brand); border-radius: 4px 4px 0 0; }
 .filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .filters .field:first-child { grid-column: 1 / -1; }
-.filters select { padding-inline: 8px; font-size: var(--fs-small); }
+.filters select { padding-inline-start: 8px; font-size: var(--fs-small); }
 .ward { border-left: 3px solid var(--line); }
 .ward.alert { border-left-color: var(--danger); }
 .ward.due { border-left-color: var(--warn); }
@@ -366,3 +357,22 @@ button.tapsent { background: transparent; text-decoration: underline; text-under
   opacity: .35;
   content: "";
 }
+
+/* Ảnh chụp trong màn phân tích tin nhắn. */
+.message-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.message-tools .btn { width: auto; }
+.message-tools .counter { margin-inline-start: auto; }
+.message-image-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 96px) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+}
+.message-image-preview img { width: 100%; height: 84px; object-fit: contain; }
+#message-image-name { overflow-wrap: anywhere; }
+#message-image-progress { width: 100%; accent-color: var(--brand); }
+[data-form="analyze"] [hidden], #message-image-status:empty { display: none; }

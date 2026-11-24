@@ -30,7 +30,7 @@ function quizScreen(q, buoi){
   const right = ans!=null && Z.pts[Z.i] >= 99;
   const fb = ans!=null ? `<div class="card ${right?'':''}" aria-live="polite"><p class="tag ${right?'ok':Z.pts[Z.i]>0?'warn':'danger'}">${right?'Đúng':Z.pts[Z.i]>0?'Đúng một phần':'Chưa đúng'}</p><p class="mt8">${esc(it.why)}</p></div>
     <button class="btn btn-primary" data-act="qnext">${Z.i<n-1?'Câu tiếp theo':'Xem kết quả'}</button>` : '';
-  return A.screen({mh:'MH-14', title:'Kiểm tra nhận diện', noTab:true, steps:[Z.i+1, n, (S.deNhin||Z.kind==='ob')?'Không tính giờ':'Câu '+(Z.i+1)], confirm:'Dừng bài kiểm tra?', backTo: buoi?'#/buoi/'+buoi:A.roleHome(), listen: it.msg || it.q || it.sents.join(' '), body: body + fb});
+  return A.screen({mh:'MH-14', title:'Kiểm tra nhận diện', noTab:true, steps:[Z.i+1, n, (Z.kind==='ob'||Z.nhom==='ob')?'Không tính giờ':'Câu '+(Z.i+1)], confirm:'Dừng bài kiểm tra?', backTo: buoi?'#/buoi/'+buoi:A.roleHome(), listen: it.msg || it.q || it.sents.join(' '), body: body + fb});
 }
 A.actions.qtap = (el, event) => {
   const Z = A.tmp.quiz;
@@ -47,7 +47,7 @@ A.actions.qa = el => {
   else if(it.dang==='act'){ Z.ans = +el.dataset.v; pt = Z.ans===it.a?100:0; }
   else { Z.ans = 'tap'; const sel = Z.sel||[]; const good = sel.filter(i=>it.flags.includes(i)).length, bad = sel.filter(i=>!it.flags.includes(i)).length; pt = Math.max(0, Math.round((good - bad)/it.flags.length*100)); }
   Z.pts[Z.i] = pt; A.render();
-  if(S.deNhin) A.speak((pt>=99?'Đúng. ':'Chưa đúng. ')+it.why);
+  if(S.readAloud) A.speak((pt>=99?'Đúng. ':'Chưa đúng. ')+it.why);
 };
 A.actions.qnext = () => {
   const Z = A.tmp.quiz; Z.ans = null; Z.sel = [];
@@ -57,16 +57,22 @@ A.actions.qnext = () => {
   if(Z.kind==='buoi'){
     const b = S.buoi.find(x=>x.ma===Z.buoi); if(b){ const k=b.kq; k.tb = Math.round((k.tb*k.nguoi+score)/(k.nguoi+1)); k.dat = Math.round(((k.dat/100*k.nguoi)+(score>=80?1:0))/(k.nguoi+1)*100); k.nguoi++; k.nhom[Z.nhom||'dan']++; A.save(); }
   }
-  S.quiz = {best: Math.max(score, (S.quiz||{}).best||0), last:score, weak}; A.save();
+  A.tmp.recentQuiz = {last:score, weak, session:Z.buoi || null};
+  if(A.hasAccount()) A.saveQuiz(A.tmp.recentQuiz);
   A.go(Z.kind==='buoi' ? `#/buoi/${Z.buoi}/ket-qua?d=${score}` : `#/thu-thach/ket-qua?d=${score}`);
+};
+A.saveQuiz = result => {
+  if(!A.hasAccount()) return;
+  S.quiz = {...result, best:Math.max(result.last,S.quiz?.best || 0)};
+  A.save();
 };
 function resultBody(score, weak, extra){
   const ok = score>=80;
   return `<div class="card center stack"><span class="label">Điểm của ${A.xung()}</span><p class="score">${score}<span style="font-size:24px">/100</span></p>
       <p class="tag ${ok?'ok':'warn'}" style="align-self:center">${ok?'Đạt – nhận Chứng nhận':'Còn '+(80-score)+' điểm nữa để nhận Chứng nhận'}</p></div>
     ${weak.length?`<div class="card"><span class="label">Kiểu lừa ${A.xung()} cần học thêm</span><ul class="list">${weak.map(t=>`<li><a href="#/hoc/${t}">${esc(A.scen(t).ten)}</a></li>`).join('')}</ul></div>`:`<div class="card"><b>Không sai câu nào.</b> ${A.xung()==='bà'?'Bà':'Bạn'} nhận diện rất tốt!</div>`}
-    <div class="cert ${ok?'':'locked'}"><span class="seal">${A.flagSvg.replace('width="22" height="22"','width="40" height="40"')}</span>
-      <h2>CHỨNG NHẬN LÁ CHẮN SỐ</h2><p><b>${esc(S.name||'Người tham gia')}</b></p><p class="small ink2">${ok?'Đã hoàn thành bài kiểm tra nhận diện lừa đảo · '+score+' điểm · 24/11/2026':'Chứng nhận mở khi đạt từ 80 điểm. Học thêm các bài ở trên rồi làm lại nhé.'}</p></div>
+    ${A.hasAccount() ? `<div class="cert ${ok?'':'locked'}"><span class="seal">${A.flagSvg.replace('width="22" height="22"','width="40" height="40"')}</span>
+      <h2>CHỨNG NHẬN LÁ CHẮN SỐ</h2><p><b>${esc(S.name||'Người tham gia')}</b></p><p class="small ink2">${ok?'Đã hoàn thành bài kiểm tra nhận diện lừa đảo · '+score+' điểm · 24/11/2026':'Chứng nhận mở khi đạt từ 80 điểm. Học thêm các bài ở trên rồi làm lại nhé.'}</p></div>` : '<p class="note">Đăng nhập để lưu điểm và nhận chứng nhận khi đủ điểm.</p>'}
     ${extra||''}`;
 }
 A.quiz = {build: buildQuiz, screen: quizScreen, result: resultBody};
