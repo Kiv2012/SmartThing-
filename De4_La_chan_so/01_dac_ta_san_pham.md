@@ -55,6 +55,10 @@ Ba vế của tên đề ứng với ba khối của sản phẩm:
 - **Công việc:** nắm kiểu lừa đang nổi → chọn nội dung → tuyên truyền tại tổ dân phố, ấp, trường học → báo cáo lên Đoàn cấp trên.
 - **Phạm vi:** cấp xã/phường (chính quyền hai cấp).
 - **Vai trò thêm:** cài app hộ người cao tuổi, giúp họ chọn người thân tin cậy, **xác minh báo cáo**, dùng bài học và bài kiểm tra **ngay trong buổi tuyên truyền**.
+- **Ba hình thức dành riêng cho đoàn viên** (chi tiết ở mục 9A):
+  - **Đoàn viên đỡ đầu số:** nhận đỡ đầu các hộ cao tuổi, làm **người thân dự phòng** cho cụ sống một mình.
+  - **Buổi tuyên truyền có QR:** người dân quét mã, học và làm bài kiểm tra tại chỗ. Số liệu tự về màn của đội.
+  - **Thi đua chi đoàn:** xếp hạng các chi đoàn theo kết quả học, số buổi tuyên truyền và số hộ đỡ đầu.
 
 ### 3.4 Vai phụ: người thân được chỉ định
 Nhận cảnh báo, trả lời nhanh, gọi lại cho người đang bị dụ. Không bắt buộc phải cài app. Người thân có thể là con cháu, hoặc với học sinh là **thầy cô chủ nhiệm, anh chị Đoàn**.
@@ -118,6 +122,12 @@ Nhận cảnh báo, trả lời nhanh, gọi lại cho người đang bị dụ.
 | MH-18 | Tạo bài tuyên truyền | Mở rộng | Đội TNV | P1 |
 | MH-19 | Trợ lý giọng nói (lớp phủ) | Điểm cộng 2 | Ông bà | P1 |
 | MH-20 | Hồ sơ và cài đặt (Dễ nhìn và đọc to) | Điểm cộng 2 | Tất cả | P1 |
+| MH-21 | Hộ đỡ đầu (Đoàn viên đỡ đầu số) | Sáng tạo – đoàn viên | Đội TNV | P0 |
+| MH-22 | Buổi tuyên truyền: tạo buổi và mã QR | Sáng tạo – đoàn viên | Đội TNV | P0 |
+| MH-23 | Kết quả buổi tuyên truyền | Sáng tạo – đoàn viên (đo tác động) | Đội TNV | P0 |
+| MH-24 | Thi đua chi đoàn | Sáng tạo – đoàn viên | Học sinh, Đội TNV | P0 |
+
+**Tổng: 25 màn** (MH-01 → MH-24 và lớp phủ MH-02a). Trong đó có 9 màn đáp ứng 6 yêu cầu bắt buộc. Các màn còn lại do đội thiết kế thêm để luồng liền mạch và để ghi điểm sáng tạo.
 
 **P0:** bắt buộc có trong bài nộp. **P1:** nên có để ghi điểm cộng và cho thấy luồng khép kín.
 Sitemap và luồng màn hình: xem [03_sitemap_luong_man_hinh.md](03_sitemap_luong_man_hinh.md).
@@ -135,7 +145,19 @@ Người dân ──kiểm tra──> Kết quả ──┬──> Hỏi ngườ
 Người dân nhận diện tốt hơn  <──────────────────────────────────────────────────────────────────┘
 ```
 
-**Đã chốt: mọi luồng được làm hoàn chỉnh ngang nhau.** Không có luồng nào chỉ làm ở mức minh họa. Thứ tự trình diễn do đội quyết định sau khi web dựng xong.
+**Luồng chính của sản phẩm (đã chốt)** là **tập các luồng giải quyết trực tiếp yêu cầu của đề**, không chọn riêng một luồng:
+
+| Vấn đề trong đề | Luồng giải quyết |
+|---|---|
+| Kiểm tra nhanh trước khi chuyển tiền + hỏi người thân | F1 (Ông bà), F4 (Hỏi người thân hai phía) |
+| Tin nhắn "việc nhẹ lương cao" của học sinh | F2 (AI tin nhắn → báo cáo → học → kiểm tra) |
+| Báo cáo một trường hợp lừa đảo | F3 (Báo cáo 3 bước) |
+| Học kỹ năng nhận diện | F5 (Bài học 1 phút → Bài kiểm tra → Thi đua chi đoàn) |
+| Đội tình nguyện nắm kiểu lừa mới tại địa phương | F6 (Thống kê → Xác minh → Tuyên truyền) |
+| Cụ sống một mình không có người thân gần | F9 (Đoàn viên đỡ đầu số) |
+| Tuyên truyền đo được tác động | F10 (Buổi tuyên truyền có QR) |
+
+Mọi luồng được làm hoàn chỉnh ngang nhau. Thứ tự trình diễn do đội quyết định sau khi web dựng xong. Chi tiết từng luồng: [03_sitemap_luong_man_hinh.md](03_sitemap_luong_man_hinh.md).
 
 **Ba luồng theo vai trò:**
 - **Ông bà:** nhận cuộc gọi lạ → mở app → Kiểm tra số → 🔴 Nguy hiểm, kèm 3 lý do → **Hỏi người thân** (Gọi Lan ngay / Gửi cho Lan) → Lan trả lời "Đừng chuyển, con gọi ngay".
@@ -192,6 +214,16 @@ Danh sách kênh tiếp nhận cụ thể của Công an (số, tài khoản Zal
 
 ---
 
+## 9A. Sáng tạo dành cho đoàn viên
+
+| Hình thức | Vấn đề giải quyết | Cách hoạt động | Tiêu chí chấm |
+|---|---|---|---|
+| **🤝 Đoàn viên đỡ đầu số** | Kẻ lừa nhắm vào người **cô lập**. Cụ sống một mình thì nút "Hỏi người thân" không có ai để hỏi | Mỗi đoàn viên đỡ đầu vài hộ cao tuổi trong xã/phường. Đoàn viên **cài app hộ** bằng mã liên kết, có sự đồng ý của cụ, và trở thành **người thân dự phòng** (người ưu tiên nếu cụ sống một mình). Khi cụ bấm Hỏi người thân, đoàn viên nhận cảnh báo. App nhắc đoàn viên thăm hỏi định kỳ | 1 (đúng nỗi đau cô lập), 4 (triển khai thật ở cơ sở) |
+| **📣 Buổi tuyên truyền có QR** | Tuyên truyền truyền thống không đo được ai đã hiểu | Đội tạo buổi (địa điểm ấp/khu phố/trường, chủ đề kiểu lừa) và nhận **mã QR**. Người dân quét mã thì mở web **không cần tài khoản**, xem bài học 1 phút và làm 5 câu kiểm tra. **Số người tham gia, điểm trung bình, tỷ lệ đạt** hiện trực tiếp trên màn của đội và cộng vào thống kê xã/phường | 3 (dữ liệu), 4 (**đo được tác động**) |
+| **🏆 Thi đua chi đoàn** | Phong trào cần động lực và số liệu so sánh | Ở trường THPT, **mỗi lớp là một chi đoàn**. Xếp hạng chi đoàn theo **điểm trung bình bài kiểm tra**, **số buổi tuyên truyền**, **số người tham gia**, **số hộ đỡ đầu**, **số ca đã xác minh**. Không công khai điểm cá nhân | 1, 4 (gắn với phong trào Đoàn) |
+
+---
+
 ## 10. Góc nhìn của ba giám khảo
 
 | Giám khảo | Phần họ quan tâm | Sản phẩm trả lời bằng |
@@ -202,7 +234,43 @@ Danh sách kênh tiếp nhận cụ thể của Công an (số, tài khoản Zal
 
 ---
 
+## 10A. Đối chiếu tiêu chí chấm của Ban Tổ chức
+
+| Tiêu chí | Điểm | Sản phẩm đáp ứng bằng |
+|---|---|---|
+| **1. Hiểu vấn đề và người dùng** | 25 | 3 nhóm người dùng, phân tích nỗi đau theo từng từ khóa của đề (mục 2–3) · bối cảnh cấp xã/phường của Đồng Nai, chính quyền hai cấp · luồng chính giải quyết từng vấn đề của đề (mục 7) · đỡ đầu số cho người cô lập |
+| **2. Thiết kế UX/UI** *(xét trước khi bằng điểm)* | 30 | 2 chạm để người thân vào cuộc · trang chủ theo vai trò · chế độ Dễ nhìn và đọc to · **mỗi màn có trạng thái trống, lỗi, mất mạng được vẽ trong PDF** · nhận diện thống nhất (DESIGN.md) |
+| **3. Sáng tạo** | 20 | AI hai tầng (tô đỏ dấu hiệu, tự phân loại báo cáo, soạn bài tuyên truyền) · dữ liệu cộng đồng có xác minh · quét mã QR chuyển khoản · bài kiểm tra "chạm vào dấu hiệu" · Hỏi người thân hai phía · buổi tuyên truyền có QR · đỡ đầu số |
+| **4. Khả thi, tác động** *(xét thứ hai khi bằng điểm)* | 25 | Web không cần cài · MVP 24 giờ rõ ràng (mục 11) · nói thật giới hạn của web và những gì app không làm · triển khai qua đội TNV, chi đoàn, nhà trường · **đo tác động** bằng số liệu buổi tuyên truyền và thi đua |
+
+## 10B. Sản phẩm nộp vòng sơ loại (theo yêu cầu của BTC)
+
+| Sản phẩm | Nội dung | Nguồn |
+|---|---|---|
+| **Bản thiết kế giao diện (PDF)** | Mỗi màn một trang, **tên màn = mã + tên** (ví dụ "MH-06 Kết quả kiểm tra"). Có đủ 6 màn bắt buộc, được đánh dấu "Bắt buộc 1–6" | Ảnh chụp từ web prototype |
+| **Prototype bấm được** | Web mobile, đường dẫn ghi trong thuyết minh. Bấm được trọn các luồng giải quyết yêu cầu của đề | Thư mục web trong repo này |
+| **Thuyết minh (tối đa 3 trang)** | (a) vấn đề và người dùng · (b) luồng sử dụng chính · (c) MVP 24 giờ · (d) kiến trúc, công nghệ · (e) công cụ AI đã dùng vào việc gì | Rút gọn từ 3 tài liệu đặc tả |
+| **Thư mục nộp** | `Doi[mã đội]_De4` trên màn hình máy tính, nộp đúng 15:00 | – |
+
+Nguyên tắc của BTC phải giữ: không sao chép nguyên giao diện sản phẩm có sẵn · dữ liệu là giả lập · không dùng thông tin cá nhân thật · ghi rõ công cụ AI đã dùng.
+
 ## 11. Khả thi và công nghệ (đề xuất)
+
+**MVP 24 giờ ở vòng chung kết (đã chốt): toàn bộ các màn P0.**
+
+| Nhóm | Màn P0 | Chức năng |
+|---|---|---|
+| Khởi đầu | MH-01, MH-02 | Chọn vai trò, xã/phường, lớp/chi đoàn · cài người thân |
+| Trang chủ | MH-03, MH-04 | Theo vai trò |
+| Kiểm tra | MH-05, MH-06 | Nhận dạng, tra danh sách mẫu, xếp 3 mức kèm lý do, đọc to |
+| AI | MH-07 | Tầng luật từ khóa + một lần gọi mô hình ngôn ngữ |
+| Báo cáo | MH-08, MH-09 | 3 bước, mã báo cáo, mở kênh Công an |
+| Hỏi người thân | MH-11 | Gọi ngay, gửi SMS/Zalo soạn sẵn, trạng thái mô phỏng |
+| Học | MH-13, MH-14, MH-15 | 10 bài, bài kiểm tra chấm điểm, chứng nhận |
+| Đội TNV | MH-16 | Thống kê, khối "Mới tuần này", biểu đồ |
+| Đoàn viên | MH-21, MH-22, MH-23, MH-24 | Đỡ đầu, buổi tuyên truyền QR và kết quả, thi đua chi đoàn |
+
+**Để sau vòng chung kết (P1):** MH-02a, MH-10, MH-12, MH-17, MH-18, MH-19, MH-20 · thông báo đẩy · quét QR chuyển khoản · nói để nhập · xuất PDF.
 
 - **Nền tảng (đã chốt): ứng dụng web, giao diện ưu tiên điện thoại.**
   - Bố cục thiết kế cho màn hình rộng 360–430px. Màn hình rộng hơn vẫn dùng được: cột nội dung tối đa 480px, căn giữa. Riêng màn đội TNV giãn ra trên máy tính bảng và máy tính.
@@ -230,7 +298,12 @@ Danh sách kênh tiếp nhận cụ thể của Công an (số, tài khoản Zal
 
 ## 13. Điểm còn mở
 
-1. Thể lệ, thang điểm, sản phẩm nộp và hạn nộp của vòng thi: **chưa có**. Thứ tự ưu tiên P0/P1 có thể đổi khi có thang điểm.
-2. Danh sách kênh tiếp nhận tin báo của Công an: **cần kiểm chứng**.
+1. Danh sách kênh tiếp nhận tin báo của Công an: **cần kiểm chứng**.
 
-**Đã chốt (24/11/2026):** làm hoàn chỉnh mọi luồng, thứ tự trình diễn do đội tự quyết sau khi dựng xong · các ngưỡng và tham số nghiệp vụ (xem mục 16 trong đặc tả chức năng) · tên người thân mẫu là Lan (con gái) và Hùng (con trai).
+**Đã chốt (24/11/2026):**
+- Luồng chính là tập luồng giải quyết yêu cầu đề (mục 7). Mọi luồng làm hoàn chỉnh, thứ tự trình diễn do đội tự quyết.
+- MVP 24 giờ là toàn bộ các màn P0 (mục 11).
+- Thêm 3 hình thức cho đoàn viên: đỡ đầu số, buổi tuyên truyền có QR, thi đua chi đoàn (mục 9A).
+- Các ngưỡng và tham số nghiệp vụ: xem mục 16 trong đặc tả chức năng.
+- Người thân mẫu: Lan (con gái), Hùng (con trai).
+- Thể lệ và tiêu chí chấm của BTC: đã có, đối chiếu ở mục 10A–10B.

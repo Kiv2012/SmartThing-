@@ -35,6 +35,14 @@ flowchart TD
     TNV --> MH16["MH-16 Tổng quan phường (thống kê)"]
     MH16 --> MH17["MH-17 Hàng chờ xác minh"]
     MH16 --> MH18["MH-18 Tạo bài tuyên truyền"]
+    TNV --> MH21["MH-21 Hộ đỡ đầu"]
+    TNV --> MH22["MH-22 Buổi tuyên truyền + QR"]
+    MH22 --> MH23["MH-23 Kết quả buổi"]
+    MH04 --> MH24["MH-24 Thi đua chi đoàn"]
+    MH16 --> MH24
+
+    DAN["Người dân quét QR buổi"] --> MH13
+    CU["Máy của cụ: mã liên kết đỡ đầu"] --> MH03
 
     MH03 --> CHUNG
     MH04 --> CHUNG
@@ -72,7 +80,14 @@ Mỗi màn có đường dẫn riêng. Người dùng mở thẳng được từ
 ├── /doi                  MH-16 Tổng quan phường (thống kê kiểu lừa mới)
 │   ├── /doi/xac-minh     MH-17 Hàng chờ xác minh
 │   ├── /doi/tuyen-truyen MH-18 Tạo bài tuyên truyền
+│   ├── /doi/buoi         MH-22 Buổi tuyên truyền: tạo buổi + mã QR
+│   │   └── /doi/buoi/:ma MH-23 Kết quả buổi (cập nhật trực tiếp)
+│   ├── /doi/do-dau       MH-21 Hộ đỡ đầu
 │   └── /doi/xuat-bao-cao (hộp thoại trong MH-16)
+│
+├── /thi-dua              MH-24 Thi đua chi đoàn
+├── /buoi/:ma             Người dân quét QR → MH-13 bài học → MH-14 (5 câu) → MH-15
+├── /lien-ket/:ma         Máy của cụ: đồng ý liên kết đỡ đầu → MH-03
 │
 └── /toi                  MH-20 Hồ sơ và cài đặt
 ```
@@ -85,9 +100,14 @@ Mỗi màn có đường dẫn riêng. Người dùng mở thẳng được từ
 
 | Vai trò | Thẻ 1 | Thẻ 2 | Thẻ 3 | Thẻ 4 | Thẻ 5 |
 |---|---|---|---|---|---|
-| **Ông bà** (4 thẻ, cao 72px, có chữ) | 🏠 Trang chủ | 🔍 Kiểm tra | 📖 Học | 👤 Tôi | – |
-| **Học sinh** (5 thẻ) | 🏠 Trang chủ | 🔍 Kiểm tra | 📖 Học | 🏆 Thử thách | 👤 Tôi |
-| **Đội TNV** (4 thẻ) | 📊 Tổng quan | ✅ Xác minh | 📣 Tuyên truyền | 👤 Tôi | – |
+| **Ông bà** (4 thẻ, cao 76px) | Trang chủ | Kiểm tra | Học | Tôi | – |
+| **Học sinh** (5 thẻ) | Trang chủ | Kiểm tra | Học | Thử thách | Tôi |
+| **Đội TNV** (5 thẻ) | Tổng quan | Xác minh | Tuyên truyền | Đỡ đầu | Tôi |
+
+Mỗi thẻ có một icon nét đơn sắc kèm nhãn chữ (DESIGN.md mục 1A, 8). Không dùng emoji.
+
+- Thẻ **Tuyên truyền** của Đội TNV có hai phần: **[Buổi tuyên truyền]** (MH-22, MH-23) và **[Soạn bài]** (MH-18).
+- **Thi đua chi đoàn** (MH-24): Học sinh vào từ thẻ **Thử thách**, Đội TNV vào từ khối thi đua trên MH-16.
 
 - Thẻ **Kiểm tra** của Học sinh có hai phần chuyển qua lại: **[Số / Link / STK]** (MH-05) và **[Dán tin nhắn]** (MH-07).
 - Với Ông bà, MH-07 không có thẻ riêng. App tự chuyển sang khi người dùng dán một đoạn văn dài (QT-06), hoặc khi bấm "Kể bằng giọng nói" (MH-19).
@@ -130,7 +150,7 @@ flowchart LR
 
 ---
 
-> **Phạm vi dựng (đã chốt):** mọi luồng F0–F8 được làm hoàn chỉnh ngang nhau. Thứ tự trình diễn do đội quyết định sau khi web dựng xong.
+> **Luồng chính (đã chốt)** là tập các luồng giải quyết yêu cầu đề: **F1, F2, F3, F4, F5, F6**, cộng hai luồng sáng tạo cho đoàn viên **F9, F10**. Mọi luồng từ F0 đến F10 (11 luồng) được làm hoàn chỉnh. Thứ tự trình diễn do đội quyết định.
 
 ## 4. Luồng Ông bà: kiểm tra số lạ và hỏi người thân (F1)
 
@@ -326,6 +346,57 @@ flowchart LR
 
 ---
 
+## 11A. Luồng Đoàn viên đỡ đầu số (F9)
+
+```mermaid
+flowchart TD
+    A["MH-21 Hộ đỡ đầu: chạm 'Thêm hộ'"] --> B["App tạo mã liên kết (QR + 6 số)"]
+    B --> C["Trên máy của cụ: mở /lien-ket/:ma"]
+    C --> D{"Cụ đồng ý để cháu hỗ trợ?"}
+    D -- "Không" --> X["Không liên kết"]
+    D -- "Đồng ý" --> E["Tự chọn vai trò Ông bà · bật Dễ nhìn · điền đoàn viên vào người thân"]
+    E --> F{"Cụ có người thân khác?"}
+    F -- "Không (sống một mình)" --> G["Đoàn viên là người ưu tiên"]
+    F -- "Có" --> H["Đoàn viên là người thứ hai (gợi ý sau 2 phút)"]
+    G & H --> I["MH-21: hộ chuyển sang 'Đã cài app'"]
+    I -- "Cụ bấm Hỏi người thân" --> J["Đoàn viên nhận cảnh báo (MH-12) · hộ được tô nổi"]
+    I -- "14 ngày không liên lạc" --> K["Nhắc thăm hỏi → 'Đã thăm / Đã gọi'"]
+```
+
+---
+
+## 11B. Luồng Buổi tuyên truyền có QR (F10)
+
+```mermaid
+flowchart LR
+    subgraph DOI["Đoàn viên"]
+        A["MH-16: kiểu lừa MỚI"] --> B["MH-22 Tạo buổi: địa điểm · thời gian · chủ đề"]
+        B --> C["Mã QR lớn để chiếu / in"]
+        E["MH-23 Kết quả trực tiếp: số người · điểm TB · tỷ lệ đạt · câu sai nhiều nhất"]
+    end
+    subgraph DAN["Người dân tại buổi"]
+        C -- "Quét QR" --> D1["Chọn nhóm: Cao tuổi / Học sinh / Người dân"]
+        D1 --> D2["MH-13 Bài học 1 phút theo chủ đề"]
+        D2 --> D3["MH-14 Bài kiểm tra 5 câu"]
+        D3 --> D4["MH-15 Điểm · chứng nhận · lưu web vào màn hình chính"]
+    end
+    D3 -- "Kết quả" --> E
+    E --> F["Cộng vào MH-16 KPI · Xuất báo cáo · MH-24 Thi đua chi đoàn"]
+```
+
+---
+
+## 11C. Thi đua chi đoàn (trong F5 và F6)
+
+```
+Học sinh làm bài (MH-14) ─────┐
+Buổi tuyên truyền (MH-23) ────┼──> MH-24 Thi đua chi đoàn
+Hộ đỡ đầu (MH-21) ────────────┤    40% Kết quả học · 20% Tham gia
+Ca đã xác minh (MH-17) ───────┘    20% Tuyên truyền · 20% Đỡ đầu và xác minh
+```
+
+---
+
 ## 12. Ma trận màn hình
 
 | Mã | Màn | Đường dẫn | Vào từ | Đi tới | Luồng |
@@ -351,6 +422,10 @@ flowchart LR
 | MH-18 | Tạo bài tuyên truyền | /doi/tuyen-truyen | MH-16 · thẻ Tuyên truyền | Chia sẻ · trình chiếu MH-13 | F6 |
 | MH-19 | Trợ lý giọng nói | /ong-ba/tro-ly | MH-03 | MH-06 · MH-11 | F8 |
 | MH-20 | Hồ sơ và cài đặt | /toi | Thẻ Tôi | MH-01 · MH-02 · báo cáo của tôi | – |
+| MH-21 | Hộ đỡ đầu | /doi/do-dau | Thẻ Đỡ đầu | Mã liên kết · MH-12 | F9 |
+| MH-22 | Buổi tuyên truyền + QR | /doi/buoi | Thẻ Tuyên truyền · MH-16 | MH-23 | F10 |
+| MH-23 | Kết quả buổi | /doi/buoi/:ma | MH-22 | MH-16 · MH-24 | F10 |
+| MH-24 | Thi đua chi đoàn | /thi-dua | Thẻ Thử thách (HS) · MH-16 | MH-14 · MH-22 | F5, F6 |
 
 ---
 
@@ -367,11 +442,14 @@ flowchart LR
 | Điểm cộng AI | MH-07, MH-18 | F2, F6 | 1–2 |
 | Điểm cộng giọng nói | MH-19, 🔊 mọi màn | F1, F8 | 1 |
 | Điểm cộng kênh Công an | MH-09, MH-10, MH-17 | F3, F6, F7 | – |
+| Sáng tạo: Đoàn viên đỡ đầu số | MH-21 | F9 | 1 (thẻ Đỡ đầu) |
+| Sáng tạo: Buổi tuyên truyền có QR | MH-22, MH-23 | F10 | 1–2 · người dân: quét QR là vào thẳng bài học |
+| Sáng tạo: Thi đua chi đoàn | MH-24 | F5, F6 | 1–2 |
 
 ---
 
 ## 14. Quyết định và điểm còn mở
 
-**Đã chốt:** mọi luồng làm hoàn chỉnh, thứ tự trình diễn do đội tự quyết · người thân mẫu là **Lan** (con gái, ưu tiên) và **Hùng** (con trai) · chờ 2 phút rồi gợi ý người thứ hai · các ngưỡng nghiệp vụ như mục 16 của đặc tả chức năng.
+**Đã chốt:** luồng chính là tập luồng giải quyết yêu cầu đề · 11 luồng F0–F10 làm hoàn chỉnh, thứ tự trình diễn do đội tự quyết · thêm F9 Đỡ đầu số, F10 Buổi tuyên truyền QR, Thi đua chi đoàn · người thân mẫu là **Lan** (con gái, ưu tiên) và **Hùng** (con trai) · chờ 2 phút rồi gợi ý người thứ hai · các ngưỡng nghiệp vụ như mục 16 của đặc tả chức năng.
 
 **Còn mở:** đường dẫn web (mục 1.1) là đề xuất cho prototype, có thể đổi khi dựng.

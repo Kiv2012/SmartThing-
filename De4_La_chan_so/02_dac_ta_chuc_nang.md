@@ -34,8 +34,9 @@
 | Vai trò | Mô tả | Được dùng |
 |---|---|---|
 | **Ông bà** (người cao tuổi) | Chế độ Dễ nhìn và đọc to bật sẵn | Kiểm tra, AI tin nhắn, Hỏi người thân, Báo cáo, Bài học, Bài kiểm tra, Giọng nói |
-| **Học sinh** | Giao diện chuẩn, có thi đua | Như Ông bà, cộng thêm xếp hạng lớp/trường |
-| **Đội TNV** | Gắn với một xã/phường | Mọi chức năng người dân, cộng thêm Thống kê, Xác minh, Tuyên truyền, Xuất báo cáo |
+| **Học sinh** | Giao diện chuẩn, gắn với trường và lớp (mỗi lớp là một chi đoàn) | Như Ông bà, cộng thêm Thi đua chi đoàn |
+| **Đội TNV (đoàn viên)** | Gắn với một xã/phường và một chi đoàn | Mọi chức năng người dân, cộng thêm Thống kê, Xác minh, Tuyên truyền, Buổi tuyên truyền QR, Đỡ đầu số, Thi đua chi đoàn, Xuất báo cáo |
+| **Người tham gia buổi tuyên truyền** | Người dân quét QR, không cần tài khoản | Bài học và bài kiểm tra của buổi đó |
 | **Người thân** | Không bắt buộc cài app | Nhận cảnh báo, trả lời nhanh |
 
 **QT-01:** Kiểm tra nhanh, AI tin nhắn và Bài học **dùng được mà không cần tài khoản**. Chỉ Báo cáo không ẩn danh, Hỏi người thân và chức năng của đội TNV cần thông tin hồ sơ.
@@ -48,7 +49,9 @@
 - **Đầu vào:** chọn 1 trong 3 thẻ (Ông bà · Học sinh · Đội tình nguyện), tên gọi (không bắt buộc), xã/phường (chọn từ danh sách).
 - **Xử lý:**
   - Chọn Ông bà thì tự bật chế độ Dễ nhìn và đọc to (CN-09).
-  - Chọn Đội TNV thì bắt buộc chọn xã/phường và nhập mã đội (giả lập).
+  - Chọn Học sinh thì chọn trường và lớp. Lớp chính là chi đoàn dùng cho thi đua (CN-14).
+  - Chọn Đội TNV thì bắt buộc chọn xã/phường, chi đoàn và nhập mã đội (giả lập).
+  - Mở bằng **mã liên kết đỡ đầu** (CN-12) thì tự chọn vai trò Ông bà và điền sẵn đoàn viên đỡ đầu làm người thân.
 - **Đầu ra:** chuyển đến MH-02 (Ông bà, Học sinh) hoặc MH-16 (Đội TNV).
 - **NT:** nút "Bắt đầu" chỉ bấm được khi đã chọn vai trò. Đổi vai trò được trong Hồ sơ (MH-20).
 
@@ -85,11 +88,11 @@
 | Quét QR chuyển khoản | Đọc mã QR chuyển khoản ngân hàng bằng camera hoặc từ ảnh có sẵn, lấy STK, ngân hàng, số tiền | P1 |
 
 ### CN-02.2 Tự nhận dạng loại dữ liệu
-| Loại | Quy tắc nhận dạng (đề xuất) | Chip hiển thị |
+| Loại | Quy tắc nhận dạng (đề xuất) | Dòng chữ hiển thị dưới ô (không icon) |
 |---|---|---|
-| Số điện thoại | Sau khi bỏ khoảng trắng, dấu chấm, gạch: `0` + 9 số, hoặc `+84`/`84` + 9 số | 📞 Số điện thoại |
-| Đường link | Có `http`, `www.` hoặc dạng `tên.miền` | 🔗 Đường link |
-| Số tài khoản | 6–19 chữ số, không khớp định dạng số điện thoại | 🏦 Số tài khoản |
+| Số điện thoại | Sau khi bỏ khoảng trắng, dấu chấm, gạch: `0` + 9 số, hoặc `+84`/`84` + 9 số | "Nhận ra: Số điện thoại" |
+| Đường link | Có `http`, `www.` hoặc dạng `tên.miền` | "Nhận ra: Đường link" |
+| Số tài khoản | 6–19 chữ số, không khớp định dạng số điện thoại | "Nhận ra: Số tài khoản" |
 | Không rõ | Các trường hợp còn lại | Gợi ý "Dán tin nhắn? → Phân tích bằng AI" |
 
 - **QT-04:** một dãy **10 số bắt đầu bằng 0** được tra **cả hai loại**, vì nhiều ngân hàng cho dùng số điện thoại làm số tài khoản. Kết quả lấy mức cao hơn.
@@ -263,7 +266,7 @@
 - **Giải thích ngay** sau từng câu: đúng hay sai, và vì sao.
 - **Màn kết quả (MH-15):** tổng điểm · **kiểu lừa còn yếu** · gợi ý bài học tương ứng · nút Làm lại.
 - **QT-19:** đạt **≥ 80 điểm** thì nhận **Chứng nhận Lá Chắn Số** (xem và chia sẻ được dưới dạng ảnh).
-- **Thi đua** (Học sinh, P1): xếp hạng **theo lớp và trường bằng điểm trung bình**, **không công khai điểm cá nhân**.
+- **Thi đua:** điểm của học sinh và đoàn viên được cộng vào **Thi đua chi đoàn** (CN-14), **không công khai điểm cá nhân**.
 - **NT:** điểm tính đúng theo QT-17/18. Mỗi câu đều có giải thích. Chứng nhận chỉ mở khi đạt ngưỡng.
 
 ---
@@ -333,6 +336,60 @@
 
 ---
 
+## 12A. CN-12 Đoàn viên đỡ đầu số (MH-21) · P0 · Sáng tạo
+
+- **Mục tiêu:** cụ sống một mình hoặc xa con cháu vẫn có **người thân dự phòng** khi bấm Hỏi người thân.
+- **Danh sách hộ đỡ đầu (MH-21):** tên gọi cụ, ấp/khu phố, tình trạng (đã cài app · đã có người thân · sống một mình), lần liên lạc gần nhất, số lần cụ hỏi trong tháng.
+- **Thêm hộ đỡ đầu:**
+  1. Đoàn viên bấm "Thêm hộ" và app tạo **mã liên kết** (mã QR kèm 6 số).
+  2. Đoàn viên mở web trên máy của cụ và quét hoặc nhập mã. App tự chọn vai trò Ông bà, bật Dễ nhìn, điền sẵn đoàn viên vào danh sách người thân (CN-01).
+  3. **Cụ đồng ý** bằng nút "Đồng ý để cháu [tên] hỗ trợ". Không có bước này thì không liên kết.
+- **QT-28:** nếu cụ không có người thân nào khác, đoàn viên đỡ đầu là **người ưu tiên**. Nếu có, đoàn viên là **người thứ hai**, được gợi ý sau 2 phút (QT-16).
+- **QT-29:** mỗi đoàn viên đỡ đầu tối đa **5 hộ**. Cụ có thể hủy liên kết bất cứ lúc nào trong Hồ sơ.
+- **Nhận cảnh báo:** khi cụ bấm Hỏi người thân, đoàn viên nhận như người thân (MH-12) và hộ đó được tô nổi trên MH-21.
+- **Nhắc thăm hỏi:** sau **14 ngày** không liên lạc thì nhắc đoàn viên. Đoàn viên ghi nhanh "Đã thăm / Đã gọi".
+- **Trạng thái trống:** chưa đỡ đầu hộ nào thì hiện hộp "Bạn chưa đỡ đầu hộ nào. Mỗi đoàn viên có thể giúp tối đa 5 hộ", kèm nút "Thêm hộ".
+- **NT:** liên kết chỉ thành công khi cụ đồng ý. Đoàn viên xuất hiện đúng vị trí trong danh sách người thân của cụ (QT-28).
+
+---
+
+## 12B. CN-13 Buổi tuyên truyền có QR (MH-22, MH-23) · P0 · Sáng tạo
+
+- **Tạo buổi (MH-22):**
+  - Đầu vào: tên buổi, địa điểm (ấp/khu phố/trường), thời gian, **chủ đề** (1–2 kiểu lừa, gợi ý sẵn kiểu đang "MỚI" từ MH-16).
+  - Đầu ra: **mã QR lớn** để chiếu hoặc in, đường dẫn ngắn `/buoi/:ma`.
+- **Người tham gia** (quét QR, không cần tài khoản):
+  1. Chọn nhóm: Người cao tuổi / Học sinh / Người dân.
+  2. Xem **bài học 1 phút** theo chủ đề (MH-13).
+  3. Làm **5 câu kiểm tra** (MH-14).
+  4. Xem điểm, nhận chứng nhận nếu đạt, có thể lưu web vào màn hình chính.
+- **Kết quả buổi (MH-23)**, cập nhật trực tiếp: **số người tham gia**, **điểm trung bình**, **tỷ lệ đạt ≥ 80**, câu sai nhiều nhất (gợi ý nội dung cần nhấn mạnh), cơ cấu nhóm tham gia.
+- **QT-30:** mỗi thiết bị chỉ tính một lượt cho mỗi buổi. Buổi tự đóng sau **24 giờ**.
+- **QT-31:** kết quả buổi được cộng vào KPI "số người đã học" của MH-16, vào báo cáo xuất (CN-08.4) và vào điểm thi đua của chi đoàn tổ chức (CN-14).
+- **Trạng thái trống:** buổi chưa có ai tham gia thì hiện "Đang chờ người tham gia, hãy chiếu mã QR lên màn hình".
+- **NT:** quét QR là vào thẳng bài học, không qua bước khởi đầu. Số liệu trên MH-23 khớp số lượt làm bài.
+
+---
+
+## 12C. CN-14 Thi đua chi đoàn (MH-24) · P0 · Sáng tạo
+
+- **Phạm vi xếp hạng:** trong trường (giữa các lớp) · trong xã/phường (giữa các chi đoàn).
+- **QT-32 – điểm thi đua** (thang 100):
+
+| Thành phần | Tỷ trọng | Cách tính |
+|---|---|---|
+| Kết quả học | 40% | Điểm trung bình bài kiểm tra của thành viên chi đoàn |
+| Mức tham gia | 20% | Tỷ lệ thành viên đã làm ít nhất 1 bài kiểm tra |
+| Tuyên truyền | 20% | Số người tham gia các buổi tuyên truyền do chi đoàn tổ chức (CN-13) |
+| Đỡ đầu và xác minh | 20% | Số hộ đỡ đầu (CN-12) và số ca đã xác minh (CN-08.2) |
+
+- **Hiển thị:** bảng xếp hạng có vị trí của chi đoàn mình được tô nổi · 4 thành phần điểm của chi đoàn mình · gợi ý "Để lên hạng: tổ chức thêm 1 buổi tuyên truyền".
+- **QT-33:** chỉ công khai điểm **theo chi đoàn**, không công khai điểm cá nhân.
+- **Trạng thái trống:** chi đoàn chưa có hoạt động thì hiện "Chi đoàn chưa có điểm. Hãy làm bài kiểm tra đầu tiên".
+- **NT:** tổng tỷ trọng là 100%. Tên chi đoàn trong dữ liệu mẫu là giả lập.
+
+---
+
 ## 13. Dữ liệu (thực thể chính)
 
 | Thực thể | Trường chính |
@@ -348,6 +405,10 @@
 | KetQuaThi | nguoi_dung_id, diem, cau_sai[], thoi_diem, dat_chung_nhan |
 | HoiNguoiThan | id, nguoi_gui, nguoi_nhan, noi_dung, trang_thai, tra_loi, thoi_diem |
 | BaiTuyenTruyen | id, tinh_huong_id, xa_phuong, poster, tin_zalo, kich_ban |
+| ChiDoan | id, ten, loai (lớp THPT / chi đoàn khu phố), truong, xa_phuong |
+| DoDau | id, doan_vien_id, nguoi_cao_tuoi_id, ma_lien_ket, dong_y (thời điểm), vai_tro (ưu tiên/thứ hai), lan_lien_lac_cuoi |
+| BuoiTuyenTruyen | ma, chi_doan_id, ten, dia_diem, thoi_gian, chu_de[], trang_thai (mở/đóng) |
+| LuotThamGia | buoi_ma, thiet_bi, nhom, diem, cau_sai[], thoi_diem |
 
 ---
 
@@ -383,6 +444,9 @@
 | Dữ liệu mẫu: 10 tình huống, 120 báo cáo, 35% đường dẫn | Đặc tả sản phẩm mục 8 | MH-13, MH-16 |
 | Người dùng: người cao tuổi · học sinh · đội TNV | CN-01, CN-09, CN-08 | MH-01, MH-03, MH-04, MH-16 |
 | Nền tảng: ứng dụng web, giao diện ưu tiên điện thoại | Mục 0, CN-01.3, PCN-07, PCN-09 | Tất cả |
+| Tiêu chí 1 (người dùng, nỗi đau) + Tiêu chí 4 (triển khai ở cơ sở) | CN-12 Đoàn viên đỡ đầu số | MH-21 |
+| Tiêu chí 3 (dữ liệu) + Tiêu chí 4 (tác động) | CN-13 Buổi tuyên truyền có QR | MH-22, MH-23 |
+| Tiêu chí 1, 4 (phong trào Đoàn) | CN-14 Thi đua chi đoàn | MH-24 |
 
 ---
 
@@ -396,5 +460,10 @@
 | 4 | Bài kiểm tra (QT-17, QT-19) | **10 câu cho Học sinh, 5 câu cho Ông bà**. Chứng nhận khi đạt **≥ 80 điểm** |
 | 5 | Phạm vi dựng | **Mọi luồng (F0–F8) làm hoàn chỉnh**. Thứ tự trình diễn do đội tự quyết sau khi dựng xong |
 | 6 | Dữ liệu mẫu người thân | **Lan (con gái, ưu tiên)**, **Hùng (con trai)** |
+| 7 | Luồng chính | **Tập các luồng giải quyết yêu cầu đề** (đặc tả sản phẩm mục 7), không chọn riêng một luồng |
+| 8 | MVP 24 giờ ở chung kết | **Toàn bộ các màn P0** (đặc tả sản phẩm mục 11) |
+| 9 | Sáng tạo cho đoàn viên | Thêm **CN-12 Đỡ đầu số**, **CN-13 Buổi tuyên truyền có QR**, **CN-14 Thi đua chi đoàn** (đều P0) |
 
-**Còn mở:** việc phân định P0/P1 có thể đổi khi có thang điểm của vòng thi · danh sách kênh tiếp nhận tin báo Công an cần kiểm chứng (QT-24).
+**Tham số của chức năng mới** (do đội phân tích đặt, sửa được): tối đa 5 hộ cho mỗi đoàn viên (QT-29) · nhắc thăm hỏi sau 14 ngày · buổi tuyên truyền tự đóng sau 24 giờ (QT-30) · tỷ trọng điểm thi đua 40/20/20/20 (QT-32).
+
+**Còn mở:** danh sách kênh tiếp nhận tin báo Công an cần kiểm chứng (QT-24).
