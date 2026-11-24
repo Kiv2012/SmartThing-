@@ -38,13 +38,18 @@ A.route(/^\/hoi-nguoi-than$/, (m, q) => {
   }
   const order = S.deNhin ? call+send : send+call;
   return A.screen({mh:'MH-11', title:'Hỏi người thân', tab:'', listen:`Bấm Gọi ${sel.ten} ngay để gọi điện, hoặc bấm Gửi cho ${sel.ten} để gửi tin.`, body:`
-    <div class="card person"><span class="avatar">${esc(sel.ten[0])}</span><span class="grow"><b style="font-size:var(--fs-card)">${esc(sel.ten)}</b><br><span class="ink2 small">${esc(sel.qh)} · <span class="mono">${esc(sel.sdt)}</span></span></span>${sel.uu?'<span class="tag">Ưu tiên</span>':''}</div>
+    <div class="card person"><span class="avatar">${esc(sel.ten[0])}</span><span class="grow"><b class="contact-name">${esc(sel.ten)}</b><span class="ink2 small">${esc(sel.qh)} · <span class="mono">${esc(sel.sdt)}</span></span></span>${sel.uu?'<span class="tag">Ưu tiên</span>':''}</div>
     ${list.length>1?`<div class="chips">${list.map(r=>`<a class="chip ${r===sel?'on':''}" href="#/hoi-nguoi-than?r=${r.id}">${esc(r.ten)}</a>`).join('')}</div>`:''}
     ${status}
-    ${st!=='replied'?`<div class="stack">${order}</div>`:`<div class="stack">${call}<a class="btn btn-ghost" href="${A.roleHome()}">Về trang chủ</a></div>`}
-    <div class="card"><span class="label">Tin sẽ gửi (soạn sẵn)</span><p>${esc(msg)}</p></div>
-    ${off?'<p class="hint">Đang mất mạng nên chưa gửi tin được. Hãy gọi điện trực tiếp.</p>':`<div class="btn-row"><a class="btn btn-ghost" href="sms:${sel.sdt.replace(/\s/g,'')}?&body=${encodeURIComponent(msg)}">Gửi qua SMS</a><button class="btn btn-ghost" data-act="ask-zalo" data-p="${sel.sdt.replace(/\s/g,'')}" data-m="${esc(msg)}">Gửi qua Zalo</button></div>
-    <p class="note">Gửi trong app: người thân nhận thông báo ngay (khi đã thêm Lá Chắn Số vào màn hình chính). SMS, Zalo: cần bấm Gửi thêm một lần.</p>`}`});
+    ${st!=='replied' ? `<section class="card"><h2>Tin nhắn soạn sẵn</h2><p>${esc(msg)}</p></section>` : ''}
+    ${off ? '<p class="hint">Đang mất mạng nên chưa gửi tin được. Hãy gọi điện trực tiếp.</p>' : '<p class="note">Gửi trong app và trạng thái phản hồi là mô phỏng.</p>'}
+    <div class="stack ask-actions">
+      ${st!=='replied' ? order : `${call}<a class="btn btn-ghost" href="${A.roleHome()}">Về trang chủ</a>`}
+      ${!off && st!=='replied' ? `<details class="contact-options">
+        <summary>Gửi bằng SMS hoặc Zalo</summary>
+        <div class="btn-row"><a class="btn btn-ghost" href="sms:${sel.sdt.replace(/\s/g,'')}?&body=${encodeURIComponent(msg)}">Mở SMS</a><button class="btn btn-ghost" data-act="ask-zalo" data-p="${sel.sdt.replace(/\s/g,'')}" data-m="${esc(msg)}">Mở Zalo</button></div>
+      </details>` : ''}
+    </div>`});
 });
 A.actions['ask-send'] = () => { S.ask = {state:'sent', at:Date.now()}; A.save(); A.toast('Đã gửi'); A.render(); };
 A.actions['ask-zalo'] = async el => { try{ await navigator.clipboard.writeText(el.dataset.m); A.toast('Đã chép nội dung, dán vào Zalo rồi bấm Gửi'); }catch(e){} window.open('https://zalo.me/'+el.dataset.p, '_blank'); };

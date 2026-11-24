@@ -1,13 +1,39 @@
-/* Lá Chắn Số – Bottom sheet, toast, trợ lý giọng nói (theo DESIGN.md) */
-/* ---------- Bottom sheet, toast ---------- */
-.sheet-bg{position:fixed;inset:0;background:rgba(15,27,51,.45);z-index:20;display:flex;align-items:flex-end;justify-content:center}
-.sheet{background:var(--paper);width:100%;max-width:480px;border-radius:14px 14px 0 0;padding:20px var(--pad) calc(20px + env(safe-area-inset-bottom,0));display:flex;flex-direction:column;gap:12px;box-shadow:0 -8px 24px rgba(0,42,92,.18);animation:up .2s ease-out}
-.sheet h2{font-size:var(--fs-title)}
-@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + 16px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;z-index:30;max-width:90%;font-size:var(--fs-small);transition:opacity .3s}
-
-/* Trợ lý giọng nói */
-.listening{display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px 0}
-.micbig{width:120px;height:120px;border-radius:50%;border:0;background:var(--brand);color:#fff;display:grid;place-items:center;cursor:pointer}
-.micbig.on{background:var(--danger-ink)}
-.micbig svg{width:48px;height:48px}
+.sheet {
+  position: fixed;
+  inset: auto 0 0;
+  width: min(100%, 520px);
+  max-height: 85dvh;
+  margin: 0 auto;
+  padding: 20px var(--pad) calc(20px + env(safe-area-inset-bottom, 0px));
+  border: 0;
+  border-radius: 16px 16px 0 0;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: auto;
+  overscroll-behavior: contain;
+  box-shadow: 0 -8px 32px var(--sheet-shadow);
+}
+.sheet[open] { display: flex; flex-direction: column; gap: 12px; animation: sheet-in .19s ease-out; }
+.sheet::backdrop { background: var(--sheet-scrim); }
+.sheet h2 { font-size: var(--fs-title); }
+@keyframes sheet-in { from { transform: translateY(24px); } to { transform: translateY(0); } }
+.toast {
+  position: fixed;
+  z-index: 10;
+  bottom: calc(var(--tabh) + env(safe-area-inset-bottom, 0px) + 12px);
+  left: 50%;
+  max-width: 90%;
+  padding: 10px 16px;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  background: var(--navy-deep);
+  color: var(--paper);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  transition: opacity .2s;
+  pointer-events: none;
+}
+.listening { display: grid; justify-items: center; gap: 12px; padding-block: 20px; }
+.micbig { display: grid; width: 104px; height: 104px; place-items: center; border: 0; border-radius: 50%; background: var(--brand); color: var(--paper); cursor: pointer; }
+.micbig.on { background: var(--danger-ink); }
+.micbig svg { width: 44px; height: 44px; }

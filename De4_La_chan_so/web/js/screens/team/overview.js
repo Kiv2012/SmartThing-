@@ -17,7 +17,7 @@ A.route(/^\/doi$/, (m, q) => {
   const weeks = [[1,6,'1–6/11'],[7,12,'7–12/11'],[13,17,'13–17/11'],[18,24,'18–24/11']].map(([a,b,l]) => ({l, n:R.filter(r=>r.day>=a&&r.day<=b).length}));
   const wmax = Math.max(1, ...weeks.map(w=>w.n));
   const alertHo = S.dodau.find(h=>h.canh_bao);
-  const sel = (id, opts, cur, key) => `<select class="select" aria-label="${id}" data-act-filter="${key}">${opts.map(([v,l])=>`<option value="${esc(v)}" ${v===cur?'selected':''}>${esc(l)}</option>`).join('')}</select>`;
+  const sel = (id, opts, cur, key) => `<label class="field"><span class="label">${id}</span><select class="select" data-act-filter="${key}">${opts.map(([v,l])=>`<option value="${esc(v)}" ${v===cur?'selected':''}>${esc(l)}</option>`).join('')}</select></label>`;
   const mostT = byType[0].s;
   return A.screen({mh:'MH-16', title:'Tổng quan địa bàn', tab:'#/doi', back:false, body:`
     <div class="filters">
@@ -25,19 +25,20 @@ A.route(/^\/doi$/, (m, q) => {
       ${sel('Khoảng thời gian', [['thang','Tháng 11/2026'],['tuan','7 ngày qua']], ky, 'ky')}
       ${sel('Đối tượng bị nhắm', [['all','Mọi đối tượng'],['ob','Người cao tuổi'],['hs','Học sinh']], tg, 'dt')}
     </div>
-    ${alertHo?`<a class="card ward alert" href="#/doi/do-dau" style="text-decoration:none;color:inherit"><b>${esc(alertHo.ten)} (${esc(alertHo.kp)}) vừa bấm Hỏi người thân</b><p class="small ink2">Cụ sống một mình, bạn là người ưu tiên. Gọi cho cụ ngay.</p></a>`:''}
+    ${alertHo?`<a class="card ward alert link-card" href="#/doi/do-dau"><b>${esc(alertHo.ten)} (${esc(alertHo.kp)}) vừa bấm Hỏi người thân</b><p class="small ink2">Cụ sống một mình, bạn là người ưu tiên. Gọi cho cụ ngay.</p></a>`:''}
     <div class="doi-grid">
-    <div class="stack">
-    ${top?`<section class="alert-new"><span><span class="tag new">MỚI TUẦN NÀY</span></span>
-      <span class="t">${esc(top.s.ten)}</span>
+    <div class="stack dashboard-lead">
+    ${top?`<section class="alert-new"><span class="eyebrow">MỚI TUẦN NÀY</span>
+      <h2 class="t">${esc(top.s.ten)}</h2>
       <span class="s">${top.b?`${top.w} ca trong 7 ngày, gấp ${Math.round(top.w/top.b)} lần trung bình 4 tuần trước`:`Lần đầu xuất hiện: ${top.w} ca trong 7 ngày`} · nhắm vào ${TG[top.s.doiTuong]}</span>
       <a class="btn btn-star" href="#/doi/buoi?moi=1&chude=${top.s.id}">Tạo buổi tuyên truyền về kiểu này</a>
-      ${nt[1]?`<span class="s">Cũng mới: <b style="color:#fff">${esc(nt[1].s.ngan)}</b> – ${nt[1].b?'tăng mạnh':'lần đầu xuất hiện'}, nhắm vào ${TG[nt[1].s.doiTuong]}</span>`:''}
+      ${nt[1]?`<span class="s">Cũng mới: <b>${esc(nt[1].s.ngan)}</b> – ${nt[1].b?'tăng mạnh':'lần đầu xuất hiện'}, nhắm vào ${TG[nt[1].s.doiTuong]}</span>`:''}
     </section>`:`<div class="empty"><b>Tuần này chưa ghi nhận kiểu lừa mới</b>Kiểu nhiều nhất tháng là "${esc(mostT.ngan)}". Có thể nhắc lại trong buổi sinh hoạt tới. <a href="#/doi/buoi?moi=1&chude=${mostT.id}">Tạo buổi tuyên truyền</a></div>`}
+    <h2 class="dashboard-title">Số liệu theo bộ lọc</h2>
     <div class="kpis">
       <div class="kpi"><div class="n">${total}</div><div class="l">Báo cáo</div></div>
-      <div class="kpi"><div class="n">${link}<span style="font-size:18px"> · ${total?Math.round(link/total*100):0}%</span></div><div class="l">Đường dẫn giả mạo</div></div>
-      <a class="kpi" href="#/doi/xac-minh" style="text-decoration:none"><div class="n">${pending}</div><div class="l">Chờ xác minh</div></a>
+      <div class="kpi"><div class="n">${link} <small>${total?Math.round(link/total*100):0}%</small></div><div class="l">Đường dẫn giả mạo</div></div>
+      <a class="kpi link-card" href="#/doi/xac-minh"><div class="n">${pending}</div><div class="l">Chờ xác minh</div></a>
       <div class="kpi"><div class="n">${learned}</div><div class="l">Người đã học tại buổi</div></div>
     </div>
     <p class="source">Dữ liệu giả lập · ${ky==='thang'?'tháng 11/2026':'18–24/11/2026'} · ${ward==='all'?'tất cả xã, phường':esc(ward)}</p>
@@ -50,7 +51,7 @@ A.route(/^\/doi$/, (m, q) => {
     <div class="stack">
     <div class="card"><h2>Theo kênh</h2><div class="bars">${Object.entries(KENH).map(([k,l])=>{ const c = R.filter(r=>r.kenh===k).length; return `<div class="b"><span class="nm">${l}</span><span class="v">${c} · ${total?Math.round(c/total*100):0}%</span><span class="tr"><i style="width:${total?c/total*100:0}%"></i></span></div>`; }).join('')}</div></div>
     <div class="card"><h2>Theo tuần</h2><div class="weeks">${weeks.map(w=>`<div><b>${w.n}</b><i style="height:${w.n/wmax*70}px"></i><span class="ink2">${w.l}</span></div>`).join('')}</div></div>
-    <a class="card" href="#/thi-dua?pv=xa" style="text-decoration:none;color:inherit"><span class="label">Thi đua chi đoàn</span><div class="kv"><b>${esc(D.CHIDOAN[0].ten)} dẫn đầu</b><b>${D.CHIDOAN[0].diem} điểm</b></div></a>
+    <a class="card link-card" href="#/thi-dua?pv=xa"><span class="label">Thi đua chi đoàn</span><div class="kv"><b>${esc(D.CHIDOAN[0].ten)} dẫn đầu</b><b>${D.CHIDOAN[0].diem} điểm</b></div></a>
     <div class="btn-row"><a class="btn btn-ghost" href="#/doi/tuyen-truyen${top?'?t='+top.s.id:''}">Soạn bài tuyên truyền</a><button class="btn btn-ghost" data-act="export">Xuất báo cáo</button></div>
     </div></div>`});
 });

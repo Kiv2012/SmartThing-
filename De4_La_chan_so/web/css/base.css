@@ -1,10 +1,24 @@
-/* Lá Chắn Số – Nền tảng (theo DESIGN.md) */
-*{box-sizing:border-box}
-html,body{margin:0;height:100%}
-body{font-family:var(--body);font-size:var(--fs-body);line-height:1.5;color:var(--ink);background:#d9e3ef;-webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:var(--display);line-height:1.2;margin:0}
-p{margin:0}
-a{color:var(--brand)}
-button,input,textarea,select{font:inherit;color:inherit}
-:focus-visible{outline:3px solid #7aa7ff;outline-offset:2px}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+html {
+  scroll-padding-top: calc(var(--bar) + 16px);
+  scroll-padding-bottom: calc(var(--tabh) + 32px);
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 var(--fs-body)/1.55 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.12; overflow-wrap: anywhere; }
+a { color: var(--brand-ink); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button, a { touch-action: manipulation; }
+img, svg { vertical-align: middle; }
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+:where(.brandbar, .landing-intro, .home-hero, .alert-new) :focus-visible { outline-color: var(--star); }
+main:focus { outline: none; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }
+}

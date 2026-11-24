@@ -23,7 +23,8 @@ function quizScreen(q, buoi){
     body = `<p class="part-title">Chạm vào các câu đáng ngờ, rồi bấm Kiểm tra</p>
       <div class="chat"><span class="who">${esc(it.who)}</span><div class="bubble">${it.sents.map((s,i)=>{
         let cls = sel.includes(i)?'on':''; if(ans!=null){ cls = it.flags.includes(i) ? (sel.includes(i)?'right':'missed') : (sel.includes(i)?'wrong':''); }
-        return `<span class="tapsent ${cls}" role="button" tabindex="0" data-act="qtap" data-i="${i}">${esc(s)}</span>`; }).join(' ')}</div></div>
+        if(ans!=null) return `<span class="tapsent ${cls}">${esc(s)}</span>`;
+        return `<button class="tapsent ${cls}" type="button" data-act="qtap" data-i="${i}" aria-pressed="${sel.includes(i)}">${esc(s)}</button>`; }).join(' ')}</div></div>
       ${ans==null?`<button class="btn btn-primary" data-act="qa" data-v="tap" ${sel.length?'':'disabled'}>Kiểm tra</button>`:''}`;
   }
   const right = ans!=null && Z.pts[Z.i] >= 99;
@@ -31,7 +32,15 @@ function quizScreen(q, buoi){
     <button class="btn btn-primary" data-act="qnext">${Z.i<n-1?'Câu tiếp theo':'Xem kết quả'}</button>` : '';
   return A.screen({mh:'MH-14', title:'Kiểm tra nhận diện', noTab:true, steps:[Z.i+1, n, (S.deNhin||Z.kind==='ob')?'Không tính giờ':'Câu '+(Z.i+1)], confirm:'Dừng bài kiểm tra?', backTo: buoi?'#/buoi/'+buoi:A.roleHome(), listen: it.msg || it.q || it.sents.join(' '), body: body + fb});
 }
-A.actions.qtap = el => { const Z = A.tmp.quiz; if(Z.ans!=null) return; Z.sel = Z.sel||[]; const i=+el.dataset.i; Z.sel = Z.sel.includes(i)?Z.sel.filter(x=>x!==i):[...Z.sel,i]; A.render(); };
+A.actions.qtap = (el, event) => {
+  const Z = A.tmp.quiz;
+  if(Z.ans!=null) return;
+  const i = Number(el.dataset.i);
+  const selected = Z.sel || [];
+  Z.sel = selected.includes(i) ? selected.filter(x => x!==i) : [...selected, i];
+  A.render();
+  if(event.detail===0) document.querySelector(`[data-act="qtap"][data-i="${i}"]`)?.focus({preventScroll:true});
+};
 A.actions.qa = el => {
   const Z = A.tmp.quiz; const it = Z.qs[Z.i]; let pt = 0;
   if(it.dang==='tl'){ Z.ans = el.dataset.v; pt = Z.ans===it.a?100:0; }

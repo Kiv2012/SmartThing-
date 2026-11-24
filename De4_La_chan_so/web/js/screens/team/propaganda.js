@@ -5,7 +5,7 @@ const pseudoQR = A.pseudoQR;
 /* ===== MH-18 Soạn bài tuyên truyền ===== */
 A.route(/^\/doi\/tuyen-truyen$/, (m, q) => {
   const t = A.scen(q.t) ? q.t : 'T02'; const sc = A.scen(t);
-  const zalo = `⚠ CẢNH BÁO TỪ ĐOÀN THANH NIÊN ${S.ward.toUpperCase()}\n${sc.ten}.\nDấu hiệu: ${sc.dauHieu.join('; ')}.\nNên làm: ${sc.nenLam.join('; ')}.\nKiểm tra số lạ, link lạ tại Lá Chắn Số.`;
+  const zalo = `CẢNH BÁO TỪ ĐOÀN THANH NIÊN ${S.ward.toUpperCase()}\n${sc.ten}.\nDấu hiệu: ${sc.dauHieu.join('; ')}.\nNên làm: ${sc.nenLam.join('; ')}.\nKiểm tra số lạ, link lạ tại Lá Chắn Số.`;
   const script = `Thưa bà con, tuần này ở ${S.ward} nhiều người báo kiểu lừa "${sc.ngan.toLowerCase()}". ${sc.chat.map(c=>c.t).join(' ')} Đó là lời kẻ gian. Có ba dấu hiệu: ${sc.dauHieu.join('; ')}. Khi gặp, bà con hãy: ${sc.nenLam.join('; ')}. Bà con có thể quét mã QR để học thêm trong 1 phút và làm 5 câu kiểm tra.`;
   return A.screen({mh:'MH-18', title:'Soạn bài tuyên truyền', tab:'#/doi/buoi', backTo:'#/doi/buoi', body:`
     <div class="seg"><a href="#/doi/buoi">Buổi tuyên truyền</a><a class="on" href="#/doi/tuyen-truyen">Soạn bài</a></div>

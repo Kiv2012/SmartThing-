@@ -10,7 +10,7 @@ function parse(){
   return {path, q};
 }
 function render(){
-  speechSynthesis && canSpeak && speechSynthesis.cancel();
+  if(canSpeak) window.speechSynthesis.cancel();
   closeSheet();
   const {path, q} = parse(); App.q = q; App.path = path;
   if(q.vai && ['ob','hs','tnv'].includes(q.vai)){ seedRole(q.vai); }
@@ -22,7 +22,8 @@ function render(){
       App.after = null;
       document.getElementById('app').innerHTML = fn(m.slice(1), q);
       window.scrollTo(0,0);
-      const t = document.querySelector('.appbar h1, .brandbar b'); document.title = (t?t.textContent+' – ':'')+'Lá Chắn Số';
+      const heading = document.querySelector('.appbar h1, main h1');
+      document.title = heading ? heading.textContent + ' – Lá Chắn Số' : 'Lá Chắn Số';
       App.after && App.after();
       return;
     }
@@ -44,7 +45,10 @@ actions.back = el => {
   if(history.length>1) history.back(); else go(roleHome());
 };
 actions.speak = el => speak(el.dataset.text);
-window.addEventListener('hashchange', render);
+window.addEventListener('hashchange', () => {
+  render();
+  document.getElementById('main')?.focus({preventScroll:true});
+});
 window.addEventListener('online', render); window.addEventListener('offline', render);
 Object.assign(window.App, {route, render, go, actions});
 })();

@@ -6,8 +6,8 @@ A.route(/^\/kiem-tra$/, (m, q) => {
   const st = q.state || '';
   const hist = st==='chua-co' ? [] : S.history;
   const seg = S.role==='hs' ? `<div class="seg"><a class="on" href="#/kiem-tra">Số · Link · Tài khoản</a><a href="#/tin-nhan">Dán tin nhắn</a></div>` : '';
-  const msg = st==='trong' ? `<p class="hint" role="alert">${S.role==='ob'?'Bà':'Bạn'} chưa nhập gì. Hãy dán hoặc gõ số điện thoại, đường link, số tài khoản.</p>`
-    : st==='thieu-so' ? `<p class="hint" role="alert">Số này có vẻ thiếu chữ số, ${A.xung()} xem lại nhé.</p>` : '';
+  const msg = st==='trong' ? `<p class="hint" id="check-error" role="alert">${S.role==='ob'?'Bà':'Bạn'} chưa nhập gì. Hãy dán hoặc gõ số điện thoại, đường link, số tài khoản.</p>`
+    : st==='thieu-so' ? `<p class="hint" id="check-error" role="alert">Số này có vẻ thiếu chữ số, ${A.xung()} xem lại nhé.</p>` : st==='khong-ro' ? '<p class="hint" id="check-error" role="alert">Chưa nhận ra số hoặc đường link. Nếu là tin nhắn, hãy chọn Phân tích tin nhắn.</p>' : '';
   A.after = () => {
     const inp = document.getElementById('q'); const out = document.getElementById('detect');
     const upd = () => { const d = A.detect(inp.value);
@@ -18,9 +18,10 @@ A.route(/^\/kiem-tra$/, (m, q) => {
   };
   return A.screen({mh:'MH-05', title:'Kiểm tra nhanh', tab:'#/kiem-tra', listen:'Dán hoặc đọc số điện thoại, đường link, số tài khoản rồi bấm Kiểm tra.', body:`
     ${seg}
-    <form class="stack" data-form="check">
-      <label class="label" for="q">Số điện thoại, đường link hoặc số tài khoản</label>
-      <div class="omni"><input id="q" autocomplete="off" placeholder="Ví dụ: 0868 000 111" aria-describedby="detect">
+    <div class="check-workspace">
+    <form class="card stack check-panel" data-form="check">
+      <label class="check-label" for="q">Số điện thoại, đường link hoặc số tài khoản</label>
+      <div class="omni"><input id="q" autocomplete="off" placeholder="Ví dụ: 0868 000 111" aria-describedby="detect${msg?' check-error':''}" ${msg?'aria-invalid="true"':''}>
         <button type="button" class="paste" data-act="paste" data-target="q">Dán</button>
         ${A.Rec?`<button type="button" class="mic" data-act="mic" aria-label="Đọc số bằng giọng nói">${icon('mic')}</button>`:''}</div>
       <div id="detect" class="detect" aria-live="polite"></div>
@@ -28,20 +29,24 @@ A.route(/^\/kiem-tra$/, (m, q) => {
       ${st==='dang-kiem-tra'?`<div class="card center"><b>Đang kiểm tra…</b><div class="steps" style="border:0;padding:8px 0 0"><div class="bar"><i style="width:60%"></i></div></div></div>`
         :`<button class="btn btn-primary" type="submit">Kiểm tra</button>`}
     </form>
+    <div class="check-details">
     <div class="stack"><span class="label">Thử nhanh</span><div class="chips">${D.EXAMPLES.map(x=>`<button class="chip mono" data-act="example" data-v="${esc(x.v)}">${esc(x.lb)}</button>`).join('')}</div></div>
     <div class="stack"><span class="label">Vừa kiểm tra</span>
       ${hist.length ? `<div class="card"><ul class="list">${hist.slice(0,5).map(h=>`<li><a class="kv" style="text-decoration:none;color:inherit" href="#/kiem-tra/ket-qua?v=${encodeURIComponent(h.raw)}"><span class="mono">${esc(h.value)}</span><span class="tag ${h.level}">${A.LV[h.level]}</span></a></li>`).join('')}</ul></div>`
         : `<div class="empty"><b>${A.xung()==='bà'?'Bà':'Bạn'} chưa kiểm tra lần nào</b>Thử bấm một ví dụ ở trên để xem cách hoạt động.</div>`}
     </div>
-    <a class="link-btn" href="#/khan-cap">Lỡ chuyển tiền rồi? Xem cách xử lý ngay</a>`});
+    <div class="check-links"><a class="link-btn" href="#/tin-nhan">Phân tích tin nhắn</a><a class="link-btn" href="#/khan-cap">Tôi đã chuyển tiền</a></div>
+    </div>
+    </div>`});
 });
 A.actions.example = el => { document.getElementById('q').value = el.dataset.v; A.actions['do-check'](); };
-A.actions['do-check'] = () => {
-  const v = document.getElementById('q').value; const d = A.detect(v);
+A.actions['do-check'] = () => A.submitCheck(document.getElementById('q').value);
+A.submitCheck = (v) => {
+  const d = A.detect(v);
   if(d.kind==='empty') return A.go('#/kiem-tra?state=trong');
   if(d.kind==='badphone') return A.go('#/kiem-tra?state=thieu-so&v='+encodeURIComponent(v));
   if(d.kind==='text'){ A.tmp.msg = v; return A.go('#/tin-nhan'); }
-  if(d.kind==='unknown') return A.toast('Chưa nhận ra số hoặc đường link. Nếu là tin nhắn, hãy dùng "Dán tin nhắn".');
+  if(d.kind==='unknown') return A.go('#/kiem-tra?state=khong-ro&v='+encodeURIComponent(v));
   A.go('#/kiem-tra/ket-qua?v='+encodeURIComponent(v));
 };
 A.actions['to-ai'] = () => { A.tmp.msg = document.getElementById('q').value; };

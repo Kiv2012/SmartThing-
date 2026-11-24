@@ -11,5 +11,5 @@ A.route(/^\/khan-cap$/, (m, q) => A.screen({mh:'MH-10', title:'Tôi đã chuyể
   <div class="card stack"><div class="estep"><span class="n">3</span><div class="grow"><b>Báo người thân</b><p class="small ink2">Để có người cùng xử lý, tránh bị lừa lần hai.</p></div></div>
     <a class="btn btn-ghost" href="#/hoi-nguoi-than">Hỏi người thân</a></div>
   <a class="btn btn-primary" href="${q.bc?'#/bao-cao/da-nhan':'#/bao-cao?moi=1'}">${q.bc?'Xem báo cáo đã gửi':'Báo cáo trường hợp này'}</a>`}));
-A.actions.tick = el => { el.textContent = '✓ '+el.dataset.t; el.disabled = true; };
+A.actions.tick = el => { el.textContent = el.dataset.t; el.disabled = true; };
 })();

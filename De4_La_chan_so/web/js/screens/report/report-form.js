@@ -15,7 +15,7 @@ A.route(/^\/bao-cao$/, (m, q) => {
       <div class="pick-grid">${D.SCEN.map(s=>`<button class="pick ${d.type===s.id?'on':''}" data-act="d-type" data-v="${s.id}" aria-pressed="${d.type===s.id}"><b>${esc(s.ngan)}</b></button>`).join('')}
       <button class="pick ${d.type==='X'?'on':''}" data-act="d-type" data-v="X"><b>Không rõ</b></button></div>
       ${!d.type?'<p class="note">Chọn một kiểu để đi tiếp</p>':''}
-      <div class="sticky-cta"><a class="btn btn-primary ${d.type?'':'disabled'}" href="#/bao-cao?b=2" ${d.type?'':'aria-disabled="true"'}>Tiếp</a></div>`;
+      <div class="sticky-cta">${d.type ? '<a class="btn btn-primary" href="#/bao-cao?b=2">Tiếp</a>' : '<button class="btn btn-primary" disabled>Tiếp</button>'}</div>`;
   } else if(b===2){
     body = `<div class="stack"><span class="label">Kẻ gian liên lạc qua (bắt buộc)</span><div class="chips">${KENH.map(k=>`<button class="chip ${d.kenh===k?'on':''}" data-act="d-kenh" data-v="${k}">${k}</button>`).join('')}</div></div>
       <div class="field"><label class="label" for="d-val">Số điện thoại, đường link hoặc số tài khoản</label><input id="d-val" class="input mono" value="${esc(d.value)}" data-act-input="value"></div>

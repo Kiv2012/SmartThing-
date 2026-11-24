@@ -23,11 +23,11 @@ A.route(/^\/tin-nhan$/, (m, q) => {
       <section class="verdict is-${lvl}">
         <div class="lvl">${A.verdictIcon(lvl)}<h2>${A.LV[lvl]}</h2></div>
         ${res.flagged ? `<p class="kind">${sc?'Giống kiểu lừa: <b>'+esc(sc.ngan)+'</b> · ':''}${res.flagged} câu đáng ngờ</p>
-          <div class="risk" aria-label="Điểm rủi ro ${res.risk} trên 100"><div class="kv"><span class="small ink2">Điểm rủi ro</span><span class="num">${res.risk}<span class="small ink2">/100</span></span></div><div class="track"><span class="needle" style="left:calc(${res.risk}% - 2px)"></span></div></div>`
+          <div class="risk" aria-label="Điểm rủi ro ${res.risk} trên 100"><div class="kv"><span class="small ink2">Điểm rủi ro</span><span class="num">${res.risk}<span class="small ink2">/100</span></span></div><div class="track" aria-hidden="true"><i></i><i></i><i></i><span class="needle" style="left:calc(${res.risk}% - 2px)"></span></div></div>`
         : `<p class="remind">Chưa thấy dấu hiệu rõ, nhưng đừng chuyển tiền hay gửi mã OTP cho người lạ.</p>`}
       </section>
       ${res.flagged?`<div class="stack"><span class="label">Câu đáng ngờ được tô đỏ · chạm để xem vì sao</span>
-        <div class="chat"><div class="bubble">${res.sents.map((x,i)=> x.flag?`<span class="flagged" tabindex="0" role="button" data-act="why" data-i="${i}">${esc(x.s)}</span>`:esc(x.s)).join(' ')}</div></div>
+        <div class="chat"><div class="bubble">${res.sents.map((x,i)=> x.flag?`<button class="flagged flag-button" type="button" data-act="why" data-i="${i}" aria-controls="why">${esc(x.s)}</button>`:esc(x.s)).join(' ')}</div></div>
         <div id="why" class="explain" aria-live="polite">${esc(res.sents.find(x=>x.flag).why)}</div></div>`:''}
       ${res.found.length?`<div class="card"><span class="label">Số và link trong tin nhắn</span><ul class="list">${res.found.map(f=>`<li class="kv"><span class="mono">${esc(f.value)}</span><span class="tag ${f.level}">${A.LV[f.level]}</span></li>`).join('')}</ul></div>`:''}
       ${sc?`<div class="card"><span class="label">Nên làm</span><ol class="ol">${sc.nenLam.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:''}
@@ -36,7 +36,7 @@ A.route(/^\/tin-nhan$/, (m, q) => {
         <div class="btn-row"><a class="btn btn-ghost" href="#/bao-cao?tu=tn">Báo cáo</a>${sc?`<a class="btn btn-ghost" href="#/hoc/${sc.id}">Học 1 phút</a>`:'<a class="btn btn-ghost" href="#/tin-nhan">Phân tích tin khác</a>'}</div>
       </div>
       ${st==='ai-loi'?'<p class="hint">Phần giải thích chi tiết chưa phản hồi. Đang hiển thị kết quả kiểm tra theo luật.</p>':''}
-      <p class="source">Đã che số tài khoản, họ tên trước khi phân tích. Kết quả do quy tắc nhận diện quyết định, phần giải thích có dùng trí tuệ nhân tạo. Bản mẫu chạy tầng luật trên máy.</p>`});
+      <p class="source">Bản mẫu phân tích bằng quy tắc trên thiết bị.</p>`});
   }
   return A.screen({mh:'MH-07', title:'Phân tích tin nhắn', tab:'#/kiem-tra', body:`
     ${seg}
@@ -49,7 +49,7 @@ A.route(/^\/tin-nhan$/, (m, q) => {
       ${st==='dang-phan-tich'?'<div class="card center"><b>Đang phân tích…</b></div>':'<button class="btn btn-primary" type="submit">Phân tích</button>'}
     </form>
     <div class="stack"><span class="label">Thử với tin nhắn mẫu</span><div class="chips">${SAMPLES.map((s,i)=>`<button class="chip" data-act="sample" data-i="${i}">${esc(s.lb)}</button>`).join('')}</div></div>
-    <p class="source">Tin nhắn được che số tài khoản và họ tên trước khi phân tích. Không lưu nội dung.</p>`});
+    <p class="source">Tin nhắn gần nhất được lưu trên thiết bị để điền sẵn khi báo cáo.</p>`});
 });
 document.addEventListener('submit', e => { if(e.target.dataset.form==='analyze'){ e.preventDefault(); runAnalyze(document.getElementById('msg').value); } });
 A.actions.sample = el => { document.getElementById('msg').value = SAMPLES[+el.dataset.i].t; document.getElementById('msg').dispatchEvent(new Event('input')); };
