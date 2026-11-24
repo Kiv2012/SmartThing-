@@ -1,6 +1,6 @@
 # ĐẶC TẢ CHỨC NĂNG – LÁ CHẮN SỐ
 
-> Phiên bản 1.1 · 24/11/2026 · Đi kèm: [01_dac_ta_san_pham.md](01_dac_ta_san_pham.md)
+> Phiên bản 1.2 · 24/11/2026 · Đi kèm: [01_dac_ta_san_pham.md](01_dac_ta_san_pham.md)
 > Quy ước: **CN** = chức năng · **QT** = quy tắc nghiệp vụ · **NT** = tiêu chí nghiệm thu · **MH** = màn hình (danh mục ở mục 6 của đặc tả sản phẩm)
 > Mức ưu tiên: **P0** bắt buộc cho bài nộp · **P1** điểm cộng hoặc mở rộng · **P2** sau vòng thi
 
@@ -31,21 +31,19 @@
 
 ## 1. Vai trò và quyền
 
-| Vai trò | Mô tả | Được dùng |
+| Role tài khoản | Mô tả | Được dùng |
 |---|---|---|
-| **Ông bà** (người cao tuổi) | Chế độ Dễ nhìn và đọc to bật sẵn | Kiểm tra, AI tin nhắn, Hỏi người thân, Báo cáo, Bài học, Bài kiểm tra, Giọng nói |
-| **Học sinh** | Giao diện chuẩn, gắn với trường và lớp (mỗi lớp là một chi đoàn) | Như Ông bà, cộng thêm Thi đua chi đoàn |
-| **Tình nguyện viên** | Thành viên chi đoàn trực tiếp tuyên truyền | Công cụ người dân, thống kê tổng hợp địa phương, nhiệm vụ/buổi được giao, tài liệu đã duyệt, hộ mình đỡ đầu, nộp kết quả và xem thi đua |
-| **Điều phối viên** | Quản lý hoạt động trong đơn vị/địa bàn được giao | Kế hoạch, phân công, quản lý thành viên, duyệt tài liệu/kết quả và xuất báo cáo |
-| **Quyền duyệt cảnh báo** | Quyền chuyên môn cấp riêng | Xác nhận/bác bỏ báo cáo, gỡ nhãn, ghi nhận chuyển tin báo có căn cứ |
-| **Người tham gia buổi tuyên truyền** | Người dân quét QR, không cần tài khoản | Bài học và bài kiểm tra của buổi đó |
-| **Người thân** | Không bắt buộc cài app | Nhận cảnh báo, trả lời nhanh |
+| **Người dùng** | Người dân; nhóm nội dung có thể là Người cao tuổi hoặc Học sinh | Kiểm tra, phân tích tin nhắn, hỏi người tin cậy, báo cáo, học, kiểm tra nhận diện |
+| **Tình nguyện viên** | Thành viên chi đoàn được giao nhiệm vụ; có thể là học sinh | Chức năng Người dùng và nhiệm vụ/buổi/hộ được giao, tài liệu đã duyệt, nộp kết quả, thống kê tổng hợp |
+| **Điều phối viên** | Người có chức trách cao hơn quản lý hoạt động trong phạm vi được cấp | Chức năng Người dùng và lập kế hoạch, phân công, quản lý thành viên, duyệt tài liệu/kết quả, tổng hợp báo cáo |
+
+Quyền duyệt cảnh báo cấp riêng; người thân là quan hệ hỗ trợ; người tham gia buổi là ngữ cảnh. Không tạo role riêng cho các trường hợp này.
 
 **QT-01:** **Không bắt buộc đăng nhập để tự bảo vệ.** Người đang hoảng không bị chặn ở màn đăng nhập.
 
 | Dùng được khi **chưa đăng nhập** (dữ liệu lưu trên máy) | **Cần tài khoản** (CN-15) |
 |---|---|
-| Kiểm tra nhanh, phân tích tin nhắn, bài học, bài kiểm tra (không lưu điểm), báo cáo **ẩn danh**, Hỏi người thân (danh sách người thân lưu trên máy), tham gia buổi tuyên truyền bằng QR | Báo cáo có tên và theo dõi trạng thái · đồng bộ người thân và lịch sử giữa các máy · lưu điểm, nhận Chứng nhận có tên · cộng điểm Thi đua chi đoàn · **mọi chức năng của Đội TNV** (thống kê, xác minh, tuyên truyền, đỡ đầu) |
+| Kiểm tra nhanh, phân tích tin nhắn, bài học, bài kiểm tra (không lưu điểm), báo cáo **ẩn danh**, Hỏi người thân (danh sách người thân lưu trên máy), tham gia buổi tuyên truyền bằng QR | Báo cáo có tên và theo dõi trạng thái · đồng bộ người thân và lịch sử giữa các máy · lưu điểm, nhận Chứng nhận có tên · cộng điểm Thi đua chi đoàn · **công tác được cấp quyền** (TNV/điều phối); đăng nhập không tự cấp quyền duyệt cảnh báo |
 
 Khi người chưa đăng nhập chạm vào chức năng cần tài khoản, app hiện bottom sheet "Đăng nhập để lưu và theo dõi" với hai nút **Đăng nhập** và **Để sau**. Riêng chức năng của Đội TNV thì không có nút "Để sau".
 
@@ -53,15 +51,16 @@ Khi người chưa đăng nhập chạm vào chức năng cần tài khoản, ap
 
 ## 2. CN-01 Khởi đầu (MH-01, MH-02) · P0
 
-### CN-01.1 Chọn vai trò
-- **Đầu vào:** chọn trải nghiệm Ông bà/Học sinh, hoặc vào Khu công tác theo quyền đã cấp, tên gọi (không bắt buộc), xã/phường (chọn từ danh sách).
-- **Xử lý:**
-  - Chọn Ông bà thì tự bật chế độ Dễ nhìn và đọc to (CN-09).
-  - Chọn Học sinh thì chọn trường và lớp. Lớp chính là chi đoàn dùng cho thi đua (CN-14).
-  - Chọn khu công tác thì đăng nhập và kiểm tra quyền đã cấp. Chưa có quyền: Yêu cầu tham gia/Chờ duyệt; TNV về MH-28, điều phối viên về MH-29.
-  - Mở bằng **mã liên kết đỡ đầu** (CN-12) thì tự chọn vai trò Ông bà và điền sẵn đoàn viên đỡ đầu làm người thân.
-- **Đầu ra:** chuyển đến MH-02 (Ông bà, Học sinh) hoặc MH-28 (TNV) / MH-29 (điều phối viên), sau kiểm tra quyền.
-- **NT:** nút "Bắt đầu" chỉ bấm được khi đã chọn vai trò. Đổi vai trò được trong Hồ sơ (MH-20).
+### CN-01.1 Chọn trải nghiệm, không chặn sử dụng
+
+- Mở trang chủ lần đầu: hiện ngay ô kiểm tra và lựa chọn “Chữ lớn, dễ dùng”. Không bắt đăng nhập, chọn nhóm hoặc khai tuổi trước kiểm tra. Link kết quả, buổi QR và yêu cầu hỗ trợ giữ đúng đích ban đầu.
+- MH-01 là bước tùy chọn khi cá nhân hóa: hỏi “Bạn muốn xem nội dung dành cho ai?” → Người cao tuổi / Học sinh / Để sau. Chọn nhóm chỉ gợi ý chế độ, không ghi đè lựa chọn hiển thị người dùng đã đặt.
+- Dễ nhìn → MH-03; Tiêu chuẩn → MH-04, độc lập với nhóm nội dung. Chưa chọn nhóm: nội dung chung, không đoán tuổi. Trường/lớp chỉ hỏi khi tham gia thi đua, địa phương khi cần báo cáo hoặc nội dung địa phương.
+- MH-20 → Cách hiển thị: đổi Dễ nhìn/Tiêu chuẩn, bật/tắt nghe đọc. MH-20 có mục riêng Nội dung phù hợp để đổi nhóm. Đổi các lựa chọn này không sửa role hay phân công.
+- MH-20 → Công tác tuyên truyền: có quyền TNV mở MH-28, điều phối viên mở MH-29; chưa được cấp quyền thì xem Yêu cầu tham gia/Chờ duyệt. Có lối Về trang cá nhân ở khu công tác.
+- MH-02 cài người tin cậy là tùy chọn, chỉ mở khi người dùng chọn thiết lập hoặc cần hỗ trợ mà chưa có người. Không ép đi qua MH-02/MH-02a sau kiểm tra.
+- Mã đỡ đầu chỉ đề xuất nhóm Người cao tuổi và Dễ nhìn; liên kết sau đồng ý, không đổi danh tính, role hoặc tùy chọn hiển thị đã đặt.
+- NT: học sinh dùng Dễ nhìn và người cao tuổi dùng Tiêu chuẩn được; cả hai vẫn có toàn bộ công cụ tự bảo vệ. Kiểm tra dùng được khi chưa chọn nhóm. Đổi chế độ rồi tải lại giữ lựa chọn; quyền công tác không thay đổi.
 
 ### CN-01.2 Cài người thân tin cậy ("chỉ định trước")
 - **Đầu vào:** 1–3 người. Mỗi người có tên gọi, số điện thoại (nhập tay, hoặc chọn từ danh bạ nếu trình duyệt hỗ trợ – xem mục 0), quan hệ (con, cháu, vợ/chồng, thầy cô, anh chị Đoàn, khác), kênh nhận (Zalo, SMS, cuộc gọi). Đánh dấu **1 người ưu tiên**.
@@ -78,7 +77,7 @@ Khi người chưa đăng nhập chạm vào chức năng cần tài khoản, ap
   - Chrome Android: nút "Cài đặt" của trình duyệt.
   - Safari iPhone: Chia sẻ → Thêm vào MH chính.
 - **Lựa chọn:** "Thêm ngay" · "Để sau". Bấm "Để sau" thì nhắc lại sau 3 lần sử dụng, tối đa 2 lần.
-- **QT-26:** với vai trò Ông bà, bước này được làm nổi bật, vì nó là điều kiện để nhận thông báo và dùng khi mất mạng. Đội TNV có thể làm hộ.
+- **QT-26:** với nhóm nội dung Người cao tuổi, bước này được làm nổi bật, vì nó là điều kiện để nhận thông báo và dùng khi mất mạng. Đội TNV có thể làm hộ.
 - **NT:** không chặn người dùng ở bước này. Sau khi thêm thành công thì không hiện lại.
 
 ---
@@ -104,7 +103,7 @@ Khi người chưa đăng nhập chạm vào chức năng cần tài khoản, ap
 ### CN-15.1 Đăng nhập (MH-25)
 - **Trên màn:** khối thương hiệu · ô **Số điện thoại** · ô **Mật khẩu** (nút chữ Hiện/Ẩn) · công tắc **Ghi nhớ trên máy này** · nút **Đăng nhập** · "hoặc" · **Tiếp tục với Google** · **Quên mật khẩu?** · **Tạo tài khoản mới** · **Dùng ngay, không cần tài khoản**.
 - **Xử lý:**
-  - Thành công: đọc hồ sơ `users/{uid}` trên Firestore. Có vai trò rồi thì về trang chủ theo vai trò, chưa có thì sang MH-01.
+  - Thành công: đọc hồ sơ `users/{uid}` trên Firestore. Quay lại đích đang làm; không có đích thì về trang cá nhân theo chế độ hiển thị, MH-01 là tùy chọn.
   - Google: dùng `signInWithPopup`. Trình duyệt chặn cửa sổ bật lên thì chuyển sang `signInWithRedirect`. Lần đầu đăng nhập thì sang MH-26 bước "Xác thực số điện thoại".
 - **QT-35 – Ghi nhớ:** bật thì dùng `browserLocalPersistence` (giữ đăng nhập đến khi đăng xuất). Tắt thì dùng `browserSessionPersistence` (thoát khi đóng tab).
 - **QT-36 – Chống dò mật khẩu:** dùng cơ chế chặn của Firebase. Khi gặp lỗi `auth/too-many-requests`, hiện "Đăng nhập tạm bị khóa do thử sai nhiều lần. Hãy thử lại sau hoặc dùng Quên mật khẩu". Bật **Email enumeration protection** để lỗi không tiết lộ số điện thoại đã có tài khoản hay chưa.
@@ -129,7 +128,7 @@ Khi người chưa đăng nhập chạm vào chức năng cần tài khoản, ap
 | 2. Mã xác thực | **6 ô** mã OTP · đếm ngược "Gửi lại sau 60 giây" · dòng cảnh báo **"Lá Chắn Số không bao giờ gọi điện hay nhắn tin hỏi mã này. Không đưa mã cho ai."** | `confirmationResult.confirm(code)` |
 | 3. Mật khẩu và tên gọi | Mật khẩu (Hiện/Ẩn) · độ mạnh bằng chữ · tên gọi · đồng ý điều khoản và chính sách dữ liệu | `linkWithCredential(EmailAuthProvider.credential(emailNoiBo, matKhau))` · `updateProfile({displayName})` · tạo `users/{uid}` trên Firestore |
 
-Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
+Sau bước 3 quay lại đích ban đầu hoặc trang cá nhân; có thể chọn cá nhân hóa ở MH-01 và thiết lập người tin cậy sau.
 - **QT-37 – Mã OTP:** độ dài, thời hạn và hạn mức gửi do Firebase quản lý. App chỉ khóa nút "Gửi lại mã" trong **60 giây** để tránh bấm liên tục.
 - **QT-38 – Mật khẩu:** bật **chính sách mật khẩu** của Firebase Authentication: tối thiểu **8 ký tự**, có chữ và số. Firebase tự băm mật khẩu (scrypt), app không bao giờ lưu hay ghi mật khẩu.
 - **QT-39 – Học sinh dưới 16 tuổi (P1):** ở MH-01, học sinh khai năm sinh. Dưới 16 tuổi thì cần **cha mẹ hoặc giáo viên chủ nhiệm xác nhận** bằng OTP gửi tới số của người đó. Kết quả lưu trong `users/{uid}.xacNhanGiamHo`. Điều khoản pháp lý cụ thể về dữ liệu cá nhân trẻ em cần kiểm chứng.
@@ -150,8 +149,8 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 - Tài khoản chưa gắn mật khẩu (chỉ dùng Google) thì hiện "Tài khoản này đăng nhập bằng Google" kèm nút Google.
 
 ### CN-15.5 Hồ sơ, vai trò, quyền
-- **Hồ sơ trên Firestore** `users/{uid}`: vai trò, tên gọi, xã/phường, chi đoàn, người thân tin cậy, cài đặt Dễ nhìn. **Security Rules:** mỗi người chỉ đọc và ghi hồ sơ của chính mình.
-- **Quyền công tác không tự khai được:** lời mời/mã đội chỉ yêu cầu tham gia. Backend kiểm tra quyền TNV, điều phối hoặc duyệt cảnh báo cùng đơn vị, địa bàn và phân công ở từng thao tác; không dùng một claim địa phương để mở toàn bộ hàng chờ và danh sách hộ. Đổi vai trò hiển thị không cấp thêm quyền.
+- **Hồ sơ trên Firestore** `users/{uid}`: role, nhóm nội dung, chế độ hiển thị, tùy chọn nghe đọc, tên gọi, xã/phường, chi đoàn và người thân tin cậy. **Security Rules:** mỗi người chỉ đọc và ghi hồ sơ của chính mình.
+- **Quyền công tác không tự khai được:** lời mời/mã đội chỉ yêu cầu tham gia. Backend kiểm tra quyền TNV, điều phối hoặc duyệt cảnh báo cùng đơn vị, địa bàn và phân công ở từng thao tác; không dùng một claim địa phương để mở toàn bộ hàng chờ và danh sách hộ. Đổi trải nghiệm hiển thị không cấp thêm quyền.
 - **Trong MH-20:** xem số điện thoại và Google đã gắn · gắn hoặc gỡ Google · đổi mật khẩu · **Đăng xuất** (`signOut`) · **Đăng xuất mọi máy** (Cloud Function gọi `revokeRefreshTokens`) · **Xóa tài khoản** (`user.delete()`, Cloud Function xóa `users/{uid}`; báo cáo ẩn danh đã gửi vẫn giữ để thống kê).
 
 ### CN-15.6 Người cao tuổi
@@ -343,7 +342,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 | **Chạm vào dấu hiệu** | Chạm vào các câu đáng ngờ trong tin | Chấm theo số dấu hiệu chạm đúng |
 | **Bạn sẽ làm gì?** | Chọn 1 trong 3–4 phản ứng | "Người xưng Công an bảo bà chuyển tiền để xác minh" |
 
-- **QT-17:** mỗi lượt gồm 10 câu cho Học sinh hoặc **5 câu cho Ông bà**. Tin thật chiếm **20–30%**. Thứ tự câu và đáp án được xáo trộn.
+- **QT-17:** mỗi lượt gồm 10 câu ở Tiêu chuẩn hoặc **5 câu ở Dễ nhìn**, độc lập với nhóm nội dung. Tin thật chiếm **20–30%**. Thứ tự câu và đáp án được xáo trộn.
 - **QT-18:** Ông bà làm bài **không tính giờ**, có giọng đọc.
 
 ### CN-07.2 Chấm điểm
@@ -413,7 +412,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 
 ## 12. CN-11 Hồ sơ và quyền riêng tư (MH-20) · P1
 
-- Hồ sơ: tên gọi, vai trò, xã/phường, người thân tin cậy, công tắc Dễ nhìn và đọc to.
+- Hồ sơ: tên gọi, role được cấp, nhóm nội dung, xã/phường, người thân tin cậy, Cách hiển thị và tùy chọn nghe đọc.
 - Thành tích: điểm cao nhất, chứng nhận, số bài đã học.
 - Báo cáo của tôi: danh sách và trạng thái.
 - **Quyền riêng tư:** xóa lịch sử kiểm tra · xóa toàn bộ dữ liệu · xem app lưu những gì.
@@ -427,7 +426,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 - **Danh sách hộ đỡ đầu (MH-21):** tên gọi cụ, ấp/khu phố, tình trạng (đã cài app · đã có người thân · sống một mình), lần liên lạc gần nhất, số lần cụ hỏi trong tháng.
 - **Thêm hộ đỡ đầu sau phân công của điều phối viên; TNV chỉ xem hộ được giao:**
   1. Đoàn viên bấm "Thêm hộ" và app tạo **mã liên kết** (mã QR kèm 6 số).
-  2. Đoàn viên mở web trên máy của cụ và quét hoặc nhập mã. App tự chọn vai trò Ông bà, bật Dễ nhìn, điền sẵn đoàn viên vào danh sách người thân (CN-01).
+  2. Đoàn viên mở web trên máy của cụ và quét hoặc nhập mã. App đề xuất nhóm Người cao tuổi và Dễ nhìn, giữ tùy chọn đã đặt, điền sẵn đoàn viên vào danh sách người thân (CN-01).
   3. **Cụ đồng ý** bằng nút "Đồng ý để cháu [tên] hỗ trợ". Không có bước này thì không liên kết.
 - **QT-28:** nếu cụ không có người thân nào khác, đoàn viên đỡ đầu là **người ưu tiên**. Nếu có, đoàn viên là **người thứ hai**, được gợi ý sau 2 phút (QT-16).
 - **QT-29:** mỗi đoàn viên đỡ đầu tối đa **5 hộ**. Cụ có thể hủy liên kết bất cứ lúc nào trong Hồ sơ.
@@ -497,7 +496,7 @@ Luồng: Điều phối viên xem tình hình địa phương MH-16 → tạo bu
 
 | Thực thể | Trường chính |
 |---|---|
-| NguoiDung (Firestore `users/{uid}`) | uid (từ Firebase Authentication), vai_tro, ten_goi, xa_phuong, chi_doan, nguoi_than[], de_nhin, xac_nhan_giam_ho |
+| NguoiDung (Firestore `users/{uid}`) | uid (từ Firebase Authentication), role (nguoi_dung/tnv/dieu_phoi), nhom_noi_dung (chua_chon/nguoi_cao_tuoi/hoc_sinh), che_do_hien_thi (de_nhin/tieu_chuan), doc_to, ten_goi, xa_phuong, chi_doan, nguoi_than[], de_nhin, xac_nhan_giam_ho |
 | Tài khoản, mật khẩu, mã OTP, phiên đăng nhập | **Do Firebase Authentication quản lý**, app không lưu |
 | NguoiThan | id, nguoi_dung_id, ten_goi, so_dien_thoai, quan_he, kenh, uu_tien |
 | LuotKiemTra *(trên máy)* | thoi_diem, noi_dung, loai (SĐT/link/STK), muc, ly_do[], tinh_huong_id |
@@ -590,3 +589,14 @@ Nguồn: người dùng xác nhận trong phiên làm việc rằng tình nguy�
 - Điều phối viên lập kế hoạch, tạo buổi, phân công, duyệt tài liệu và kết quả, quản lý thành viên, tổng hợp báo cáo trong phạm vi được giao.
 - Duyệt hoạt động không phải xác nhận lừa đảo. Quyền duyệt cảnh báo cấp riêng cho tài khoản được chỉ định; không mặc định thuộc TNV hoặc mọi điều phối viên.
 - Người thân là quan hệ hỗ trợ có sự đồng ý. Người tham gia buổi là ngữ cảnh sử dụng, không cần một loại tài khoản riêng.
+
+
+## Mô hình quyền và trải nghiệm đã thống nhất
+
+Chỉ có 3 role tài khoản: Người dùng, Tình nguyện viên, Điều phối viên. TNV là thành viên chi đoàn trực tiếp làm nhiệm vụ tuyên truyền, có thể là học sinh; điều phối viên là người có chức trách cao hơn phụ trách hoạt động. TNV và điều phối viên vẫn có đầy đủ chức năng cá nhân của Người dùng trên cùng tài khoản.
+
+Người cao tuổi/Học sinh là nhóm nội dung, không phải role. Dễ nhìn/Tiêu chuẩn là chế độ hiển thị độc lập với nhóm nội dung và quyền. Chọn nhóm Người cao tuổi gợi ý Dễ nhìn, chọn Học sinh gợi ý Tiêu chuẩn; người dùng có thể thay đổi. Không suy ra quyền hoặc bắt buộc tuổi từ lựa chọn này.
+
+Người thân tin cậy là quan hệ hỗ trợ; người tham gia buổi là ngữ cảnh sử dụng. Quyền duyệt cảnh báo là quyền chuyên môn bổ sung được cấp riêng, không phải role thứ tư. Chi đoàn và xã/phường là đơn vị/phạm vi dữ liệu.
+
+Một học sinh có thể dùng Dễ nhìn, có quyền TNV và được bà chọn làm người thân tin cậy trên cùng tài khoản. Chuyển vào khu công tác không đổi nhóm nội dung, chế độ hiển thị hoặc người thân.

@@ -1,7 +1,7 @@
 # ĐẶC TẢ SẢN PHẨM – LÁ CHẮN SỐ
 
 > Đề 4 – An toàn thông tin · Phòng, chống lừa đảo · Kỹ năng số
-> Phiên bản 1.1 · 24/11/2026 · Tài liệu đi kèm: [02_dac_ta_chuc_nang.md](02_dac_ta_chuc_nang.md)
+> Phiên bản 1.2 · 24/11/2026 · Tài liệu đi kèm: [02_dac_ta_chuc_nang.md](02_dac_ta_chuc_nang.md)
 
 ---
 
@@ -72,7 +72,7 @@ Nhận cảnh báo, trả lời nhanh, gọi lại cho người đang bị dụ.
 2. **Lời thường:** viết "đường link" thay cho "URL", "số tài khoản" thay cho "STK". Lý do kết quả là câu đời thường, không phải điểm kỹ thuật.
 3. **Không bao giờ hứa "an toàn" khi không có căn cứ:** không có dữ liệu thì xếp vào mức "Nghi ngờ".
 4. **Màu, biểu tượng, chữ và giọng đọc đi cùng nhau:** không truyền thông tin bằng màu một mình.
-5. **Trang chủ khác nhau theo vai trò:** ông bà, học sinh và đội TNV mỗi nhóm thấy đúng việc của mình.
+5. **Trang chủ theo trải nghiệm và khu làm việc:** Người dùng chọn Dễ nhìn/Tiêu chuẩn; TNV và điều phối viên có khu công tác theo quyền, giữ nguyên trang cá nhân.
 6. **Mọi màn đều dẫn tới hành động kế tiếp:** không có màn cụt.
 7. **Tôn trọng dữ liệu cá nhân:** thu tối thiểu, cho báo cáo ẩn danh, che thông tin nhạy cảm trước khi đưa cho AI phân tích.
 
@@ -103,7 +103,7 @@ Nhận cảnh báo, trả lời nhanh, gọi lại cho người đang bị dụ.
 
 | Mã | Tên màn | Yêu cầu của đề | Vai trò dùng | Ưu tiên |
 |---|---|---|---|---|
-| MH-01 | Chọn vai trò | Ngầm định (3 người dùng) | Tất cả | P0 |
+| MH-01 | Chọn trải nghiệm (không bắt buộc) | Cá nhân hóa | Tất cả | P0 |
 | MH-02 | Cài người thân tin cậy | Ngầm định ("chỉ định trước") | Ông bà, Học sinh | P0 |
 | MH-03 | Trang chủ Ông bà | – | Ông bà | P0 |
 | MH-04 | Trang chủ Học sinh | – | Học sinh | P0 |
@@ -268,7 +268,7 @@ Nguyên tắc của BTC phải giữ: không sao chép nguyên giao diện sản
 | Nhóm | Màn P0 | Chức năng |
 |---|---|---|
 | Tài khoản | MH-25, MH-26, MH-27 | Đăng nhập, đăng ký bằng số điện thoại (OTP) + mật khẩu hoặc Google · quên mật khẩu |
-| Khởi đầu | MH-01, MH-02 | Chọn vai trò, xã/phường, lớp/chi đoàn · cài người thân |
+| Khởi đầu | MH-01, MH-02 | Chọn trải nghiệm, xã/phường, lớp/chi đoàn · cài người thân |
 | Trang chủ | MH-03, MH-04 | Theo vai trò |
 | Kiểm tra | MH-05, MH-06 | Nhận dạng, tra danh sách mẫu, xếp 3 mức kèm lý do, đọc to |
 | AI | MH-07 | Tầng luật từ khóa + một lần gọi mô hình ngôn ngữ |
@@ -336,3 +336,25 @@ Nguồn: người dùng xác nhận trong phiên làm việc rằng tình nguy�
 - Điều phối viên lập kế hoạch, tạo buổi, phân công, duyệt tài liệu và kết quả, quản lý thành viên, tổng hợp báo cáo trong phạm vi được giao.
 - Duyệt hoạt động không phải xác nhận lừa đảo. Quyền duyệt cảnh báo cấp riêng cho tài khoản được chỉ định; không mặc định thuộc TNV hoặc mọi điều phối viên.
 - Người thân là quan hệ hỗ trợ có sự đồng ý. Người tham gia buổi là ngữ cảnh sử dụng, không cần một loại tài khoản riêng.
+
+## Bố trí trải nghiệm người dùng
+
+| Thành phần | Dễ nhìn (MH-03) | Tiêu chuẩn (MH-04) |
+|---|---|---|
+| Trang chủ | Hai nút lớn Kiểm tra số lạ và Gọi người tin cậy; bài học phía dưới | Ô kiểm tra số/link/tài khoản, lối vào Kiểm tra tin nhắn; bài học và thử thách phía dưới |
+| Điều hướng | Trang chủ · Học · Tôi | Trang chủ · Học · Thử thách · Tôi |
+| Kết quả | Hành động cần làm trước, lý do ngắn; ưu tiên gọi hỗ trợ | Cùng kết luận và lý do; mở thêm chi tiết dấu hiệu |
+| Học | Nội dung theo nhóm đã chọn; tự điều khiển tốc độ, nghe đọc tùy chọn | Nội dung theo nhóm đã chọn; tự điều khiển tốc độ, nghe đọc tùy chọn |
+
+Tất cả công cụ tự bảo vệ có ở cả hai chế độ. Người cao tuổi vẫn kiểm tra tin nhắn; học sinh vẫn gọi hỗ trợ. Thử thách luôn vào được từ Học dù không có thẻ riêng. Chưa cài người tin cậy thì nút dẫn tới thêm người, không giả định đã gọi được.
+
+
+## Mô hình quyền và trải nghiệm đã thống nhất
+
+Chỉ có 3 role tài khoản: Người dùng, Tình nguyện viên, Điều phối viên. TNV là thành viên chi đoàn trực tiếp làm nhiệm vụ tuyên truyền, có thể là học sinh; điều phối viên là người có chức trách cao hơn phụ trách hoạt động. TNV và điều phối viên vẫn có đầy đủ chức năng cá nhân của Người dùng trên cùng tài khoản.
+
+Người cao tuổi/Học sinh là nhóm nội dung, không phải role. Dễ nhìn/Tiêu chuẩn là chế độ hiển thị độc lập với nhóm nội dung và quyền. Chọn nhóm Người cao tuổi gợi ý Dễ nhìn, chọn Học sinh gợi ý Tiêu chuẩn; người dùng có thể thay đổi. Không suy ra quyền hoặc bắt buộc tuổi từ lựa chọn này.
+
+Người thân tin cậy là quan hệ hỗ trợ; người tham gia buổi là ngữ cảnh sử dụng. Quyền duyệt cảnh báo là quyền chuyên môn bổ sung được cấp riêng, không phải role thứ tư. Chi đoàn và xã/phường là đơn vị/phạm vi dữ liệu.
+
+Một học sinh có thể dùng Dễ nhìn, có quyền TNV và được bà chọn làm người thân tin cậy trên cùng tài khoản. Chuyển vào khu công tác không đổi nhóm nội dung, chế độ hiển thị hoặc người thân.
