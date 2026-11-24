@@ -1,0 +1,54 @@
+/* MH-05 Kiểm tra nhanh – Bắt buộc 1 */
+(function(){
+const A = window.App, D = A.D, S = A.S, esc = A.esc, icon = A.icon;
+/* ===== MH-05 Kiểm tra nhanh ===== */
+A.route(/^\/kiem-tra$/, (m, q) => {
+  const st = q.state || '';
+  const hist = st==='chua-co' ? [] : S.history;
+  const seg = S.role==='hs' ? `<div class="seg"><a class="on" href="#/kiem-tra">Số · Link · Tài khoản</a><a href="#/tin-nhan">Dán tin nhắn</a></div>` : '';
+  const msg = st==='trong' ? `<p class="hint" role="alert">${S.role==='ob'?'Bà':'Bạn'} chưa nhập gì. Hãy dán hoặc gõ số điện thoại, đường link, số tài khoản.</p>`
+    : st==='thieu-so' ? `<p class="hint" role="alert">Số này có vẻ thiếu chữ số, ${A.xung()} xem lại nhé.</p>` : '';
+  A.after = () => {
+    const inp = document.getElementById('q'); const out = document.getElementById('detect');
+    const upd = () => { const d = A.detect(inp.value);
+      out.innerHTML = d.kind==='empty' ? '' : A.KIND_LABEL[d.kind] ? `Nhận ra: <b>${A.KIND_LABEL[d.kind]}</b>${d.both?' (sẽ tra cả số tài khoản)':''}`
+        : d.kind==='text' ? `Đây là một đoạn tin nhắn. <a href="#/tin-nhan" data-act="to-ai">Phân tích tin nhắn này</a>` : d.kind==='badphone' ? 'Số điện thoại có vẻ thiếu chữ số' : 'Chưa nhận ra loại dữ liệu'; };
+    inp.addEventListener('input', upd); if(q.v){ inp.value = q.v; upd(); }
+    if(st==='dang-kiem-tra') { inp.value='0868 000 111'; upd(); }
+  };
+  return A.screen({mh:'MH-05', title:'Kiểm tra nhanh', tab:'#/kiem-tra', listen:'Dán hoặc đọc số điện thoại, đường link, số tài khoản rồi bấm Kiểm tra.', body:`
+    ${seg}
+    <form class="stack" data-form="check">
+      <label class="label" for="q">Số điện thoại, đường link hoặc số tài khoản</label>
+      <div class="omni"><input id="q" autocomplete="off" placeholder="Ví dụ: 0868 000 111" aria-describedby="detect">
+        <button type="button" class="paste" data-act="paste" data-target="q">Dán</button>
+        ${A.Rec?`<button type="button" class="mic" data-act="mic" aria-label="Đọc số bằng giọng nói">${icon('mic')}</button>`:''}</div>
+      <div id="detect" class="detect" aria-live="polite"></div>
+      ${msg}
+      ${st==='dang-kiem-tra'?`<div class="card center"><b>Đang kiểm tra…</b><div class="steps" style="border:0;padding:8px 0 0"><div class="bar"><i style="width:60%"></i></div></div></div>`
+        :`<button class="btn btn-primary" type="submit">Kiểm tra</button>`}
+    </form>
+    <div class="stack"><span class="label">Thử nhanh</span><div class="chips">${D.EXAMPLES.map(x=>`<button class="chip mono" data-act="example" data-v="${esc(x.v)}">${esc(x.lb)}</button>`).join('')}</div></div>
+    <div class="stack"><span class="label">Vừa kiểm tra</span>
+      ${hist.length ? `<div class="card"><ul class="list">${hist.slice(0,5).map(h=>`<li><a class="kv" style="text-decoration:none;color:inherit" href="#/kiem-tra/ket-qua?v=${encodeURIComponent(h.raw)}"><span class="mono">${esc(h.value)}</span><span class="tag ${h.level}">${A.LV[h.level]}</span></a></li>`).join('')}</ul></div>`
+        : `<div class="empty"><b>${A.xung()==='bà'?'Bà':'Bạn'} chưa kiểm tra lần nào</b>Thử bấm một ví dụ ở trên để xem cách hoạt động.</div>`}
+    </div>
+    <a class="link-btn" href="#/khan-cap">Lỡ chuyển tiền rồi? Xem cách xử lý ngay</a>`});
+});
+A.actions.example = el => { document.getElementById('q').value = el.dataset.v; A.actions['do-check'](); };
+A.actions['do-check'] = () => {
+  const v = document.getElementById('q').value; const d = A.detect(v);
+  if(d.kind==='empty') return A.go('#/kiem-tra?state=trong');
+  if(d.kind==='badphone') return A.go('#/kiem-tra?state=thieu-so&v='+encodeURIComponent(v));
+  if(d.kind==='text'){ A.tmp.msg = v; return A.go('#/tin-nhan'); }
+  if(d.kind==='unknown') return A.toast('Chưa nhận ra số hoặc đường link. Nếu là tin nhắn, hãy dùng "Dán tin nhắn".');
+  A.go('#/kiem-tra/ket-qua?v='+encodeURIComponent(v));
+};
+A.actions['to-ai'] = () => { A.tmp.msg = document.getElementById('q').value; };
+A.actions.mic = el => {
+  if(el.classList.contains('on')) return;
+  el.classList.add('on'); A.toast('Đang nghe… hãy đọc số');
+  A.listen(t => { const inp = document.getElementById('q'); inp.value = t.replace(/[^\d]/g,'').length>=6 ? t.replace(/[^\d+]/g,'') : t; inp.dispatchEvent(new Event('input')); }, () => el.classList.remove('on'));
+};
+document.addEventListener('submit', e => { if(e.target.dataset.form==='check'){ e.preventDefault(); A.actions['do-check'](); } });
+})();
