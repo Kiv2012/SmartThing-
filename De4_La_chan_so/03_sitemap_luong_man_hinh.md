@@ -1,6 +1,6 @@
 # SITEMAP VÀ LUỒNG MÀN HÌNH – LÁ CHẮN SỐ
 
-> Phiên bản 1.1 · 24/11/2026 · Nền tảng: ứng dụng web, giao diện ưu tiên điện thoại
+> Phiên bản 1.2 · 24/11/2026 · Nền tảng: ứng dụng web, giao diện ưu tiên điện thoại
 > Đi kèm: [01_dac_ta_san_pham.md](01_dac_ta_san_pham.md) · [02_dac_ta_chuc_nang.md](02_dac_ta_chuc_nang.md)
 > Mã màn (MH-xx) và mã chức năng (CN-xx) dùng thống nhất với hai tài liệu trên.
 
@@ -10,17 +10,20 @@
 
 ```mermaid
 flowchart TD
-    ROOT["laChanSo (web)"] --> MH25["MH-25 Đăng nhập"]
+    ROOT["laChanSo (web): kiểm tra ngay"] --> MH05
+    ROOT --> MH25["MH-25 Đăng nhập khi cần"]
     MH25 --> MH26["MH-26 Đăng ký"]
     MH25 --> MH27["MH-27 Quên mật khẩu"]
     MH25 -- "Dùng ngay, không cần tài khoản" --> MH01
-    MH26 --> MH01["MH-01 Chọn vai trò"]
-    MH01 --> MH02["MH-02 Cài người thân tin cậy"]
+    MH26 --> MH01["MH-01 Chọn trải nghiệm"]
+    MH01 -- "Thiết lập tùy chọn" --> MH02["MH-02 Cài người thân tin cậy"]
+    MH01 -- "Dễ nhìn" --> MH03
+    MH01 -- "Tiêu chuẩn / Để sau" --> MH04
     MH02 --> MH02a["MH-02a Gợi ý Thêm vào màn hình chính (lớp phủ)"]
 
     MH02a --> OB["KHU ÔNG BÀ"]
     MH02a --> HS["KHU HỌC SINH"]
-    MH01 --> AUTH{"Kiểm tra quyền công tác"}
+    MH20 -- "Công tác tuyên truyền" --> AUTH{"Kiểm tra quyền công tác"}
     AUTH -- "TNV" --> TNV["MH-28 Việc của tôi"]
     AUTH -- "Điều phối" --> DP["MH-29 Quản lý hoạt động"]
     DP --> MH22
@@ -64,11 +67,11 @@ flowchart TD
 Mỗi màn có đường dẫn riêng. Người dùng mở thẳng được từ link hoặc thông báo, nút Quay lại của trình duyệt hoạt động đúng, và prototype có thể đi thẳng đến từng màn khi trình diễn.
 
 ```
-/                         → đã đăng nhập hoặc đã chọn vai trò: về trang chủ theo vai trò; chưa thì /dang-nhap
+/                         → đã đăng nhập hoặc đã chọn vai trò: về trang chủ theo vai trò; chưa thì trang cá nhân Tiêu chuẩn với Kiểm tra ngay; không bắt đăng nhập
 ├── /dang-nhap            MH-25 Đăng nhập (số điện thoại + mật khẩu, Google)
 ├── /dang-ky              MH-26 Đăng ký: ?b=1 số điện thoại · ?b=2 mã OTP · ?b=3 mật khẩu và tên
 ├── /quen-mat-khau        MH-27 Quên mật khẩu
-├── /bat-dau              MH-01 Chọn vai trò
+├── /bat-dau              MH-01 Chọn trải nghiệm
 ├── /nguoi-than           MH-02 Cài người thân tin cậy   (+ lớp phủ MH-02a)
 │
 ├── /ong-ba               MH-03 Trang chủ Ông bà
@@ -112,8 +115,8 @@ Mỗi màn có đường dẫn riêng. Người dùng mở thẳng được từ
 
 | Vai trò | Thẻ 1 | Thẻ 2 | Thẻ 3 | Thẻ 4 | Thẻ 5 |
 |---|---|---|---|---|---|
-| **Ông bà** (4 thẻ, cao 76px) | Trang chủ | Kiểm tra | Học | Tôi | – |
-| **Học sinh** (5 thẻ) | Trang chủ | Kiểm tra | Học | Thử thách | Tôi |
+| **Người dùng — Dễ nhìn** (cao 76px) | Trang chủ | Học | Tôi | – | – |
+| **Người dùng — Tiêu chuẩn** | Trang chủ | Học | Thử thách | Tôi | – |
 | **Tình nguyện viên** | Việc của tôi | Tình hình | Tài liệu | Đỡ đầu | Tôi |
 | **Điều phối viên** | Tổng quan | Kế hoạch | Thành viên | Báo cáo | Tôi |
 
@@ -122,8 +125,8 @@ Mỗi thẻ có một icon nét đơn sắc kèm nhãn chữ (DESIGN.md mục 1A
 - TNV vào buổi được giao từ MH-28/MH-30; vào tài liệu đã duyệt từ thẻ Tài liệu. Điều phối viên lập buổi từ Kế hoạch trong MH-29.
 - **Thi đua chi đoàn** (MH-24): Học sinh vào từ thẻ **Thử thách**, Đội TNV vào từ khối thi đua trên MH-16.
 
-- Thẻ **Kiểm tra** của Học sinh có hai phần chuyển qua lại: **[Số / Link / STK]** (MH-05) và **[Dán tin nhắn]** (MH-07).
-- Với Ông bà, MH-07 không có thẻ riêng. App tự chuyển sang khi người dùng dán một đoạn văn dài (QT-06), hoặc khi bấm "Kể bằng giọng nói" (MH-19).
+- Kiểm tra mở từ trang chủ ở cả hai chế độ, có hai phần chuyển qua lại: **[Số / Link / STK]** (MH-05) và **[Dán tin nhắn]** (MH-07).
+- Ở Dễ nhìn, vẫn có lối Kiểm tra tin nhắn trong MH-05; dán văn bản dài chỉ đề nghị chuyển, giữ nguyên nội dung (QT-06).
 - Đội TNV vẫn dùng được các công cụ của người dân qua mục **Tôi → Công cụ người dân**.
 - **Trên máy tính bảng và máy tính (≥ 768px)**, khu Đội TNV thay thanh dưới bằng **thanh bên trái**. MH-16 hiển thị 2–3 cột.
 
@@ -141,39 +144,24 @@ Mỗi thẻ có một icon nét đơn sắc kèm nhãn chữ (DESIGN.md mục 1A
 ## 3. Luồng khởi đầu (F0)
 
 ```mermaid
-flowchart LR
-    A["Mở link / quét QR"] --> B{"Đã đăng nhập hoặc đã chọn vai trò?"}
-    B -- "Có" --> H["Trang chủ theo vai trò"]
-    B -- "Chưa" --> L["MH-25 Đăng nhập"]
-    L -- "Số điện thoại + mật khẩu đúng" --> H
-    L -- "Tạo tài khoản mới" --> R1["MH-26 B1 Số điện thoại"]
-    R1 --> R2["B2 Mã OTP 6 số"]
-    R2 --> R3["B3 Mật khẩu + tên gọi"]
-    R3 --> C
-    L -- "Tiếp tục với Google (lần đầu)" --> R1
-    L -- "Quên mật khẩu?" --> F["MH-27 Số điện thoại → OTP → mật khẩu mới"]
-    F --> L
-    L -- "Dùng ngay, không cần tài khoản (Firebase ẩn danh)" --> C["MH-01 Chọn vai trò + xã/phường"]
-    C -- "Ông bà (bật Dễ nhìn)" --> D["MH-02 Cài người thân"]
-    C -- "Học sinh" --> D
-    C -- "Khu công tác: kiểm tra quyền" --> P{"Quyền đã cấp"}
-    P -- "TNV" --> T["MH-28 Việc của tôi"]
-    P -- "Điều phối" --> Q["MH-29 Quản lý hoạt động"]
-    P -- "Chưa có" --> W["Yêu cầu tham gia / Chờ duyệt"]
-    D -- "Lưu / Để sau" --> E["MH-02a Gợi ý Thêm vào màn hình chính"]
-    E -- "Thêm ngay / Để sau" --> H
+flowchart TD
+    A["Mở web"] --> B["Trang cá nhân: kiểm tra ngay, không cần đăng nhập"]
+    B --> K["MH-05 Kiểm tra / MH-07 Tin nhắn"]
+    B -- "Chữ lớn, dễ dùng" --> L["MH-03 Dễ nhìn"]
+    B -- "Cá nhân hóa tùy chọn" --> C["MH-01 Nhóm nội dung hoặc Để sau"]
+    C --> H{"Chế độ hiển thị đã chọn"}
+    H -- "Dễ nhìn" --> L
+    H -- "Tiêu chuẩn" --> S["MH-04 Tiêu chuẩn"]
+    B --> P["MH-20 Tôi: Cách hiển thị / Nội dung phù hợp"]
+    P -- "Công tác tuyên truyền" --> Q{"Đăng nhập và quyền đã cấp"}
+    Q -- "TNV" --> T["MH-28 Việc của tôi"]
+    Q -- "Điều phối viên" --> D["MH-29 Quản lý hoạt động"]
+    Q -- "Chưa có quyền" --> W["Yêu cầu tham gia / Chờ duyệt"]
+    T -- "Về trang cá nhân" --> B
+    D -- "Về trang cá nhân" --> B
 ```
 
-| Bước | Màn | Người dùng làm | Hệ thống phản hồi |
-|---|---|---|---|
-| 0a | MH-25 | Nhập số điện thoại + mật khẩu, hoặc "Tiếp tục với Google", hoặc "Dùng ngay, không cần tài khoản" | Đúng thì về trang chủ (đã có vai trò) hoặc MH-01. Sai 5 lần thì khóa 15 phút |
-| 0b | MH-26 | B1 nhập số (reCAPTCHA vô hình) → B2 nhập mã OTP (đếm ngược gửi lại 60 giây) → B3 mật khẩu + tên gọi. Đang dùng ẩn danh thì dữ liệu được giữ lại khi tạo tài khoản. Google lần đầu: chỉ B1–B2, bỏ qua được trừ Đội TNV | Tạo tài khoản, chuyển MH-01 |
-| 1 | MH-01 | Chọn thẻ vai trò, chọn xã/phường | Ông bà: tự bật Dễ nhìn và đọc lời chào. Chọn Đội TNV khi chưa đăng nhập thì yêu cầu đăng nhập |
-| 2 | MH-02 | Thêm người thân (tên, số, quan hệ) hoặc "Để sau" | Người đầu tiên là người ưu tiên |
-| 3 | MH-02a | "Thêm ngay" (xem hướng dẫn theo trình duyệt) hoặc "Để sau" | Không chặn, nhắc lại tối đa 2 lần |
-| 4 | Trang chủ | – | Hiện "Bài học hôm nay" |
-
-**Kiểm tra mà không cần khởi đầu (QT-01):** người mở thẳng link `/kiem-tra` được kiểm tra ngay. App chỉ hỏi vai trò khi người đó cần Hỏi người thân hoặc Báo cáo không ẩn danh.
+Link buổi QR, kết quả và cảnh báo mở đúng đích; không chèn chọn nhóm hoặc thiết lập người thân. Đăng nhập khi cần lưu/theo dõi hoặc vào khu công tác rồi quay lại đúng đích. MH-02/MH-02a là tùy chọn. Nhóm nội dung không quyết định role hoặc trang đích; Dễ nhìn về MH-03, Tiêu chuẩn về MH-04.
 
 ---
 
@@ -375,7 +363,7 @@ flowchart TD
     B --> C["Trên máy của cụ: mở /lien-ket/:ma"]
     C --> D{"Cụ đồng ý để cháu hỗ trợ?"}
     D -- "Không" --> X["Không liên kết"]
-    D -- "Đồng ý" --> E["Tự chọn vai trò Ông bà · bật Dễ nhìn · điền đoàn viên vào người thân"]
+    D -- "Đồng ý" --> E["Tự chọn nhóm nội dung Người cao tuổi · bật Dễ nhìn · điền đoàn viên vào người thân"]
     E --> F{"Cụ có người thân khác?"}
     F -- "Không (sống một mình)" --> G["Đoàn viên là người ưu tiên"]
     F -- "Có" --> H["Đoàn viên là người thứ hai (gợi ý sau 2 phút)"]
@@ -425,7 +413,7 @@ Hỗ trợ đã duyệt (MH-30) ───────┘    20% Tuyên truyền 
 | MH-25 | Đăng nhập | /dang-nhap | Lần đầu mở · chạm chức năng cần tài khoản · Tôi → Đăng nhập | Trang chủ · MH-01 · MH-26 · MH-27 | F0 |
 | MH-26 | Đăng ký (3 bước) | /dang-ky | MH-25 (Tạo tài khoản, Google lần đầu) | MH-01 | F0 |
 | MH-27 | Quên mật khẩu | /quen-mat-khau | MH-25 | MH-25 | F0 |
-| MH-01 | Chọn vai trò | /bat-dau | MH-25 (Dùng ngay) · MH-26 · Tôi → Đổi vai trò | MH-02 · MH-16 | F0 |
+| MH-01 | Chọn trải nghiệm | /bat-dau | MH-25 (Dùng ngay) · MH-26 · Tôi → Đổi trải nghiệm | Trang cá nhân theo chế độ · Để sau | F0 |
 | MH-02 | Cài người thân | /nguoi-than | MH-01 · MH-11 · MH-20 | MH-02a · quay lại MH-11 | F0, F4 |
 | MH-02a | Gợi ý Thêm vào MH chính | lớp phủ | MH-02 | Trang chủ | F0 |
 | MH-03 | Trang chủ Ông bà | /ong-ba | F0 · thẻ Trang chủ | MH-05 · MH-11 · MH-19 · MH-13 | F1 |
@@ -501,3 +489,14 @@ Nguồn: người dùng xác nhận trong phiên làm việc rằng tình nguy�
 - Điều phối viên lập kế hoạch, tạo buổi, phân công, duyệt tài liệu và kết quả, quản lý thành viên, tổng hợp báo cáo trong phạm vi được giao.
 - Duyệt hoạt động không phải xác nhận lừa đảo. Quyền duyệt cảnh báo cấp riêng cho tài khoản được chỉ định; không mặc định thuộc TNV hoặc mọi điều phối viên.
 - Người thân là quan hệ hỗ trợ có sự đồng ý. Người tham gia buổi là ngữ cảnh sử dụng, không cần một loại tài khoản riêng.
+
+
+## Mô hình quyền và trải nghiệm đã thống nhất
+
+Chỉ có 3 role tài khoản: Người dùng, Tình nguyện viên, Điều phối viên. TNV là thành viên chi đoàn trực tiếp làm nhiệm vụ tuyên truyền, có thể là học sinh; điều phối viên là người có chức trách cao hơn phụ trách hoạt động. TNV và điều phối viên vẫn có đầy đủ chức năng cá nhân của Người dùng trên cùng tài khoản.
+
+Người cao tuổi/Học sinh là nhóm nội dung, không phải role. Dễ nhìn/Tiêu chuẩn là chế độ hiển thị độc lập với nhóm nội dung và quyền. Chọn nhóm Người cao tuổi gợi ý Dễ nhìn, chọn Học sinh gợi ý Tiêu chuẩn; người dùng có thể thay đổi. Không suy ra quyền hoặc bắt buộc tuổi từ lựa chọn này.
+
+Người thân tin cậy là quan hệ hỗ trợ; người tham gia buổi là ngữ cảnh sử dụng. Quyền duyệt cảnh báo là quyền chuyên môn bổ sung được cấp riêng, không phải role thứ tư. Chi đoàn và xã/phường là đơn vị/phạm vi dữ liệu.
+
+Một học sinh có thể dùng Dễ nhìn, có quyền TNV và được bà chọn làm người thân tin cậy trên cùng tài khoản. Chuyển vào khu công tác không đổi nhóm nội dung, chế độ hiển thị hoặc người thân.

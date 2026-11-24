@@ -146,10 +146,10 @@ Mỗi mức gồm **màu + biểu tượng + chữ + câu đọc to**, không ba
 ## 6. Chế độ Dễ nhìn
 
 - Bật bằng class `.de-nhin` trên `<html>`. Mọi cỡ chữ, khoảng cách và chiều cao nút đều lấy từ biến CSS, nên chỉ cần đổi giá trị biến.
-- Vai trò Ông bà **tự bật**. Ai cũng có thể bật/tắt trong Hồ sơ (≤ 2 chạm).
+- Nhóm Người cao tuổi được gợi ý bật, không ghi đè lựa chọn đã đặt. Ai cũng có thể bật/tắt trong Hồ sơ (≤ 2 chạm).
 - Khi bật:
   - **Mỗi màn tối đa 3 hành động.** Các hành động phụ chuyển vào "Xem thêm".
-  - Nội dung quan trọng **tự đọc** khi mở màn (kết quả, câu trả lời của người thân).
+  - Khi đã bật nghe đọc, nội dung quan trọng **được đọc** khi mở màn (kết quả, câu trả lời của người thân).
   - Nút có cả biểu tượng và chữ, không có nút chỉ có biểu tượng.
   - Thứ tự nút ở Hỏi người thân: **Gọi ngay** trước **Gửi** (QT-27).
 
@@ -324,3 +324,25 @@ Nguồn: người dùng xác nhận trong phiên làm việc rằng tình nguy�
 - Điều phối viên lập kế hoạch, tạo buổi, phân công, duyệt tài liệu và kết quả, quản lý thành viên, tổng hợp báo cáo trong phạm vi được giao.
 - Duyệt hoạt động không phải xác nhận lừa đảo. Quyền duyệt cảnh báo cấp riêng cho tài khoản được chỉ định; không mặc định thuộc TNV hoặc mọi điều phối viên.
 - Người thân là quan hệ hỗ trợ có sự đồng ý. Người tham gia buổi là ngữ cảnh sử dụng, không cần một loại tài khoản riêng.
+
+## 15. Hiển thị độc lập với quyền và nhóm nội dung
+
+MH-03 là trang cá nhân Dễ nhìn, MH-04 là trang cá nhân Tiêu chuẩn; tên Ông bà/Học sinh cũ chỉ mô tả nhóm thiết kế ban đầu. Cả hai chế độ có đủ kiểm tra số/link/tài khoản, tin nhắn, báo cáo, hỏi hỗ trợ, học và thử thách.
+
+- Dễ nhìn: hai nút lớn Kiểm tra số lạ, Gọi người tin cậy; bài học phía dưới; thanh dưới Trang chủ · Học · Tôi. Thử thách vào từ Học.
+- Tiêu chuẩn: ô kiểm tra và lối Kiểm tra tin nhắn nổi bật; bài học, thử thách phía dưới; thanh dưới Trang chủ · Học · Thử thách · Tôi.
+- MH-01 hỏi nhóm nội dung, có Để sau. Không hiển thị thẻ chọn TNV/Điều phối như cách tự cấp quyền. Không hỏi năm sinh bắt buộc chỉ để đổi giao diện.
+- MH-20 tách Cách hiển thị (Dễ nhìn/Tiêu chuẩn, nghe đọc) và Nội dung phù hợp (Người cao tuổi/Học sinh/chưa chọn). Nghe đọc có nút dừng/nghe lại, không tự bật chỉ vì đổi nhóm.
+- Mục Công tác tuyên truyền mở theo quyền; khu công tác có Về trang cá nhân. Không đổi tên, tài khoản, nhóm nội dung hay chế độ khi chuyển khu.
+- Bắt buộc vẽ: chưa chọn nhóm vẫn kiểm tra được; học sinh dùng Dễ nhìn; người cao tuổi dùng Tiêu chuẩn; TNV là học sinh chuyển qua lại cá nhân/công tác; chưa cài người tin cậy; nghe đọc tắt.
+
+
+## Mô hình quyền và trải nghiệm đã thống nhất
+
+Chỉ có 3 role tài khoản: Người dùng, Tình nguyện viên, Điều phối viên. TNV là thành viên chi đoàn trực tiếp làm nhiệm vụ tuyên truyền, có thể là học sinh; điều phối viên là người có chức trách cao hơn phụ trách hoạt động. TNV và điều phối viên vẫn có đầy đủ chức năng cá nhân của Người dùng trên cùng tài khoản.
+
+Người cao tuổi/Học sinh là nhóm nội dung, không phải role. Dễ nhìn/Tiêu chuẩn là chế độ hiển thị độc lập với nhóm nội dung và quyền. Chọn nhóm Người cao tuổi gợi ý Dễ nhìn, chọn Học sinh gợi ý Tiêu chuẩn; người dùng có thể thay đổi. Không suy ra quyền hoặc bắt buộc tuổi từ lựa chọn này.
+
+Người thân tin cậy là quan hệ hỗ trợ; người tham gia buổi là ngữ cảnh sử dụng. Quyền duyệt cảnh báo là quyền chuyên môn bổ sung được cấp riêng, không phải role thứ tư. Chi đoàn và xã/phường là đơn vị/phạm vi dữ liệu.
+
+Một học sinh có thể dùng Dễ nhìn, có quyền TNV và được bà chọn làm người thân tin cậy trên cùng tài khoản. Chuyển vào khu công tác không đổi nhóm nội dung, chế độ hiển thị hoặc người thân.
