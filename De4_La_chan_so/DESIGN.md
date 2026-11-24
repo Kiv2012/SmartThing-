@@ -218,10 +218,10 @@ Mỗi mức gồm **màu + biểu tượng + chữ + câu đọc to**, không ba
 | **Chứng nhận** `.cert` | Nền trắng, viền kép xanh Đoàn, **con dấu** `.seal` (tròn đỏ cờ, sao vàng), tên, điểm, ngày, "Lá Chắn Số" |
 | **Dòng xếp hạng** `.rank` | Bảng thường: số hạng (Bai Jamjuree), tên chi đoàn, điểm. Không huy hiệu, không cúp. Chi đoàn của mình nền `--brand-soft` và chữ đậm |
 
-### 7.6 Đội TNV
+### 7.6 Tình nguyện viên và điều phối viên
 | Thành phần | Mô tả |
 |---|---|
-| **Khối "MỚI TUẦN NÀY"** `.alert-new` | Nền `--navy` phẳng, nhãn chữ "MỚI" màu `--star`, tên kiểu lừa (chữ trắng 20px), mức tăng, đối tượng bị nhắm, nút `.btn-star` "Tạo buổi tuyên truyền" |
+| **Khối "MỚI TUẦN NÀY"** `.alert-new` | Nền `--navy` phẳng, nhãn chữ "MỚI" màu `--star`, tên kiểu lừa (chữ trắng 20px), mức tăng, đối tượng bị nhắm, TNV có nút "Xem tài liệu"; điều phối viên có nút `.btn-star` "Lập buổi tuyên truyền" |
 | **Ô số liệu** `.kpi` | Số lớn Bai Jamjuree `--navy`, nhãn, **nguồn hoặc kỳ dữ liệu** dưới con số ("Dữ liệu giả lập · tháng 11/2026") |
 | **Biểu đồ thanh ngang** `.bars` | 10 kiểu lừa xếp giảm dần, cột màu `--brand`, **kiểu MỚI màu `--warn`**, có mũi tên ▲▼ và nhãn số trên từng thanh |
 | **Thẻ hộ đỡ đầu** `.ward` | Tên cụ, ấp/khu phố, 3 nhãn trạng thái, lần liên lạc gần nhất, nút "Đã thăm / Đã gọi". Hộ có cảnh báo: viền trái 4px `--danger` |
@@ -305,3 +305,22 @@ Câu đọc to ngắn hơn câu hiển thị: một mệnh đề, kết thúc b�
 - [ ] Số liệu có ghi nguồn hoặc "dữ liệu giả lập".
 - [ ] Console trình duyệt không có lỗi. Web chạy được khi tắt mạng (font và dữ liệu lưu cùng web).
 - [ ] Không có thông tin cá nhân thật.
+
+## 14. Giao diện công tác theo quyền
+
+- MH-28: ưu tiên nhiệm vụ sắp tới, giờ/nơi thực hiện, tài liệu và hộ được giao. Một hành động chính theo trạng thái; không mở đầu bằng dashboard quản lý.
+- MH-29: ưu tiên việc cần phân công, kết quả chờ duyệt và tiến độ. Bộ lọc đơn vị/địa bàn và kỳ dữ liệu luôn rõ.
+- MH-30: hiện trạng thái, người phụ trách, lịch, tài liệu và lịch sử yêu cầu bổ sung. TNV thấy Nhận/Từ chối/Nộp kết quả theo bước; điều phối viên thấy Phân công/Duyệt/Yêu cầu bổ sung.
+- Vẽ trạng thái chưa có nhiệm vụ, chờ cấp quyền, không có quyền, đổi lịch/hủy, nộp thất bại giữ nháp, chờ duyệt, cần bổ sung, hoàn thành.
+- Phân biệt số liệu học trực tiếp tạm tính với kết quả hoạt động đã duyệt. Không hiện quyền duyệt cảnh báo khi tài khoản chưa được cấp riêng.
+
+
+## Quyết định phân cấp hoạt động
+
+Nguồn: người dùng xác nhận trong phiên làm việc rằng tình nguyện viên là thành viên chi đoàn trực tiếp đi tuyên truyền; người quản lý hoạt động phải là vai trò cấp cao hơn riêng biệt. Tên “Điều phối viên” là tên đề xuất cho vai trò quản lý này.
+
+- Người cao tuổi và Học sinh là nhóm trải nghiệm; TNV và Điều phối viên là quyền công tác được cấp. Một học sinh có thể đồng thời là TNV. Đổi giao diện không cấp thêm quyền.
+- TNV nhận nhiệm vụ, dùng tài liệu đã duyệt, trực tiếp tuyên truyền, hỗ trợ hộ được giao và nộp kết quả.
+- Điều phối viên lập kế hoạch, tạo buổi, phân công, duyệt tài liệu và kết quả, quản lý thành viên, tổng hợp báo cáo trong phạm vi được giao.
+- Duyệt hoạt động không phải xác nhận lừa đảo. Quyền duyệt cảnh báo cấp riêng cho tài khoản được chỉ định; không mặc định thuộc TNV hoặc mọi điều phối viên.
+- Người thân là quan hệ hỗ trợ có sự đồng ý. Người tham gia buổi là ngữ cảnh sử dụng, không cần một loại tài khoản riêng.

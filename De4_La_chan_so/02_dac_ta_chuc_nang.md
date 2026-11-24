@@ -1,6 +1,6 @@
 # ĐẶC TẢ CHỨC NĂNG – LÁ CHẮN SỐ
 
-> Phiên bản 1.0 · 24/11/2026 · Đi kèm: [01_dac_ta_san_pham.md](01_dac_ta_san_pham.md)
+> Phiên bản 1.1 · 24/11/2026 · Đi kèm: [01_dac_ta_san_pham.md](01_dac_ta_san_pham.md)
 > Quy ước: **CN** = chức năng · **QT** = quy tắc nghiệp vụ · **NT** = tiêu chí nghiệm thu · **MH** = màn hình (danh mục ở mục 6 của đặc tả sản phẩm)
 > Mức ưu tiên: **P0** bắt buộc cho bài nộp · **P1** điểm cộng hoặc mở rộng · **P2** sau vòng thi
 
@@ -35,7 +35,9 @@
 |---|---|---|
 | **Ông bà** (người cao tuổi) | Chế độ Dễ nhìn và đọc to bật sẵn | Kiểm tra, AI tin nhắn, Hỏi người thân, Báo cáo, Bài học, Bài kiểm tra, Giọng nói |
 | **Học sinh** | Giao diện chuẩn, gắn với trường và lớp (mỗi lớp là một chi đoàn) | Như Ông bà, cộng thêm Thi đua chi đoàn |
-| **Đội TNV (đoàn viên)** | Gắn với một xã/phường và một chi đoàn | Mọi chức năng người dân, cộng thêm Thống kê, Xác minh, Tuyên truyền, Buổi tuyên truyền QR, Đỡ đầu số, Thi đua chi đoàn, Xuất báo cáo |
+| **Tình nguyện viên** | Thành viên chi đoàn trực tiếp tuyên truyền | Công cụ người dân, thống kê tổng hợp địa phương, nhiệm vụ/buổi được giao, tài liệu đã duyệt, hộ mình đỡ đầu, nộp kết quả và xem thi đua |
+| **Điều phối viên** | Quản lý hoạt động trong đơn vị/địa bàn được giao | Kế hoạch, phân công, quản lý thành viên, duyệt tài liệu/kết quả và xuất báo cáo |
+| **Quyền duyệt cảnh báo** | Quyền chuyên môn cấp riêng | Xác nhận/bác bỏ báo cáo, gỡ nhãn, ghi nhận chuyển tin báo có căn cứ |
 | **Người tham gia buổi tuyên truyền** | Người dân quét QR, không cần tài khoản | Bài học và bài kiểm tra của buổi đó |
 | **Người thân** | Không bắt buộc cài app | Nhận cảnh báo, trả lời nhanh |
 
@@ -52,13 +54,13 @@ Khi người chưa đăng nhập chạm vào chức năng cần tài khoản, ap
 ## 2. CN-01 Khởi đầu (MH-01, MH-02) · P0
 
 ### CN-01.1 Chọn vai trò
-- **Đầu vào:** chọn 1 trong 3 thẻ (Ông bà · Học sinh · Đội tình nguyện), tên gọi (không bắt buộc), xã/phường (chọn từ danh sách).
+- **Đầu vào:** chọn trải nghiệm Ông bà/Học sinh, hoặc vào Khu công tác theo quyền đã cấp, tên gọi (không bắt buộc), xã/phường (chọn từ danh sách).
 - **Xử lý:**
   - Chọn Ông bà thì tự bật chế độ Dễ nhìn và đọc to (CN-09).
   - Chọn Học sinh thì chọn trường và lớp. Lớp chính là chi đoàn dùng cho thi đua (CN-14).
-  - Chọn Đội TNV thì bắt buộc chọn xã/phường, chi đoàn và nhập mã đội (giả lập).
+  - Chọn khu công tác thì đăng nhập và kiểm tra quyền đã cấp. Chưa có quyền: Yêu cầu tham gia/Chờ duyệt; TNV về MH-28, điều phối viên về MH-29.
   - Mở bằng **mã liên kết đỡ đầu** (CN-12) thì tự chọn vai trò Ông bà và điền sẵn đoàn viên đỡ đầu làm người thân.
-- **Đầu ra:** chuyển đến MH-02 (Ông bà, Học sinh) hoặc MH-16 (Đội TNV).
+- **Đầu ra:** chuyển đến MH-02 (Ông bà, Học sinh) hoặc MH-28 (TNV) / MH-29 (điều phối viên), sau kiểm tra quyền.
 - **NT:** nút "Bắt đầu" chỉ bấm được khi đã chọn vai trò. Đổi vai trò được trong Hồ sơ (MH-20).
 
 ### CN-01.2 Cài người thân tin cậy ("chỉ định trước")
@@ -149,7 +151,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 
 ### CN-15.5 Hồ sơ, vai trò, quyền
 - **Hồ sơ trên Firestore** `users/{uid}`: vai trò, tên gọi, xã/phường, chi đoàn, người thân tin cậy, cài đặt Dễ nhìn. **Security Rules:** mỗi người chỉ đọc và ghi hồ sơ của chính mình.
-- **Vai trò Đội TNV không tự khai được:** người dùng nhập mã đội → Cloud Function kiểm tra mã → gắn **custom claim** `doi: <mã xã/phường>`. Security Rules chỉ cho tài khoản có claim này đọc thống kê, hàng chờ xác minh và hộ đỡ đầu của xã/phường đó.
+- **Quyền công tác không tự khai được:** lời mời/mã đội chỉ yêu cầu tham gia. Backend kiểm tra quyền TNV, điều phối hoặc duyệt cảnh báo cùng đơn vị, địa bàn và phân công ở từng thao tác; không dùng một claim địa phương để mở toàn bộ hàng chờ và danh sách hộ. Đổi vai trò hiển thị không cấp thêm quyền.
 - **Trong MH-20:** xem số điện thoại và Google đã gắn · gắn hoặc gỡ Google · đổi mật khẩu · **Đăng xuất** (`signOut`) · **Đăng xuất mọi máy** (Cloud Function gọi `revokeRefreshTokens`) · **Xóa tài khoản** (`user.delete()`, Cloud Function xóa `users/{uid}`; báo cáo ẩn danh đã gửi vẫn giữ để thống kê).
 
 ### CN-15.6 Người cao tuổi
@@ -358,7 +360,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 
 ### CN-08.1 Thống kê kiểu lừa mới tại địa phương (MH-16) · P0
 - **Bộ lọc:** xã/phường (mặc định là xã/phường của đội) · khoảng thời gian (tuần, tháng) · đối tượng bị nhắm (người cao tuổi, học sinh, tất cả).
-- **Khối "MỚI TUẦN NÀY"** đặt trên cùng: tên kiểu lừa · mức tăng · đối tượng bị nhắm · nút **Tạo bài tuyên truyền**.
+- **Khối "MỚI TUẦN NÀY"** đặt trên cùng: tên kiểu lừa · mức tăng · đối tượng bị nhắm · TNV có nút **Xem tài liệu / Đề xuất chủ đề**; điều phối viên có nút **Lập buổi tuyên truyền**.
 - **KPI:** tổng báo cáo (120) · đường dẫn giả mạo (42 – 35%) · số báo cáo chờ xác minh · số người đã học hoặc đạt chứng nhận.
 - **Biểu đồ:**
   - 10 kiểu lừa xếp theo số ca, có mũi tên ▲▼ so với kỳ trước.
@@ -371,15 +373,15 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 
 ### CN-08.2 Hàng chờ xác minh (MH-17) · P1
 - Danh sách báo cáo chưa xác minh, gom theo cùng số, link hoặc STK.
-- Thao tác: **Xác nhận lừa đảo** (đưa vào danh sách cảnh báo) · **Bác bỏ** (ghi lý do) · **Chuyển Công an**.
-- **QT-21:** mọi thao tác được ghi nhật ký (ai, lúc nào). Số hoặc link bị đánh dấu nhầm có thể được **gỡ nhãn** khi đội TNV xử lý khiếu nại.
+- Chỉ người có quyền duyệt cảnh báo trong địa bàn được thao tác; TNV chỉ bổ sung thông tin. Thao tác: **Xác nhận lừa đảo** (đưa vào danh sách cảnh báo) · **Bác bỏ** (ghi lý do) · **Chuyển Công an**.
+- **QT-21:** mọi thao tác được ghi nhật ký (ai, lúc nào). Số hoặc link bị đánh dấu nhầm có thể được **gỡ nhãn** khi người có quyền duyệt xử lý khiếu nại, ghi căn cứ và lý do.
 
 ### CN-08.3 Tạo bài tuyên truyền (MH-18) · P1
 - Chọn kiểu lừa, AI soạn sẵn **poster** (tiêu đề, 3 dấu hiệu, việc nên làm, mã QR tải app), **tin nhắn Zalo** gửi nhóm tổ dân phố, và **kịch bản nói 2 phút**.
-- Đội sửa được trước khi tải về hoặc chia sẻ.
+- TNV dùng bản đã duyệt hoặc đề xuất bản nháp. Điều phối viên duyệt và phát hành phiên bản; bản cần sửa trả lại kèm lý do. Không phát hành bản nháp như tài liệu chính thức.
 
 ### CN-08.4 Xuất báo cáo · P1
-- Báo cáo tuần/tháng gồm số liệu, danh sách ca đã xác minh và hoạt động tuyên truyền. Định dạng PDF, dùng **cho Đoàn cấp trên** và **cho Công an xã/phường**.
+- Chỉ điều phối viên xuất tổng hợp trong phạm vi quản lý; TNV xem kết quả nhiệm vụ của mình. Báo cáo tuần/tháng gồm số liệu, danh sách ca đã xác minh và hoạt động tuyên truyền. Định dạng PDF, dùng **cho Đoàn cấp trên** và **cho Công an xã/phường**.
 
 ---
 
@@ -403,7 +405,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 - **Xử lý:**
   - Đóng gói **hồ sơ tin báo**: thời điểm, kênh, số/link/STK, kiểu lừa, mô tả, ảnh, xã/phường, số tiền (nếu có), mã báo cáo.
   - Cho chọn kênh: **113** (gọi) · kênh tiếp nhận tin báo chính thức của Công an (mở đường dẫn, nội dung được chép sẵn vào bộ nhớ tạm) · với link giả mạo thì thêm kênh báo cáo website lừa đảo của cơ quan an toàn thông tin.
-- **QT-23:** app **không gửi tự động** và **không giả lập là đã gửi tới Công an**. App chỉ mở kênh chính thức. Trạng thái "Đã chuyển Công an" chỉ do đội TNV cập nhật.
+- **QT-23:** app **không gửi tự động** và **không giả lập là đã gửi tới Công an**. App chỉ mở kênh chính thức. Trạng thái "Đã chuyển Công an" chỉ do người có quyền duyệt cảnh báo cập nhật kèm căn cứ chuyển; mở đường dẫn chưa phải đã chuyển.
 - **QT-24:** danh sách kênh và đường dẫn **phải được kiểm chứng** và cấu hình được theo từng địa phương.
 - **NT:** hồ sơ tin báo được chép đầy đủ, mở đúng kênh đã chọn.
 
@@ -423,7 +425,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 
 - **Mục tiêu:** cụ sống một mình hoặc xa con cháu vẫn có **người thân dự phòng** khi bấm Hỏi người thân.
 - **Danh sách hộ đỡ đầu (MH-21):** tên gọi cụ, ấp/khu phố, tình trạng (đã cài app · đã có người thân · sống một mình), lần liên lạc gần nhất, số lần cụ hỏi trong tháng.
-- **Thêm hộ đỡ đầu:**
+- **Thêm hộ đỡ đầu sau phân công của điều phối viên; TNV chỉ xem hộ được giao:**
   1. Đoàn viên bấm "Thêm hộ" và app tạo **mã liên kết** (mã QR kèm 6 số).
   2. Đoàn viên mở web trên máy của cụ và quét hoặc nhập mã. App tự chọn vai trò Ông bà, bật Dễ nhìn, điền sẵn đoàn viên vào danh sách người thân (CN-01).
   3. **Cụ đồng ý** bằng nút "Đồng ý để cháu [tên] hỗ trợ". Không có bước này thì không liên kết.
@@ -438,7 +440,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 
 ## 12B. CN-13 Buổi tuyên truyền có QR (MH-22, MH-23) · P0 · Sáng tạo
 
-- **Tạo buổi (MH-22):**
+- **Tạo buổi (MH-22), chỉ điều phối viên:**
   - Đầu vào: tên buổi, địa điểm (ấp/khu phố/trường), thời gian, **chủ đề** (1–2 kiểu lừa, gợi ý sẵn kiểu đang "MỚI" từ MH-16).
   - Đầu ra: **mã QR lớn** để chiếu hoặc in, đường dẫn ngắn `/buoi/:ma`.
 - **Người tham gia** (quét QR, không cần tài khoản):
@@ -448,7 +450,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
   4. Xem điểm, nhận chứng nhận nếu đạt, có thể lưu web vào màn hình chính.
 - **Kết quả buổi (MH-23)**, cập nhật trực tiếp: **số người tham gia**, **điểm trung bình**, **tỷ lệ đạt ≥ 80**, câu sai nhiều nhất (gợi ý nội dung cần nhấn mạnh), cơ cấu nhóm tham gia.
 - **QT-30:** mỗi thiết bị chỉ tính một lượt cho mỗi buổi. Buổi tự đóng sau **24 giờ**.
-- **QT-31:** kết quả buổi được cộng vào KPI "số người đã học" của MH-16, vào báo cáo xuất (CN-08.4) và vào điểm thi đua của chi đoàn tổ chức (CN-14).
+- **QT-31:** số liệu học trực tiếp là tạm tính; thành tích hoạt động chỉ cộng sau duyệt tại MH-30. Kết quả học được cộng vào KPI "số người đã học" của MH-16, vào báo cáo xuất (CN-08.4) và vào điểm thi đua của chi đoàn tổ chức (CN-14).
 - **Trạng thái trống:** buổi chưa có ai tham gia thì hiện "Đang chờ người tham gia, hãy chiếu mã QR lên màn hình".
 - **NT:** quét QR là vào thẳng bài học, không qua bước khởi đầu. Số liệu trên MH-23 khớp số lượt làm bài.
 
@@ -464,7 +466,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 | Kết quả học | 40% | Điểm trung bình bài kiểm tra của thành viên chi đoàn |
 | Mức tham gia | 20% | Tỷ lệ thành viên đã làm ít nhất 1 bài kiểm tra |
 | Tuyên truyền | 20% | Số người tham gia các buổi tuyên truyền do chi đoàn tổ chức (CN-13) |
-| Đỡ đầu và xác minh | 20% | Số hộ đỡ đầu (CN-12) và số ca đã xác minh (CN-08.2) |
+| Hỗ trợ người dân | 20% | Hoạt động hỗ trợ hộ đỡ đầu đã được duyệt; không tính số ca xác nhận lừa đảo |
 
 - **Hiển thị:** bảng xếp hạng có vị trí của chi đoàn mình được tô nổi · 4 thành phần điểm của chi đoàn mình · gợi ý "Để lên hạng: tổ chức thêm 1 buổi tuyên truyền".
 - **QT-33:** chỉ công khai điểm **theo chi đoàn**, không công khai điểm cá nhân.
@@ -472,6 +474,24 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 - **NT:** tổng tỷ trọng là 100%. Tên chi đoàn trong dữ liệu mẫu là giả lập.
 
 ---
+
+## CN-16 Phân công và thực hiện hoạt động · P0
+
+| Màn | Người dùng | Nội dung |
+|---|---|---|
+| MH-28 Việc của tôi | TNV | Buổi sắp tới, nhận nhiệm vụ, tài liệu đã duyệt, hộ được giao |
+| MH-29 Quản lý hoạt động | Điều phối viên | Kế hoạch, thành viên, phân công, kết quả chờ duyệt và báo cáo |
+| MH-30 Chi tiết nhiệm vụ | Theo quyền | TNV nhận/từ chối, vận hành buổi và nộp kết quả; điều phối viên theo dõi, duyệt hoặc trả bổ sung |
+
+Luồng: Điều phối viên xem tình hình địa phương MH-16 → tạo buổi MH-22, chọn tài liệu đã duyệt, phân công → TNV nhận tại MH-28/MH-30 → trực tiếp tuyên truyền, mở QR buổi được giao → người dân học và làm bài → MH-23 ghi số liệu tạm tính → TNV nộp kết quả → điều phối viên duyệt → tổng hợp hoạt động và thi đua.
+
+- Nhiệm vụ: Chờ nhận → Đã nhận → Đang thực hiện → Chờ duyệt → Hoàn thành. Từ chối kèm lý do trả về điều phối viên để giao lại. Yêu cầu bổ sung trả về TNV, giữ lịch sử các lần nộp.
+- Buổi: Nháp → Đã phân công → Đang diễn ra → Kết thúc thu bài → Chờ duyệt kết quả → Hoàn thành; có nhánh Hủy. Đóng QR sau 24 giờ không tự duyệt hoạt động.
+- TNV chỉ vận hành buổi được giao, không tự đổi lịch, hủy buổi, sửa phân công hoặc duyệt kết quả của mình. Nộp lại không tạo điểm/kết quả trùng.
+- Thống kê học trực tiếp có nhãn tạm tính; chỉ hoạt động đã duyệt mới tính thành tích hoạt động. Giữ riêng số liệu học và kết quả duyệt hoạt động.
+- Đỡ đầu: điều phối viên phân công → TNV đề nghị liên kết → cụ đồng ý → TNV hỗ trợ. Chuyển TNV cần cụ đồng ý lại; hủy liên kết thu hồi quyền người cũ.
+- Trạng thái bắt buộc: chờ cấp quyền, không có quyền, chưa có nhiệm vụ, từ chối, đổi lịch, buổi bị hủy, gửi thất bại giữ nháp, chờ duyệt, cần bổ sung, hoàn thành. Đổi lịch/hủy phải thông báo TNV.
+- NT: TNV không xem/sửa dữ liệu cá nhân và nhiệm vụ ngoài phân công; điều phối viên chỉ quản lý phạm vi được cấp. Phân công/duyệt/trả bổ sung lưu người thực hiện, thời điểm, lý do. Cách cấp quyền điều phối viên đầu tiên cần chốt trước triển khai thật.
 
 ## 13. Dữ liệu (thực thể chính)
 
@@ -491,7 +511,10 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 | BaiTuyenTruyen | id, tinh_huong_id, xa_phuong, poster, tin_zalo, kich_ban |
 | ChiDoan | id, ten, loai (lớp THPT / chi đoàn khu phố), truong, xa_phuong |
 | DoDau | id, doan_vien_id, nguoi_cao_tuoi_id, ma_lien_ket, dong_y (thời điểm), vai_tro (ưu tiên/thứ hai), lan_lien_lac_cuoi |
-| BuoiTuyenTruyen | ma, chi_doan_id, ten, dia_diem, thoi_gian, chu_de[], trang_thai (mở/đóng) |
+| BuoiTuyenTruyen | ma, chi_doan_id, ten, dia_diem, thoi_gian, chu_de[], nguoi_tao, nguoi_phu_trach, tai_lieu_phien_ban, trang_thai_buoi, trang_thai_thu_bai |
+| PhanCong | id, buoi_ma, tnv_uid, nhiem_vu, han, trang_thai, ly_do |
+| KetQuaHoatDong | id, buoi_ma, nguoi_nop, phien_ban, noi_dung, trang_thai_duyet, nguoi_duyet, ly_do, thoi_diem |
+| QuyenCongTac | uid, don_vi, dia_ban, quyen[], nguoi_cap, thu_hoi |
 | LuotThamGia | buoi_ma, thiet_bi, nhom, diem, cau_sai[], thoi_diem |
 
 ---
@@ -509,7 +532,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 | PCN-07 | **Ứng dụng web, giao diện ưu tiên điện thoại** (360–430px, cột nội dung tối đa 480px trên màn hình rộng). Riêng màn đội TNV giãn ra trên máy tính bảng và máy tính. Chạy tốt trên Chrome Android và Safari iPhone. Xem mục 0 |
 | PCN-09 | Lần đầu mở trang hiển thị trong ≤ 3 giây trên mạng 4G. Giao diện không phụ thuộc thư viện tải từ máy chủ ngoài |
 | PCN-08 | Toàn bộ dữ liệu trong prototype là giả lập |
-| PCN-10 | **Bảo mật tài khoản (Firebase):** Firebase Hosting, chỉ HTTPS · mật khẩu do Firebase băm (scrypt) · bật Email enumeration protection, chính sách mật khẩu, SMS region policy chỉ +84 · reCAPTCHA cho đăng nhập số điện thoại · Firestore Security Rules: chỉ đọc/ghi dữ liệu của mình, quyền Đội TNV qua custom claim · không ghi mật khẩu hay OTP vào nhật ký · nên bật App Check (P1) |
+| PCN-10 | **Bảo mật tài khoản (Firebase):** Firebase Hosting, chỉ HTTPS · mật khẩu do Firebase băm (scrypt) · bật Email enumeration protection, chính sách mật khẩu, SMS region policy chỉ +84 · reCAPTCHA cho đăng nhập số điện thoại · Firestore Security Rules: chỉ đọc/ghi dữ liệu của mình, quyền công tác tách riêng theo vai trò, địa bàn và phân công · không ghi mật khẩu hay OTP vào nhật ký · nên bật App Check (P1) |
 | PCN-11 | **Mã nguồn Firebase SDK được đóng gói cùng web** (bản dựng chung kết dùng công cụ đóng gói), không tải SDK từ CDN, để giữ PCN-09. Đăng nhập cần có mạng, còn Kiểm tra nhanh vẫn chạy khi mất mạng |
 
 ---
@@ -545,7 +568,7 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 | 2 | Định nghĩa "kiểu mới" (QT-20) | **Lần đầu xuất hiện** tại xã/phường trong 7 ngày, **hoặc** số ca 7 ngày **≥ 2 lần** trung bình 4 tuần trước và ≥ 3 ca |
 | 3 | Chờ trước khi gợi ý người thân thứ hai (QT-16) | **2 phút** |
 | 4 | Bài kiểm tra (QT-17, QT-19) | **10 câu cho Học sinh, 5 câu cho Ông bà**. Chứng nhận khi đạt **≥ 80 điểm** |
-| 5 | Phạm vi dựng | **Mọi luồng (F0–F8) làm hoàn chỉnh**. Thứ tự trình diễn do đội tự quyết sau khi dựng xong |
+| 5 | Phạm vi dựng | **Mọi luồng (F0–F10) làm hoàn chỉnh**. Thứ tự trình diễn do đội tự quyết sau khi dựng xong |
 | 6 | Dữ liệu mẫu người thân | **Lan (con gái, ưu tiên)**, **Hùng (con trai)** |
 | 7 | Luồng chính | **Tập các luồng giải quyết yêu cầu đề** (đặc tả sản phẩm mục 7), không chọn riêng một luồng |
 | 8 | MVP 24 giờ ở chung kết | **Toàn bộ các màn P0** (đặc tả sản phẩm mục 11) |
@@ -553,6 +576,17 @@ Sau bước 3 chuyển sang **MH-01 Chọn vai trò**, rồi MH-02 như cũ.
 
 **Tham số của chức năng mới** (do đội phân tích đặt, sửa được): tối đa 5 hộ cho mỗi đoàn viên (QT-29) · nhắc thăm hỏi sau 14 ngày · buổi tuyên truyền tự đóng sau 24 giờ (QT-30) · tỷ trọng điểm thi đua 40/20/20/20 (QT-32).
 
-**Tài khoản (CN-15):** **đã chốt dùng Firebase Authentication** (Phone, Email/Password với email nội bộ sinh từ số điện thoại, Google, Anonymous) cùng Firestore, Cloud Functions, Hosting. Do đội phân tích đặt, chờ duyệt: không bắt buộc đăng nhập để tự bảo vệ (QT-01) · ghi nhớ đăng nhập bằng `browserLocalPersistence` (QT-35) · chống dò mật khẩu bằng cơ chế của Firebase (QT-36) · khóa nút gửi lại OTP 60 giây (QT-37) · mật khẩu từ 8 ký tự, có chữ và số (QT-38) · Google bắt buộc bổ sung số điện thoại với Đội TNV · vai trò Đội TNV cấp qua custom claim.
+**Tài khoản (CN-15):** **đã chốt dùng Firebase Authentication** (Phone, Email/Password với email nội bộ sinh từ số điện thoại, Google, Anonymous) cùng Firestore, Cloud Functions, Hosting. Do đội phân tích đặt, chờ duyệt: không bắt buộc đăng nhập để tự bảo vệ (QT-01) · ghi nhớ đăng nhập bằng `browserLocalPersistence` (QT-35) · chống dò mật khẩu bằng cơ chế của Firebase (QT-36) · khóa nút gửi lại OTP 60 giây (QT-37) · mật khẩu từ 8 ký tự, có chữ và số (QT-38) · Google bắt buộc bổ sung số điện thoại với Đội TNV · quyền TNV/điều phối/duyệt cảnh báo được cấp riêng theo đơn vị và phạm vi.
 
 **Còn mở:** danh sách kênh tiếp nhận tin báo Công an cần kiểm chứng (QT-24) · điều khoản pháp lý cụ thể về dữ liệu của học sinh dưới 16 tuổi (QT-38) · chi phí SMS OTP của Firebase (phải dùng gói trả theo mức dùng, cần kiểm tra bảng giá hiện hành) · đánh giá việc lưu dữ liệu cá nhân trên máy chủ Firebase ở nước ngoài theo quy định chuyển dữ liệu cá nhân ra nước ngoài.
+
+
+## Quyết định phân cấp hoạt động
+
+Nguồn: người dùng xác nhận trong phiên làm việc rằng tình nguyện viên là thành viên chi đoàn trực tiếp đi tuyên truyền; người quản lý hoạt động phải là vai trò cấp cao hơn riêng biệt. Tên “Điều phối viên” là tên đề xuất cho vai trò quản lý này.
+
+- Người cao tuổi và Học sinh là nhóm trải nghiệm; TNV và Điều phối viên là quyền công tác được cấp. Một học sinh có thể đồng thời là TNV. Đổi giao diện không cấp thêm quyền.
+- TNV nhận nhiệm vụ, dùng tài liệu đã duyệt, trực tiếp tuyên truyền, hỗ trợ hộ được giao và nộp kết quả.
+- Điều phối viên lập kế hoạch, tạo buổi, phân công, duyệt tài liệu và kết quả, quản lý thành viên, tổng hợp báo cáo trong phạm vi được giao.
+- Duyệt hoạt động không phải xác nhận lừa đảo. Quyền duyệt cảnh báo cấp riêng cho tài khoản được chỉ định; không mặc định thuộc TNV hoặc mọi điều phối viên.
+- Người thân là quan hệ hỗ trợ có sự đồng ý. Người tham gia buổi là ngữ cảnh sử dụng, không cần một loại tài khoản riêng.

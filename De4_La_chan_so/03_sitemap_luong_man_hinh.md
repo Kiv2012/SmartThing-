@@ -1,6 +1,6 @@
 # SITEMAP VÀ LUỒNG MÀN HÌNH – LÁ CHẮN SỐ
 
-> Phiên bản 1.0 · 24/11/2026 · Nền tảng: ứng dụng web, giao diện ưu tiên điện thoại
+> Phiên bản 1.1 · 24/11/2026 · Nền tảng: ứng dụng web, giao diện ưu tiên điện thoại
 > Đi kèm: [01_dac_ta_san_pham.md](01_dac_ta_san_pham.md) · [02_dac_ta_chuc_nang.md](02_dac_ta_chuc_nang.md)
 > Mã màn (MH-xx) và mã chức năng (CN-xx) dùng thống nhất với hai tài liệu trên.
 
@@ -20,7 +20,12 @@ flowchart TD
 
     MH02a --> OB["KHU ÔNG BÀ"]
     MH02a --> HS["KHU HỌC SINH"]
-    MH01 --> TNV["KHU ĐỘI TNV"]
+    MH01 --> AUTH{"Kiểm tra quyền công tác"}
+    AUTH -- "TNV" --> TNV["MH-28 Việc của tôi"]
+    AUTH -- "Điều phối" --> DP["MH-29 Quản lý hoạt động"]
+    DP --> MH22
+    DP --> NV["MH-30 Chi tiết nhiệm vụ"]
+    TNV --> NV
 
     subgraph CHUNG["Màn dùng chung"]
         MH05["MH-05 Kiểm tra nhanh"] --> MH06["MH-06 Kết quả kiểm tra"]
@@ -37,7 +42,7 @@ flowchart TD
     MH03 --> MH19["MH-19 Trợ lý giọng nói"]
     HS --> MH04["MH-04 Trang chủ Học sinh"]
     TNV --> MH16["MH-16 Tổng quan phường (thống kê)"]
-    MH16 --> MH17["MH-17 Hàng chờ xác minh"]
+    AUTH -- "Có quyền duyệt cảnh báo" --> MH17["MH-17 Hàng chờ xác minh"]
     MH16 --> MH18["MH-18 Tạo bài tuyên truyền"]
     TNV --> MH21["MH-21 Hộ đỡ đầu"]
     TNV --> MH22["MH-22 Buổi tuyên truyền + QR"]
@@ -109,11 +114,12 @@ Mỗi màn có đường dẫn riêng. Người dùng mở thẳng được từ
 |---|---|---|---|---|---|
 | **Ông bà** (4 thẻ, cao 76px) | Trang chủ | Kiểm tra | Học | Tôi | – |
 | **Học sinh** (5 thẻ) | Trang chủ | Kiểm tra | Học | Thử thách | Tôi |
-| **Đội TNV** (5 thẻ) | Tổng quan | Xác minh | Tuyên truyền | Đỡ đầu | Tôi |
+| **Tình nguyện viên** | Việc của tôi | Tình hình | Tài liệu | Đỡ đầu | Tôi |
+| **Điều phối viên** | Tổng quan | Kế hoạch | Thành viên | Báo cáo | Tôi |
 
 Mỗi thẻ có một icon nét đơn sắc kèm nhãn chữ (DESIGN.md mục 1A, 8). Không dùng emoji.
 
-- Thẻ **Tuyên truyền** của Đội TNV có hai phần: **[Buổi tuyên truyền]** (MH-22, MH-23) và **[Soạn bài]** (MH-18).
+- TNV vào buổi được giao từ MH-28/MH-30; vào tài liệu đã duyệt từ thẻ Tài liệu. Điều phối viên lập buổi từ Kế hoạch trong MH-29.
 - **Thi đua chi đoàn** (MH-24): Học sinh vào từ thẻ **Thử thách**, Đội TNV vào từ khối thi đua trên MH-16.
 
 - Thẻ **Kiểm tra** của Học sinh có hai phần chuyển qua lại: **[Số / Link / STK]** (MH-05) và **[Dán tin nhắn]** (MH-07).
@@ -150,7 +156,10 @@ flowchart LR
     L -- "Dùng ngay, không cần tài khoản (Firebase ẩn danh)" --> C["MH-01 Chọn vai trò + xã/phường"]
     C -- "Ông bà (bật Dễ nhìn)" --> D["MH-02 Cài người thân"]
     C -- "Học sinh" --> D
-    C -- "Đội TNV (nhập mã đội)" --> T["MH-16 Tổng quan phường"]
+    C -- "Khu công tác: kiểm tra quyền" --> P{"Quyền đã cấp"}
+    P -- "TNV" --> T["MH-28 Việc của tôi"]
+    P -- "Điều phối" --> Q["MH-29 Quản lý hoạt động"]
+    P -- "Chưa có" --> W["Yêu cầu tham gia / Chờ duyệt"]
     D -- "Lưu / Để sau" --> E["MH-02a Gợi ý Thêm vào màn hình chính"]
     E -- "Thêm ngay / Để sau" --> H
 ```
@@ -257,7 +266,7 @@ flowchart LR
     S1 & S2 & S3 -- "Thoát" --> X{"Bỏ báo cáo này?"}
 ```
 
-**Sau khi gửi, báo cáo đi tiếp như sau:** Đã nhận → xuất hiện trong **MH-17 Hàng chờ xác minh** của đội TNV xã/phường → Xác nhận / Bác bỏ / Chuyển Công an → trạng thái được cập nhật ở **MH-20 → Báo cáo của tôi**.
+**Sau khi gửi, báo cáo đi tiếp như sau:** Đã nhận → xuất hiện trong **MH-17 Hàng chờ xác minh** của người có quyền duyệt cảnh báo tại xã/phường → Xác nhận / Bác bỏ / Chuyển Công an → trạng thái được cập nhật ở **MH-20 → Báo cáo của tôi**.
 
 ---
 
@@ -307,30 +316,24 @@ flowchart LR
 
 ---
 
-## 9. Luồng Đội tình nguyện (F6) – Bắt buộc 6
+## 9. Luồng tuyên truyền và điều phối (F6)
 
 ```mermaid
 flowchart TD
-    O["MH-16 Tổng quan phường"] --> NEW["Khối MỚI TUẦN NÀY: kiểu lừa · mức tăng · đối tượng bị nhắm"]
-    O --> KPI["120 báo cáo · 42 link giả (35%) · số chờ xác minh · số người đạt chứng nhận"]
-    O --> CH["Biểu đồ 10 kiểu ▲▼ · cơ cấu kênh · xu hướng tuần · bộ lọc"]
-    NEW -- "Tạo bài tuyên truyền" --> TT["MH-18 AI soạn poster + tin Zalo + kịch bản 2 phút"]
-    TT -- "Sửa → Tải về / Chia sẻ" --> SH["Nhóm Zalo tổ dân phố · in poster"]
-    KPI -- "Chờ xác minh" --> XM["MH-17 Hàng chờ (gom theo số/link/STK)"]
-    XM -- "Xác nhận" --> DS["Vào danh sách cảnh báo → MH-06 của người dân báo 🔴"]
-    XM -- "Bác bỏ (ghi lý do)" --> BB["Cập nhật trạng thái cho người báo"]
-    XM -- "Chuyển Công an" --> CA["Hồ sơ tin báo → kênh chính thức"]
-    O -- "Xuất báo cáo" --> PDF["PDF tuần/tháng: Đoàn cấp trên / Công an xã/phường"]
-    TT -- "Chế độ trình chiếu" --> PJ["MH-13 toàn màn hình trong buổi tuyên truyền"]
+    A["Điều phối viên: MH-29 Quản lý hoạt động"] --> B["MH-16 Xem kiểu lừa mới"]
+    B --> C["MH-22 Lập buổi, chọn tài liệu, phân công"]
+    C --> D["TNV: MH-28 Việc của tôi"]
+    D --> E["MH-30 Nhận nhiệm vụ"]
+    E -- "Từ chối, nêu lý do" --> A
+    E -- "Nhận" --> F["Chuẩn bị và trực tiếp tuyên truyền, mở QR"]
+    F --> G["Người dân học, làm bài; MH-23 số liệu tạm tính"]
+    G --> H["TNV nộp kết quả"]
+    H --> I["Điều phối viên duyệt"]
+    I -- "Cần bổ sung" --> H
+    I -- "Đạt" --> J["Hoàn thành, báo cáo và thi đua"]
 ```
 
-**Vòng khép kín giữa các vai trò:**
-
-```
-Người dân báo cáo (MH-08) → Đội TNV xác minh (MH-17) → Danh sách cảnh báo
-      ↑                                                        ↓
-Người dân học (MH-13) ← Tuyên truyền (MH-18) ← Kiểu mới (MH-16)   Kết quả 🔴 cho người kiểm tra sau (MH-06)
-```
+MH-16 vẫn phục vụ TNV xem tình hình địa phương tổng hợp để chọn nội dung phù hợp. MH-17 chỉ dành cho người được cấp quyền duyệt cảnh báo; quản lý hoạt động không tự có quyền này. TNV không xem bằng chứng cá nhân ngoài phạm vi được giao.
 
 ---
 
@@ -410,7 +413,7 @@ flowchart LR
 Học sinh làm bài (MH-14) ─────┐
 Buổi tuyên truyền (MH-23) ────┼──> MH-24 Thi đua chi đoàn
 Hộ đỡ đầu (MH-21) ────────────┤    40% Kết quả học · 20% Tham gia
-Ca đã xác minh (MH-17) ───────┘    20% Tuyên truyền · 20% Đỡ đầu và xác minh
+Hỗ trợ đã duyệt (MH-30) ───────┘    20% Tuyên truyền · 20% Hỗ trợ người dân
 ```
 
 ---
@@ -439,7 +442,7 @@ Ca đã xác minh (MH-17) ───────┘    20% Tuyên truyền · 20%
 | **MH-14** | **Bài kiểm tra nhận diện** | /thu-thach | MH-13 · MH-04 · thẻ Thử thách | MH-15 | F5 |
 | MH-15 | Kết quả + Chứng nhận | /thu-thach/ket-qua | MH-14 | MH-13 · làm lại · chia sẻ | F5 |
 | **MH-16** | **Tổng quan phường** | /doi | F0 · thẻ Tổng quan | MH-17 · MH-18 · xuất PDF | F6 |
-| MH-17 | Hàng chờ xác minh | /doi/xac-minh | MH-16 · thẻ Xác minh | Kênh Công an | F6 |
+| MH-17 | Hàng chờ xác minh | /doi/xac-minh | Khu công tác, chỉ khi có quyền duyệt | Kênh Công an | F6 |
 | MH-18 | Tạo bài tuyên truyền | /doi/tuyen-truyen | MH-16 · thẻ Tuyên truyền | Chia sẻ · trình chiếu MH-13 | F6 |
 | MH-19 | Trợ lý giọng nói | /ong-ba/tro-ly | MH-03 | MH-06 · MH-11 | F8 |
 | MH-20 | Hồ sơ và cài đặt | /toi | Thẻ Tôi | MH-01 · MH-02 · báo cáo của tôi | – |
@@ -459,7 +462,7 @@ Ca đã xác minh (MH-17) ───────┘    20% Tuyên truyền · 20%
 | Nút "Hỏi người thân" | MH-11 | F1, F4 | **2** (Hỏi người thân → Gọi/Gửi) |
 | Bài học 01 phút | MH-13 | F5 | 1–2 |
 | Bài kiểm tra có chấm điểm | MH-14, MH-15 | F5 | 1–2 |
-| Màn đội TNV: thống kê kiểu lừa mới | MH-16 | F6 | 0 (là trang chủ của đội) |
+| Màn đội TNV: thống kê kiểu lừa mới | MH-16 | F6 | 1 (từ Việc của tôi → Tình hình) |
 | Điểm cộng AI | MH-07, MH-18 | F2, F6 | 1–2 |
 | Điểm cộng giọng nói | MH-19, 🔊 mọi màn | F1, F8 | 1 |
 | Điểm cộng kênh Công an | MH-09, MH-10, MH-17 | F3, F6, F7 | – |
@@ -475,3 +478,26 @@ Ca đã xác minh (MH-17) ───────┘    20% Tuyên truyền · 20%
 **Đã chốt:** luồng chính là tập luồng giải quyết yêu cầu đề · 11 luồng F0–F10 làm hoàn chỉnh, thứ tự trình diễn do đội tự quyết · thêm F9 Đỡ đầu số, F10 Buổi tuyên truyền QR, Thi đua chi đoàn · người thân mẫu là **Lan** (con gái, ưu tiên) và **Hùng** (con trai) · chờ 2 phút rồi gợi ý người thứ hai · các ngưỡng nghiệp vụ như mục 16 của đặc tả chức năng.
 
 **Còn mở:** đường dẫn web (mục 1.1) là đề xuất cho prototype, có thể đổi khi dựng.
+
+## Điều hướng công tác bổ sung
+
+| Màn | Đường dẫn | Vào từ | Đi tới |
+|---|---|---|---|
+| MH-28 Việc của tôi | /cong-tac | Đăng nhập có quyền TNV | MH-30, MH-16, tài liệu, hộ được giao |
+| MH-29 Quản lý hoạt động | /dieu-phoi | Đăng nhập có quyền điều phối | MH-22, MH-30, MH-16 |
+| MH-30 Chi tiết nhiệm vụ | /cong-tac/nhiem-vu/:id | MH-28/MH-29 | Nhận việc, buổi được giao, nộp/duyệt kết quả |
+
+Kế hoạch, Thành viên, Báo cáo là các phần của MH-29. Tài liệu TNV là MH-18 với bản đã duyệt và bản nháp đề xuất. MH-22: điều phối viên tạo/sửa, TNV vận hành buổi được giao. MH-23: TNV xem buổi của mình, điều phối viên xem trong phạm vi quản lý.
+
+F9 bắt đầu bằng điều phối viên phân công hộ, rồi TNV đề nghị liên kết và cụ đồng ý. F10 bắt đầu từ lập buổi/phân công ở MH-29/MH-22; TNV nhận việc tại MH-28/MH-30; sau buổi phải nộp và duyệt kết quả trước khi tính thành tích hoạt động.
+
+
+## Quyết định phân cấp hoạt động
+
+Nguồn: người dùng xác nhận trong phiên làm việc rằng tình nguyện viên là thành viên chi đoàn trực tiếp đi tuyên truyền; người quản lý hoạt động phải là vai trò cấp cao hơn riêng biệt. Tên “Điều phối viên” là tên đề xuất cho vai trò quản lý này.
+
+- Người cao tuổi và Học sinh là nhóm trải nghiệm; TNV và Điều phối viên là quyền công tác được cấp. Một học sinh có thể đồng thời là TNV. Đổi giao diện không cấp thêm quyền.
+- TNV nhận nhiệm vụ, dùng tài liệu đã duyệt, trực tiếp tuyên truyền, hỗ trợ hộ được giao và nộp kết quả.
+- Điều phối viên lập kế hoạch, tạo buổi, phân công, duyệt tài liệu và kết quả, quản lý thành viên, tổng hợp báo cáo trong phạm vi được giao.
+- Duyệt hoạt động không phải xác nhận lừa đảo. Quyền duyệt cảnh báo cấp riêng cho tài khoản được chỉ định; không mặc định thuộc TNV hoặc mọi điều phối viên.
+- Người thân là quan hệ hỗ trợ có sự đồng ý. Người tham gia buổi là ngữ cảnh sử dụng, không cần một loại tài khoản riêng.

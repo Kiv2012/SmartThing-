@@ -1,7 +1,7 @@
 # ĐẶC TẢ SẢN PHẨM – LÁ CHẮN SỐ
 
 > Đề 4 – An toàn thông tin · Phòng, chống lừa đảo · Kỹ năng số
-> Phiên bản 1.0 · 24/11/2026 · Tài liệu đi kèm: [02_dac_ta_chuc_nang.md](02_dac_ta_chuc_nang.md)
+> Phiên bản 1.1 · 24/11/2026 · Tài liệu đi kèm: [02_dac_ta_chuc_nang.md](02_dac_ta_chuc_nang.md)
 
 ---
 
@@ -51,14 +51,15 @@ Ba vế của tên đề ứng với ba khối của sản phẩm:
 - **Cần từ sản phẩm:** kiểm tra riêng tư, không phán xét, có thi đua và điểm số.
 - **Vai trò kép:** học sinh cũng là **người thân được hỏi** của ông bà. Sản phẩm nối hai nhóm người dùng trong cùng một gia đình.
 
-### 3.3 Đội thanh niên tình nguyện xã, phường
-- **Công việc:** nắm kiểu lừa đang nổi → chọn nội dung → tuyên truyền tại tổ dân phố, ấp, trường học → báo cáo lên Đoàn cấp trên.
-- **Phạm vi:** cấp xã/phường (chính quyền hai cấp).
-- **Vai trò thêm:** cài app hộ người cao tuổi, giúp họ chọn người thân tin cậy, **xác minh báo cáo**, dùng bài học và bài kiểm tra **ngay trong buổi tuyên truyền**.
-- **Ba hình thức dành riêng cho đoàn viên** (chi tiết ở mục 9A):
-  - **Đoàn viên đỡ đầu số:** nhận đỡ đầu các hộ cao tuổi, làm **người thân dự phòng** cho cụ sống một mình.
-  - **Buổi tuyên truyền có QR:** người dân quét mã, học và làm bài kiểm tra tại chỗ. Số liệu tự về màn của đội.
-  - **Thi đua chi đoàn:** xếp hạng các chi đoàn theo kết quả học, số buổi tuyên truyền và số hộ đỡ đầu.
+### 3.3 Tình nguyện viên và điều phối viên
+
+Tình nguyện viên là thành viên chi đoàn trực tiếp tuyên truyền tại xã/phường: nhận nhiệm vụ, chuẩn bị tài liệu đã duyệt, hỗ trợ người dân và báo cáo kết quả. Họ xem thống kê kiểu lừa mới để biết cần tuyên truyền gì; chỉ xem hộ và buổi được giao.
+
+Điều phối viên là vai trò quản lý hoạt động riêng: lập kế hoạch, phân công TNV, duyệt tài liệu và kết quả, quản lý thành viên, tổng hợp báo cáo. Quyền duyệt cảnh báo lừa đảo được cấp riêng.
+
+Đỡ đầu số, buổi tuyên truyền QR và thi đua chi đoàn vẫn được giữ; trách nhiệm thực hiện và duyệt được phân tách theo CN-16.
+
+---
 
 ### 3.4 Vai phụ: người thân được chỉ định
 Nhận cảnh báo, trả lời nhanh, gọi lại cho người đang bị dụ. Không bắt buộc phải cài app. Người thân có thể là con cháu, hoặc với học sinh là **thầy cô chủ nhiệm, anh chị Đoàn**.
@@ -118,19 +119,22 @@ Nhận cảnh báo, trả lời nhanh, gọi lại cho người đang bị dụ.
 | **MH-14** | **Bài kiểm tra nhận diện** | **Bắt buộc 5** | Tất cả | P0 |
 | MH-15 | Kết quả bài kiểm tra và chứng nhận | Bắt buộc 5 ("có chấm điểm") | Tất cả | P0 |
 | **MH-16** | **Màn hình đội tình nguyện: thống kê kiểu lừa mới tại địa phương** | **Bắt buộc 6** | Đội TNV | P0 |
-| MH-17 | Hàng chờ xác minh báo cáo | Mở rộng (chống báo cáo bừa) | Đội TNV | P1 |
+| MH-17 | Hàng chờ xác minh báo cáo | Mở rộng (chống báo cáo bừa) | Người có quyền duyệt cảnh báo | P1 |
 | MH-18 | Tạo bài tuyên truyền | Mở rộng | Đội TNV | P1 |
 | MH-19 | Trợ lý giọng nói (lớp phủ) | Điểm cộng 2 | Ông bà | P1 |
 | MH-20 | Hồ sơ và cài đặt (Dễ nhìn và đọc to) | Điểm cộng 2 | Tất cả | P1 |
-| MH-21 | Hộ đỡ đầu (Đoàn viên đỡ đầu số) | Sáng tạo – đoàn viên | Đội TNV | P0 |
-| MH-22 | Buổi tuyên truyền: tạo buổi và mã QR | Sáng tạo – đoàn viên | Đội TNV | P0 |
+| MH-21 | Hộ đỡ đầu (Đoàn viên đỡ đầu số) | Sáng tạo – đoàn viên | Theo phân công và quyền điều phối | P0 |
+| MH-22 | Buổi tuyên truyền: tạo buổi và mã QR | Sáng tạo – đoàn viên | Theo phân công và quyền điều phối | P0 |
 | MH-23 | Kết quả buổi tuyên truyền | Sáng tạo – đoàn viên (đo tác động) | Đội TNV | P0 |
 | MH-24 | Thi đua chi đoàn | Sáng tạo – đoàn viên | Học sinh, Đội TNV | P0 |
 | MH-25 | Đăng nhập (số điện thoại + mật khẩu, hoặc Google) | Tài khoản | Tất cả | P0 |
 | MH-26 | Đăng ký (số điện thoại → mã OTP → mật khẩu và tên) | Tài khoản | Tất cả | P0 |
+| MH-28 | Việc của tôi | Công tác TNV | TNV | P0 |
+| MH-29 | Quản lý hoạt động | Điều phối | Điều phối viên | P0 |
+| MH-30 | Chi tiết nhiệm vụ | Thực hiện và duyệt | Theo quyền | P0 |
 | MH-27 | Quên mật khẩu | Tài khoản | Tất cả | P0 |
 
-**Tổng: 28 màn** (MH-01 → MH-27 và lớp phủ MH-02a). Trong đó có 9 màn đáp ứng 6 yêu cầu bắt buộc. Các màn còn lại do đội thiết kế thêm để luồng liền mạch và để ghi điểm sáng tạo.
+**Tổng: 31 màn** (MH-01 → MH-30 và lớp phủ MH-02a). Trong đó có 9 màn đáp ứng 6 yêu cầu bắt buộc. Các màn còn lại do đội thiết kế thêm để luồng liền mạch và để ghi điểm sáng tạo.
 
 **P0:** bắt buộc có trong bài nộp. **P1:** nên có để ghi điểm cộng và cho thấy luồng khép kín.
 Sitemap và luồng màn hình: xem [03_sitemap_luong_man_hinh.md](03_sitemap_luong_man_hinh.md).
@@ -141,7 +145,7 @@ Sitemap và luồng màn hình: xem [03_sitemap_luong_man_hinh.md](03_sitemap_lu
 
 ```
 Người dân ──kiểm tra──> Kết quả ──┬──> Hỏi người thân ──> Người thân gọi lại ──> DỪNG chuyển tiền
-                                  ├──> Báo cáo ──> Đội TNV xác minh ──> Công an xã/phường
+                                  ├──> Báo cáo ──> Người có quyền duyệt xác minh ──> Công an xã/phường
                                   │                     │
                                   │                     └──> Thống kê kiểu mới ──> Tuyên truyền ─┐
                                   └──> Bài học 1 phút ──> Bài kiểm tra ──> Chứng nhận            │
@@ -165,7 +169,7 @@ Mọi luồng được làm hoàn chỉnh ngang nhau. Thứ tự trình diễn d
 **Ba luồng theo vai trò:**
 - **Ông bà:** nhận cuộc gọi lạ → mở app → Kiểm tra số → 🔴 Nguy hiểm, kèm 3 lý do → **Hỏi người thân** (Gọi Lan ngay / Gửi cho Lan) → Lan trả lời "Đừng chuyển, con gọi ngay".
 - **Học sinh:** dán tin nhắn "việc nhẹ lương cao" → AI tô đỏ dấu hiệu → Báo cáo → Bài học 1 phút → Bài kiểm tra.
-- **Đội TNV:** Tổng quan → kiểu lừa mới tuần này → Xác minh báo cáo → Tạo bài tuyên truyền → Xuất báo cáo.
+- **TNV:** Việc của tôi → nhận nhiệm vụ → dùng tài liệu → tuyên truyền → nộp kết quả. **Điều phối viên:** tình hình địa phương → lập buổi → phân công → duyệt kết quả → tổng hợp báo cáo.
 
 ---
 
@@ -211,7 +215,7 @@ Mọi số điện thoại, đường link, số tài khoản và tên người 
 |---|---|---|---|
 | **AI phân tích tin nhắn dán vào** | Dán tin → tô đỏ câu đáng ngờ, gọi tên kiểu lừa, giải thích bằng lời thường, gợi ý việc nên làm | **Chụp màn hình thay cho dán** (đọc chữ trong ảnh) · **AI tự phân loại báo cáo**, giúp màn đội TNV tự cập nhật kiểu mới · **AI soạn bài tuyên truyền** | Cả 3 nhóm |
 | **Chế độ giọng nói cho người cao tuổi** | Đọc to kết quả và bài học · nói số điện thoại thay vì gõ | **Trợ lý hội thoại:** bà kể lại cuộc gọi, app trả lời bằng giọng nói và gợi ý Hỏi người thân · giọng đọc miền Nam | Người cao tuổi |
-| **Kết nối kênh tin báo Công an** | Nút mở 113 và kênh tiếp nhận chính thức, kèm nội dung soạn sẵn | **Đội TNV làm cầu nối:** xác minh và gom ca trùng, xuất báo cáo tuần cho Công an xã/phường. Vòng khép kín người dân → đội TNV → Công an → cảnh báo → người dân | Đội TNV, người dân |
+| **Kết nối kênh tin báo Công an** | Nút mở 113 và kênh tiếp nhận chính thức, kèm nội dung soạn sẵn | **Điều phối viên làm cầu nối:** tổng hợp báo cáo tuần; người có quyền duyệt riêng xác minh và gom ca trùng, lập hồ sơ cho Công an xã/phường. Vòng khép kín người dân → đội TNV → Công an → cảnh báo → người dân | Đội TNV, người dân |
 
 Danh sách kênh tiếp nhận cụ thể của Công an (số, tài khoản Zalo, cổng trực tuyến) **phải được kiểm chứng** trước khi đưa vào bài nộp.
 
@@ -223,7 +227,7 @@ Danh sách kênh tiếp nhận cụ thể của Công an (số, tài khoản Zal
 |---|---|---|---|
 | **🤝 Đoàn viên đỡ đầu số** | Kẻ lừa nhắm vào người **cô lập**. Cụ sống một mình thì nút "Hỏi người thân" không có ai để hỏi | Mỗi đoàn viên đỡ đầu vài hộ cao tuổi trong xã/phường. Đoàn viên **cài app hộ** bằng mã liên kết, có sự đồng ý của cụ, và trở thành **người thân dự phòng** (người ưu tiên nếu cụ sống một mình). Khi cụ bấm Hỏi người thân, đoàn viên nhận cảnh báo. App nhắc đoàn viên thăm hỏi định kỳ | 1 (đúng nỗi đau cô lập), 4 (triển khai thật ở cơ sở) |
 | **📣 Buổi tuyên truyền có QR** | Tuyên truyền truyền thống không đo được ai đã hiểu | Đội tạo buổi (địa điểm ấp/khu phố/trường, chủ đề kiểu lừa) và nhận **mã QR**. Người dân quét mã thì mở web **không cần tài khoản**, xem bài học 1 phút và làm 5 câu kiểm tra. **Số người tham gia, điểm trung bình, tỷ lệ đạt** hiện trực tiếp trên màn của đội và cộng vào thống kê xã/phường | 3 (dữ liệu), 4 (**đo được tác động**) |
-| **🏆 Thi đua chi đoàn** | Phong trào cần động lực và số liệu so sánh | Ở trường THPT, **mỗi lớp là một chi đoàn**. Xếp hạng chi đoàn theo **điểm trung bình bài kiểm tra**, **số buổi tuyên truyền**, **số người tham gia**, **số hộ đỡ đầu**, **số ca đã xác minh**. Không công khai điểm cá nhân | 1, 4 (gắn với phong trào Đoàn) |
+| **🏆 Thi đua chi đoàn** | Phong trào cần động lực và số liệu so sánh | Ở trường THPT, **mỗi lớp là một chi đoàn**. Xếp hạng chi đoàn theo **điểm trung bình bài kiểm tra**, **số buổi tuyên truyền**, **số người tham gia**, **số hộ đỡ đầu**, **hoạt động hỗ trợ đã duyệt**. Không công khai điểm cá nhân | 1, 4 (gắn với phong trào Đoàn) |
 
 ---
 
@@ -272,7 +276,7 @@ Nguyên tắc của BTC phải giữ: không sao chép nguyên giao diện sản
 | Hỏi người thân | MH-11 | Gọi ngay, gửi SMS/Zalo soạn sẵn, trạng thái mô phỏng |
 | Học | MH-13, MH-14, MH-15 | 10 bài, bài kiểm tra chấm điểm, chứng nhận |
 | Đội TNV | MH-16 | Thống kê, khối "Mới tuần này", biểu đồ |
-| Đoàn viên | MH-21, MH-22, MH-23, MH-24 | Đỡ đầu, buổi tuyên truyền QR và kết quả, thi đua chi đoàn |
+| Công tác và điều phối | MH-21, MH-22, MH-23, MH-24, MH-28, MH-29, MH-30 | Đỡ đầu, buổi tuyên truyền QR và kết quả, thi đua chi đoàn |
 
 **Để sau vòng chung kết (P1):** MH-02a, MH-10, MH-12, MH-17, MH-18, MH-19, MH-20 · thông báo đẩy · quét QR chuyển khoản · nói để nhập · xuất PDF.
 
@@ -299,7 +303,7 @@ Nguyên tắc của BTC phải giữ: không sao chép nguyên giao diện sản
 | Rủi ro | Giảm thiểu |
 |---|---|
 | Báo "An toàn" sai | Chỉ xanh khi nằm trong danh sách chính thức. Luôn kèm nhắc "dừng lại nếu bị giục chuyển tiền" |
-| Báo cáo bừa, vu khống số vô tội | Ngưỡng số báo cáo độc lập · đội TNV xác minh · có quy trình khiếu nại gỡ nhãn |
+| Báo cáo bừa, vu khống số vô tội | Ngưỡng số báo cáo độc lập · người có quyền duyệt xác minh · có quy trình khiếu nại gỡ nhãn |
 | Lộ dữ liệu cá nhân | Thu tối thiểu · báo cáo ẩn danh · che STK và họ tên trước khi đưa AI · tuân thủ quy định pháp luật về bảo vệ dữ liệu cá nhân |
 | Chiếm tài khoản, lừa lấy mã OTP | Mật khẩu băm, khóa tạm sau 5 lần sai · OTP có hạn và giới hạn số lần gửi · màn OTP ghi rõ "Lá Chắn Số không bao giờ hỏi mã này" · đổi mật khẩu thì đăng xuất mọi máy |
 | Dữ liệu cá nhân lưu trên máy chủ Firebase ở nước ngoài | Chỉ lưu tối thiểu (tên gọi, xã/phường, vai trò, người thân) · không lưu nội dung tin nhắn · đánh giá và làm thủ tục chuyển dữ liệu cá nhân ra nước ngoài theo quy định trước khi triển khai thật |
@@ -321,3 +325,14 @@ Nguyên tắc của BTC phải giữ: không sao chép nguyên giao diện sản
 - Các ngưỡng và tham số nghiệp vụ: xem mục 16 trong đặc tả chức năng.
 - Người thân mẫu: Lan (con gái), Hùng (con trai).
 - Thể lệ và tiêu chí chấm của BTC: đã có, đối chiếu ở mục 10A–10B.
+
+
+## Quyết định phân cấp hoạt động
+
+Nguồn: người dùng xác nhận trong phiên làm việc rằng tình nguyện viên là thành viên chi đoàn trực tiếp đi tuyên truyền; người quản lý hoạt động phải là vai trò cấp cao hơn riêng biệt. Tên “Điều phối viên” là tên đề xuất cho vai trò quản lý này.
+
+- Người cao tuổi và Học sinh là nhóm trải nghiệm; TNV và Điều phối viên là quyền công tác được cấp. Một học sinh có thể đồng thời là TNV. Đổi giao diện không cấp thêm quyền.
+- TNV nhận nhiệm vụ, dùng tài liệu đã duyệt, trực tiếp tuyên truyền, hỗ trợ hộ được giao và nộp kết quả.
+- Điều phối viên lập kế hoạch, tạo buổi, phân công, duyệt tài liệu và kết quả, quản lý thành viên, tổng hợp báo cáo trong phạm vi được giao.
+- Duyệt hoạt động không phải xác nhận lừa đảo. Quyền duyệt cảnh báo cấp riêng cho tài khoản được chỉ định; không mặc định thuộc TNV hoặc mọi điều phối viên.
+- Người thân là quan hệ hỗ trợ có sự đồng ý. Người tham gia buổi là ngữ cảnh sử dụng, không cần một loại tài khoản riêng.
