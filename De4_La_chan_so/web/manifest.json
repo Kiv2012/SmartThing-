@@ -1,0 +1,11 @@
+{
+  "name": "Lá Chắn Số",
+  "short_name": "Lá Chắn Số",
+  "description": "Kiểm tra số lạ, đường link, số tài khoản trước khi chuyển tiền",
+  "lang": "vi",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#eef4fb",
+  "theme_color": "#0b294b",
+  "icons": [{"src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]
+}
