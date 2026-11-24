@@ -22,10 +22,10 @@ function password(label='Mật khẩu mẫu'){
 }
 
 A.route(/^\/dang-nhap$/, (match, query) => A.screen({
-  mh:'MH-25', noTab:true, title:query.work ? 'Khu công tác' : 'Đăng nhập', backTo:A.residentHome(),
+  mh:'MH-25', noTab:true, title:query.work ? 'Công tác tuyên truyền' : 'Đăng nhập', backTo:A.residentHome(),
   body:`
   <div class="account-layout">
-    ${query.preview!=='1' ? `<section class="card stack"><h2>Đăng nhập chưa khả dụng</h2><p>Chưa kết nối dịch vụ tài khoản. Bạn vẫn có thể kiểm tra và học mà không cần đăng nhập.</p><a class="btn btn-primary" href="${A.residentHome()}">Dùng ngay</a></section>` : `<form class="card stack" data-form="demo-login">
+    ${query.work ? '' : query.preview!=='1' ? `<section class="card stack"><h2>Đăng nhập chưa khả dụng</h2><p>Chưa kết nối dịch vụ tài khoản. Bạn vẫn có thể kiểm tra và học mà không cần đăng nhập.</p><a class="btn btn-primary" href="${A.residentHome()}">Dùng ngay</a><a class="btn btn-ghost" href="#/dang-nhap?work=1">Công tác tuyên truyền</a></section>` : `<form class="card stack" data-form="demo-login">
       <h2>Đăng nhập bằng tài khoản minh họa</h2>
       <p class="note">Bản trình diễn. Chỉ dùng dữ liệu mẫu, mật khẩu mẫu là <b>${samplePassword}</b>.</p>
       ${phone()}${password()}
@@ -34,9 +34,9 @@ A.route(/^\/dang-nhap$/, (match, query) => A.screen({
       <div class="account-links"><a href="#/dang-ky?preview=1&next=${encodeURIComponent(query.next || '')}">Tạo tài khoản</a><a href="#/quen-mat-khau?preview=1">Quên mật khẩu?</a></div>
       <a class="btn btn-ghost" href="${A.residentHome()}">Dùng ngay, không cần tài khoản</a>
     </form>`}
-    ${query.preview==='1' ? `<section class="card stack" aria-labelledby="preview-accounts">
-      <h2 id="preview-accounts">Tài khoản công tác minh họa</h2>
-      <p class="note">Các tài khoản này đã được cấp quyền trong bản trình diễn.</p>
+    ${query.work || query.preview==='1' ? `<section class="card stack" aria-labelledby="preview-accounts">
+      <h2 id="preview-accounts">Chọn tài khoản công tác</h2>
+      <p class="note">Tài khoản dùng dữ liệu minh họa. Chưa kết nối dịch vụ xác thực và cấp quyền thực tế.</p>
       <button class="role-choice" type="button" data-act="sign-in-work" data-work="tnv"><b>Tình nguyện viên</b><span>Nhận nhiệm vụ, đi tuyên truyền và nộp kết quả.</span></button>
       <button class="role-choice" type="button" data-act="sign-in-work" data-work="dp"><b>Điều phối viên</b><span>Lập kế hoạch, phân công và duyệt kết quả hoạt động.</span></button>
     </section>` : ''}
@@ -76,8 +76,7 @@ A.actions['account-show'] = button => {
 };
 A.actions['sign-in-work'] = button => {
   A.signIn(button.dataset.work);
-  if(A.q.work && A.enterWork()) A.go(returnTo(true));
-  else A.go(returnTo());
+  if(A.enterWork()) A.go(A.roleHome());
 };
 A.actions['open-work'] = () => { if(A.enterWork()) A.go(A.roleHome()); };
 A.actions['exit-work'] = () => { A.leaveWork(); A.go(A.residentHome()); };

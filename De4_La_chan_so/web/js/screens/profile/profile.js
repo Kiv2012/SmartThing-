@@ -35,7 +35,8 @@ A.route(/^\/toi$/, () => A.screen({mh:'MH-20', title:'Tôi', tab:'#/toi', back:f
     ${A.workRole() ? '<button class="btn btn-ghost" data-act="exit-work">Về trang cá nhân</button>'
       : ['tnv','dp'].includes(A.accountRole()) ? '<button class="btn btn-primary" data-act="open-work">Công tác tuyên truyền</button>'
       : A.hasAccount() ? (S.workRequested ? '<p class="hint">Đang chờ duyệt yêu cầu tham gia.</p>' : '<button class="btn btn-ghost" data-act="request-work">Yêu cầu tham gia</button>')
-      : '<a class="btn btn-ghost" href="#/dang-nhap?work=1">Đăng nhập để xem nhiệm vụ</a>'}
+      : '<a class="btn btn-ghost" href="#/dang-nhap?work=1">Mở công tác tuyên truyền</a>'}
+    ${A.hasAccount() ? '<a class="link-btn" href="#/dang-nhap?work=1">Chọn tài khoản công tác</a>' : ''}
   </section>
   <div class="card"><b>Thành tích</b><p class="small ink2 mt8">${S.quiz?`Điểm cao nhất ${S.quiz.best}/100 · ${S.quiz.best>=80?'Đã có Chứng nhận Lá Chắn Số':'Chưa có chứng nhận (cần từ 80 điểm)'}`:'Chưa làm bài kiểm tra.'}</p><a class="link-btn" href="#/thu-thach">Làm bài kiểm tra</a></div>
   <div class="card"><b>Báo cáo của tôi</b>${A.hasAccount() && S.myReports.some(r=>!r.anonymous)?`<ul class="list">${S.myReports.filter(r=>!r.anonymous).slice(0,5).map(r=>`<li class="kv"><span><span class="mono small">${esc(r.ma)}</span><br><span class="small ink2">${esc((A.scen(r.type)||{ngan:'Không rõ'}).ngan)}</span></span><span class="${ST[r.status][1]}">${ST[r.status][0]}</span></li>`).join('')}</ul>`:'<p class="small ink2 mt8">Chưa gửi báo cáo nào.</p>'}</div>
